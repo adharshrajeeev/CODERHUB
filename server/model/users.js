@@ -1,4 +1,4 @@
-const mongoose=require('mongoose');
+import mongoose from "mongoose";
 
 const UserSchema=mongoose.Schema({
     
@@ -29,7 +29,7 @@ const UserSchema=mongoose.Schema({
     },
     bio:{
         type:String,
-        required:true
+       
     },
     followers:[
         {
@@ -54,4 +54,5 @@ const UserSchema=mongoose.Schema({
 
 })
 
-module.exports = mongoose.model('USERS', UserSchema);
+const User = mongoose.model('USERS', UserSchema);
+export default User
