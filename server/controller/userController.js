@@ -1,5 +1,6 @@
 import bcrypt from 'bcrypt'
-import signupValidate from '../middlewares/validation.js';
+import { signupValidate } from '../middlewares/validation.js';
+
 import User from '../model/users.js';
 
 
@@ -28,6 +29,15 @@ export const registerUser = async (req,res)=>{
          }
       }
    }catch(err){
-
+         res.status(400).json({error:err})
    }
 };
+
+
+export const userLogin = async(req,res)=>{
+   try{
+
+   }catch(err){
+      res.status(400).json({error:err})
+   }
+}
