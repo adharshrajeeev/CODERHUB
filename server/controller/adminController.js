@@ -1,4 +1,4 @@
 
 export const adminLogin=(req,res)=>{
-        res.send("her we come")
+     res.send("her we come")
 }

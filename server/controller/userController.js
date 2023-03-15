@@ -1,5 +1,7 @@
-import bcrypt from 'bcrypt'
-import { signupValidate } from '../middlewares/validation.js';
+'use Strict'
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken'
+import { signupValidate, userLoginValidate } from '../middlewares/validation.js';
 
 import User from '../model/users.js';
 
@@ -36,7 +38,22 @@ export const registerUser = async (req,res)=>{
 
 export const userLogin = async(req,res)=>{
    try{
-
+      const {error}=userLoginValidate(req.body);
+      if(error){
+         res.status(400).json({error:error.details[0].message})
+      }else{
+         const {email,password}=req.body;
+         const userdetails=await User.findOne({email});
+         if(userdetails){
+            const passMatch=await bcrypt.compare(password,userdetails.password);
+            if(!passMatch) return res.status(400).json({error:"User Password is Invalid"})
+            
+            const token=jwt.sign({id:userdetails._id},process.env.JWT_SECETKEY);
+            res.status(200).json({token,userdetails})
+         }else{
+            res.status(400).json({error:"User not found"})
+         }
+      }
    }catch(err){
       res.status(400).json({error:err})
    }

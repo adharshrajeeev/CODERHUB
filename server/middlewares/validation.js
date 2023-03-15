@@ -13,6 +13,14 @@ export  const signupValidate=(data)=>{
     return Schema.validate(data)
 }
 
+export const userLoginValidate=(data)=>{
+    const Schema=Joi.object({
+        email:Joi.string().email().required(),
+        password:Joi.string().min(5).required(),
+    })
+    return Schema.validate(data)
+}
+
 
 export const adminLoginValidate=(data)=>{
     const Schema=Joi.object({
