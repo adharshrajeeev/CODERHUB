@@ -30,10 +30,19 @@ export const addUserPosts = async (req, res) => {
         res.status(200).json(post)
 
      
-        res.status(200).json({message:"sucess post added",posts})
+        res.status(200).json({message:"sucess post added",post})
     }catch(err){
         res.status(400).json({error:err})
     }
 }
 
 
+export const getUserPost= async(req,res)=>{
+    try{
+        console.log(req.decoded)
+    res.send("yes gotcha")
+    }catch(err){
+        res.status(400).json({error:err})
+    }
+    
+}
