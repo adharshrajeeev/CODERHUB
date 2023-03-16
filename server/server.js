@@ -18,11 +18,11 @@ app.use(morgan("dev"))
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
-dbConnection();
 
 app.use('/api',userRoutes)
 app.use('/api/admin',adminRoutes)
 
 
-
-app.listen(process.env.PORT,()=>console.log(`SERVER STARTED AT PORT:${process.env.PORT}`))
+dbConnection().then(()=>{
+    app.listen(process.env.PORT,()=>console.log(`SERVER STARTED AT PORT:${process.env.PORT}`))
+})
