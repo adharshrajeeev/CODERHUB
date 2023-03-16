@@ -27,9 +27,6 @@ export const addUserPosts = async (req, res) => {
             content,
             postedUser:userId
         })
-        res.status(200).json(post)
-
-     
         res.status(200).json({message:"sucess post added",post})
     }catch(err){
         res.status(400).json({error:err})
@@ -37,12 +34,25 @@ export const addUserPosts = async (req, res) => {
 }
 
 
-export const getUserPost= async(req,res)=>{
+export const getUserPost = async(req,res)=>{
     try{
-        console.log(req.decoded)
-    res.send("yes gotcha")
+        const userId=req.params.id;
+        const userPosts = await Posts.find({postedUser:userId})
+        res.status(200).json(userPosts)
     }catch(err){
         res.status(400).json({error:err})
     }
     
+}
+
+
+export const getAllPosts = async(req,res)=>{
+    try{
+        const {id}=req.decoded;
+        
+
+        
+    }catch(err){
+        res.status(400).json({error:err})
+    }
 }

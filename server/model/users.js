@@ -33,12 +33,14 @@ const UserSchema=mongoose.Schema({
     },
     followers:[
         {
-            type:String
+            type:mongoose.Types.ObjectId,
+             ref:"users",
         }
     ],
     following:[
         {
-            type:String
+            type:mongoose.Types.ObjectId,
+            ref:"users",
         }
     ],
     coverPic:{
