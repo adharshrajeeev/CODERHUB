@@ -11,11 +11,12 @@ const PostSchema=mongoose.Schema({
     }],
     postedUser:{
         type:mongoose.Types.ObjectId,
-        ref:"users"
+        ref:"users",
+        required:true
     },
     image:{
-        type:String,
-        required:false
+        PublicId:String,
+        url:String
     },
     comments:[{
         content:{
