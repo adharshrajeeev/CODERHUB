@@ -103,3 +103,29 @@ export const followUser= async (req,res)=>{
       res.status(400).json({error:err})
    }
 }
+
+
+export const unFollowUser = async (req,res)=>{
+   try{
+      const {userId,followerId}=req.query;
+      const user=await User.findById(userId)
+      const followers=await User.findById(followerId)
+
+       if(!followers || !user) return res.status(400).json({message:"follower not found"})
+
+       User.updateOne({_id:user._id},{
+         $pull:{
+            following:followers._id
+         }
+       }).then(async(response)=>{
+            await User.updateOne({_id:followers._id},{
+               $pull:{
+                  followers:user._id
+               }
+            })
+             return  res.status(200).json({message:`Success Unfollowed user ${followers.userName}`})
+       })
+   }catch(err){
+      res.status(400).json({error:err})
+   }
+}
