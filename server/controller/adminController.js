@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 import { adminLoginValidate } from "../middlewares/validation.js"
 import Admin from "../model/admin.js";
-
+import User from '../model/users.js';
 
 export const adminLogin = async(req,res)=>{
 
@@ -23,7 +23,7 @@ export const adminLogin = async(req,res)=>{
                const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWTKEY)
                res.status(200).json({adminToken})
           }else{
-               console.log("admin not found")
+              
                res.status(400).json({error:"admin credentials not found"})
           }
           
@@ -31,4 +31,21 @@ export const adminLogin = async(req,res)=>{
           res.status(400).json({error:err})
      }
 
+}
+
+
+export const getAllUsers = async (req,res)=>{
+     try{
+
+          const users=await User.find();
+          if(!users){
+               return   res.status(200).json({message:"no users found"}) 
+          }
+          
+          res.status(200).json(users)
+          
+
+     }catch(err){
+          res.status(400).json({error:err})
+     }
 }
