@@ -82,17 +82,22 @@ export const followUser= async (req,res)=>{
      const user=await User.findById(userId);
      const followers=await User.findById(followerId)
 
-     if(!followers) return res.status(400).json({message:"follower not found"})
+     if(!followers || !user) return res.status(400).json({message:"follower not found"})
      
-    const userFollowing =  await User.updateOne({_id:user._id},{
+      User.updateOne({_id:user._id},{
          $addToSet:{
             following:followers._id
          }
+      }).then(async(response)=>{
+         if(response.modifiedCount === 0) return res.status(401).json({message:`You already following`})
+        const followed = await User.updateOne({_id:followers._id},{
+            $addToSet:{
+               followers:user._id
+            }
+         })
+          return  res.status(200).json({message:`Success you started Following  ${followers.userName}`})
       })
-      
-      if(userFollowing.modifiedCount === 0) return  res.status(401).json({message:`You already following`})
 
-      res.status(200).json({message:`sucess u started following ${followers.userName}`})
       
    }catch(err){
       res.status(400).json({error:err})
