@@ -10,3 +10,6 @@ const adminSchema=mongoose.Schema({
         required:true
     }
 })
+
+const Admin=mongoose.model('admin',adminSchema);
+export default Admin;

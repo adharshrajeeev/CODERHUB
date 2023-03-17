@@ -1,4 +1,34 @@
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt'
+import { adminLoginValidate } from "../middlewares/validation.js"
+import Admin from "../model/admin.js";
 
-export const adminLogin=(req,res)=>{
-     res.send("her we come")
+
+export const adminLogin = async(req,res)=>{
+
+     try{
+
+          const {error}=adminLoginValidate(req.body)
+     
+          if(error) return res.status(400).json({error:error.details[0].message})
+
+          const {adminId,adminPassword}=req.body;
+          const adminDetails=await Admin.findOne({adminId})
+          if(adminDetails){
+              
+               const matchPassword = await bcrypt.compare(adminPassword,adminDetails.adminPassword)
+            
+               if(!matchPassword) return res.status(400).json({error:"Admin Password is not matched"})
+      
+               const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWTKEY)
+               res.status(200).json({adminToken})
+          }else{
+               console.log("admin not found")
+               res.status(400).json({error:"admin credentials not found"})
+          }
+          
+     }catch(err){
+          res.status(400).json({error:err})
+     }
+
 }
