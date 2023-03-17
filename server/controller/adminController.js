@@ -49,3 +49,20 @@ export const getAllUsers = async (req,res)=>{
           res.status(400).json({error:err})
      }
 }
+
+
+export const changeUserStatus = async (req,res)=>{
+     try{
+
+          const users=await User.findOneAndUpdate({_id:req.params.id},{
+               isBlocked:false
+          })
+
+          res.status(200).json({message:"user updated Sucessfully",users})
+
+
+
+     }catch(err){
+          res.status(400).json({error:err})
+     }
+}
