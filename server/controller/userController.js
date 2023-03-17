@@ -1,7 +1,7 @@
 'use Strict'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
-import { signupValidate, userLoginValidate } from '../middlewares/validation.js';
+import { signupValidate, userBioValidation, userLoginValidate } from '../middlewares/validation.js';
 
 import User from '../model/users.js';
 
@@ -128,4 +128,29 @@ export const unFollowUser = async (req,res)=>{
    }catch(err){
       res.status(400).json({error:err})
    }
+}
+
+
+export const addUserBio=async(req,res)=>{
+   
+   try{
+   //    const {error}=userBioValidation(req.body.bio)
+   // if(error) return res.status(500).json({error:error.details[0].message})
+
+   const {userId,bio}= req.body;
+   console.log(userId,bio)
+   const user=await User.findOneAndUpdate({_id:userId},
+      {
+         userBio:bio
+      });
+
+      res.status(200).json({message:"bio updated sucessfully"})
+
+   
+   }catch(err){
+      res.status(400).json({error:err})
+   }
+   
+
+
 }

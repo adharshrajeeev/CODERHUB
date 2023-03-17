@@ -30,3 +30,10 @@ export const adminLoginValidate=(data)=>{
     return Schema.validate(data)
 }
 
+
+export const userBioValidation=(data)=>{
+    const Schema=Joi.string({
+        bio:Joi.string().required()
+    })
+    return Schema.validate(data)
+}
