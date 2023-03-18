@@ -1,5 +1,6 @@
 import cloudinary from '../config/cloudinary.js';
 import Posts from '../model/posts.js'
+import User from '../model/users.js';
 
 
 
@@ -48,8 +49,11 @@ export const getUserPost = async(req,res)=>{
 
 export const getAllPosts = async(req,res)=>{
     try{
-        const {id}=req.decoded;
+        const id="64116279684260282fd03b21"
         
+        const folowingList=await User.findById({_id:id}).select('+following')
+        
+      console.log(folowingList)
 
         
     }catch(err){

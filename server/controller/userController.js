@@ -86,13 +86,13 @@ export const followUser= async (req,res)=>{
      
       User.updateOne({_id:user._id},{
          $addToSet:{
-            following:followers._id
+            following:{followerId:followers._id}
          }
       }).then(async(response)=>{
          if(response.modifiedCount === 0) return res.status(401).json({message:`You already following`})
         const followed = await User.updateOne({_id:followers._id},{
             $addToSet:{
-               followers:user._id
+               followers:{followerId:user._id}
             }
          })
           return  res.status(200).json({message:`Success you started Following  ${followers.userName}`})
@@ -115,12 +115,12 @@ export const unFollowUser = async (req,res)=>{
 
        User.updateOne({_id:user._id},{
          $pull:{
-            following:followers._id
+            following:{followerId:followers._id}
          }
        }).then(async(response)=>{
             await User.updateOne({_id:followers._id},{
                $pull:{
-                  followers:user._id
+                  followers:{followerId:user._id}
                }
             })
              return  res.status(200).json({message:`Success Unfollowed user ${followers.userName}`})

@@ -16,10 +16,10 @@ router.get('/users',verifyToken,getAllUsers)
 router.get('/userPosts/:id',verifyToken,getUserPost);
 router.get('/posts',verifyToken,getAllPosts)
 
-router.post('/follow',followUser)
+router.post('/follow',verifyToken,followUser)
+router.post('/unFollow',verifyToken,unFollowUser)
 
-router.post('/unFollow',unFollowUser)
-router.post('/addBio',addUserBio)
+router.post('/addBio',verifyToken,addUserBio)
 
 
 export default router
