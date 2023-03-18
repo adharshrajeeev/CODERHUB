@@ -1,6 +1,7 @@
 'use Strict'
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
+import cloudinary from '../config/cloudinary.js';
 import { signupValidate, userBioValidation, userLoginValidate } from '../middlewares/validation.js';
 
 import User from '../model/users.js';
@@ -152,6 +153,26 @@ export const addUserBio=async(req,res)=>{
       res.status(400).json({error:err})
    }
    
+}
 
 
+export const addProfilePicture = async(req,res)=>{
+   try{
+   
+      const userId=req.params.id
+     
+      if(!req.file) res.status(400).json({error:"no image found"})
+      console.log(req.file)
+      const profilePic=await cloudinary.uploader.upload(req.file.path,{
+         folder:"Profile"
+      })
+      const imageUrl=profilePic.url
+      const userPropic=await User.findOneAndUpdate({_id:userId},{
+         profilePic:imageUrl
+      })
+      res.status(200).json({message:"User Profile picture updated",imageUrl})
+
+   }catch(err){
+      res.status(500).json({error:err})
+   }
 }

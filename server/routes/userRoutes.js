@@ -1,7 +1,7 @@
 import express from 'express'
 import upload from '../config/multer.js';
 import {  addUserPosts, getAllPosts, getUserPost } from '../controller/postController.js';
-import { addUserBio, followUser, getAllUsers, registerUser,unFollowUser,userLogin } from '../controller/userController.js';
+import { addProfilePicture, addUserBio, followUser, getAllUsers, registerUser,unFollowUser,userLogin } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
 
 
@@ -20,6 +20,7 @@ router.post('/follow',verifyToken,followUser)
 router.post('/unFollow',verifyToken,unFollowUser)
 
 router.post('/addBio',verifyToken,addUserBio)
+router.post('/profilePicture/:id',verifyToken,upload.single('image'),addProfilePicture)
 
 
 

@@ -53,7 +53,6 @@ export const getAllPosts = async(req,res)=>{
         const userId=req.params.id
         const user=await User.findOne({_id:userId})
         const followingIds= user.following.map(follower =>follower._id )
-        console.log(followingIds,"this is follwer")
         const userPosts=await Posts.find({postedUser:{$in:followingIds}})
 
         res.status(200).json(userPosts)
