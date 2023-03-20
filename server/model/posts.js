@@ -25,6 +25,10 @@ const PostSchema=mongoose.Schema({
             type:mongoose.Types.ObjectId
         }
     }],
+    isDelete:{
+        type:Boolean,
+        default:false
+    }
    
 
 },{timestamps:true})

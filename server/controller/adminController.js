@@ -3,12 +3,12 @@ import bcrypt from 'bcrypt'
 import { adminLoginValidate } from "../middlewares/validation.js"
 import Admin from "../model/admin.js";
 import User from '../model/users.js';
-import Posts from '../model/posts'
+import Posts from '../model/posts.js'
 
 export const adminLogin = async(req,res)=>{
 
      try{
-          if(!req.admin) return res.status(401).json({message:"No Authentication"})
+          
           const {error}=adminLoginValidate(req.body)
      
           if(error) return res.status(400).json({error:error.details[0].message})
