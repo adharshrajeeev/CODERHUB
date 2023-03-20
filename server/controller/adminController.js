@@ -3,11 +3,12 @@ import bcrypt from 'bcrypt'
 import { adminLoginValidate } from "../middlewares/validation.js"
 import Admin from "../model/admin.js";
 import User from '../model/users.js';
+import Posts from '../model/posts'
 
 export const adminLogin = async(req,res)=>{
 
      try{
-
+          if(!req.admin) return res.status(401).json({message:"No Authentication"})
           const {error}=adminLoginValidate(req.body)
      
           if(error) return res.status(400).json({error:error.details[0].message})
@@ -36,7 +37,7 @@ export const adminLogin = async(req,res)=>{
 
 export const getAllUsers = async (req,res)=>{
      try{
-
+          if(!req.admin) return res.status(401).json({message:"No Authentication"})
           const users=await User.find();
           if(!users){
                return   res.status(200).json({message:"no users found"}) 
@@ -53,7 +54,7 @@ export const getAllUsers = async (req,res)=>{
 
 export const changeUserStatus = async (req,res)=>{
      try{
-
+          if(!req.admin) return res.status(401).json({message:"No Authentication"})
           const users=await User.findOneAndUpdate({_id:req.params.id},{
                isBlocked:false
           })
@@ -64,5 +65,18 @@ export const changeUserStatus = async (req,res)=>{
 
      }catch(err){
           res.status(400).json({error:err})
+     }
+}
+
+
+export const getAlluserPosts =  async(req,res)=>{
+     try{
+          if(!req.admin) return res.status(401).json({message:"No Authentication"})
+          const posts=await Posts.find();
+          res.status(200).json({success:true,posts})
+
+     }catch(err){
+          
+          res.status(500).json({success:false,error:err})
      }
 }
