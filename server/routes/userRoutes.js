@@ -1,7 +1,7 @@
 import express from 'express'
 import upload from '../config/multer.js';
 import {  addUserPosts, getAllPosts, getEditPost, getUserPost, updateUserPost } from '../controller/postController.js';
-import { addProfilePicture, addUserBio, followUser, getAllUsers, getUserBio, getUserProfilePic, registerUser,unFollowUser,uptadeUserBio,userLogin } from '../controller/userController.js';
+import { addProfilePicture, addUserBio, followUser, getAllUsers, getUserBio, getUserProfilePic, registerUser,unFollowUser,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
 
 
@@ -20,7 +20,7 @@ router.get('/editPost/:id',verifyToken,getEditPost)
 
 router.put('/updatePost/:id',verifyToken,upload.single('image'),updateUserPost)
 
-router.post('/follow',verifyToken,followUser)
+router.post('/follow',verifyToken,followUser) 
 router.post('/unFollow',verifyToken,unFollowUser)
 
 router.post('/addBio',verifyToken,addUserBio)
@@ -30,7 +30,7 @@ router.put('/updatebio/:id',verifyToken,uptadeUserBio)
 
 router.post('/profilePicture/:id',verifyToken,upload.single('image'),addProfilePicture)
 router.get('/profilePic/:id',verifyToken,getUserProfilePic)
-
+router.put('/updateProPic/:id',verifyToken,UpdateUserPicture)
 
 
 export default router
