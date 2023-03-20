@@ -15,7 +15,6 @@ const PostSchema=mongoose.Schema({
         required:true
     },
     image:{
-        PublicId:String,
         url:String
     },
     comments:[{

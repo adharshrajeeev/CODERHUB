@@ -59,15 +59,26 @@ export const getEditPost=async(req,res)=>{
 export const updateUserPost= async(req,res)=>{
     try{
         const postId=req.params.id
+        const {content}=req.body;
+
         if(req.file){
             const cloudImage=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Posts"
             });
             const UpdatePost=await Posts.findOneAndUpdate({_id:postId},{
-                
+                $set:{
+                    "image.url":cloudImage.url,
+                    content:content
+                }
             })
+            return res.status(200).json({success:true,UpdatePost})
         }
-        const {content}=req.body;
+        const UpdatePost=await Posts.findOneAndUpdate({_id:postId},{
+            $set:{
+                content:content
+            }
+        })
+         res.status(200).json({success:true,UpdatePost})
 
     }catch(err){
         res.status(500).json({success:false,error:err})
