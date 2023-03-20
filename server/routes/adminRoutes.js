@@ -12,6 +12,7 @@ router.get('/allUsers',adminVerification,getAllUsers)
 
 router.put('/changeStatus/:id',adminVerification,changeUserStatus)
 router.get('/allPosts',adminVerification,getAlluserPosts)
+router.patch('/deletePost/:id',adminVerification,)
 
 
 export default router

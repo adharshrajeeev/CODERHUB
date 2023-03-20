@@ -80,3 +80,23 @@ export const getAlluserPosts =  async(req,res)=>{
           res.status(500).json({success:false,error:err})
      }
 }
+
+
+export const deleteUserPosts = async(req,res)=>{
+     try{
+          if(!req.admin) return res.status(401).json({message:"No Authentication"})
+          const postId=req.params.id;
+          Posts.findOneAndUpdate({_id:postId},{
+               $set:{
+                    isDelete:true
+               }
+          }).then(()=>{
+               return res.status(200).json({success:true,message:"User Post Deleted"})
+          }).catch((err)=>{
+               return res.status(400).json({success:false,error:err})
+          })
+          
+     }catch(err){
+          res.status(500).json({success:false,error:err})
+     }
+}
