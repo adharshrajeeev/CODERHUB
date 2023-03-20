@@ -30,7 +30,7 @@ router.put('/updatebio/:id',verifyToken,uptadeUserBio)
 
 router.post('/profilePicture/:id',verifyToken,upload.single('image'),addProfilePicture)
 router.get('/profilePic/:id',verifyToken,getUserProfilePic)
-router.put('/updateProPic/:id',verifyToken,UpdateUserPicture)
+router.put('/updateProPic/:id',verifyToken,upload.single('image'),UpdateUserPicture)
 
 
 export default router
