@@ -177,7 +177,7 @@ export const uptadeUserBio = async(req,res)=>{
       })
       res.status(200).json({success:true,bio})
    }catch(err){
-      res.status(500).json({sucess:false,error:err})
+      res.status(500).json({success:false,error:err})
    }
 }
 
@@ -186,7 +186,7 @@ export const addProfilePicture = async(req,res)=>{
    
       const userId=req.params.id
      
-      if(!req.file) res.status(400).json({error:"no image found"})
+      if(!req.file) return res.status(400).json({error:"no image found"})
       console.log(req.file)
       const profilePic=await cloudinary.uploader.upload(req.file.path,{
          folder:"Profile"
@@ -199,5 +199,17 @@ export const addProfilePicture = async(req,res)=>{
 
    }catch(err){
       res.status(500).json({error:err})
+   }
+}
+
+
+export const getUserProfilePic = async (req,res)=>{
+   try{
+      const userId=req.params.id;
+      const user=await User.findById(userId)
+      res.status(200).json({success:true,profilePic:user.profilePic})
+
+   }catch(err){
+      res.status(500).json({success:false,error:err})
    }
 }
