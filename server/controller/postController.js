@@ -30,7 +30,7 @@ export const addUserPosts = async (req, res) => {
         })
         res.status(200).json({message:"sucess post added",post})
     }catch(err){
-        res.status(400).json({error:err})
+        res.status(400).json({success:false,error:err})
     }
 }
 
@@ -41,11 +41,38 @@ export const getUserPost = async(req,res)=>{
         const userPosts = await Posts.find({postedUser:userId})
         res.status(200).json(userPosts)
     }catch(err){
-        res.status(400).json({error:err})
+        res.status(400).json({success:false,error:err})
     }
     
 }
 
+export const getEditPost=async(req,res)=>{
+    try{
+        const userPost=await Posts.findById(req.params.id)
+        res.status(200).json({success:true,userPost})
+    }catch(err){
+        res.status(500).json({success:false,error:err})
+    }
+}
+
+
+export const updateUserPost= async(req,res)=>{
+    try{
+        const postId=req.params.id
+        if(req.file){
+            const cloudImage=await cloudinary.uploader.upload(req.file.path,{
+                folder:"Posts"
+            });
+            const UpdatePost=await Posts.findOneAndUpdate({_id:postId},{
+                
+            })
+        }
+        const {content}=req.body;
+
+    }catch(err){
+        res.status(500).json({success:false,error:err})
+    }
+}
 
 export const getAllPosts = async(req,res)=>{
     try{

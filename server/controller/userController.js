@@ -65,11 +65,10 @@ export const userLogin = async(req,res)=>{
 export const getAllUsers = async(req,res)=>{
       try{
 
-         const users=await User.find()
+         const users = await User.find()
          res.status(200).json(users)
 
       }catch(err){
-
          res.status(400).json({error:err})
       } 
 }
@@ -155,6 +154,32 @@ export const addUserBio=async(req,res)=>{
    
 }
 
+
+export const getUserBio = async (req,res)=>{
+   try{
+      let {userBio}=await User.findById(req.params.id);
+      if(userBio){
+
+         return res.status(200).json({success:true,userBio})
+      }
+      res.status(200).json({success:true,userBio:null})
+   }catch(err){
+      res.status(500).json({sucess:false,error:err})
+   }
+}
+
+
+export const uptadeUserBio = async(req,res)=>{
+   try{
+      const {userBio}= req.body;
+      const bio= await User.findOneAndUpdate({_id:req.params.id},{
+         userBio:userBio
+      })
+      res.status(200).json({success:true,bio})
+   }catch(err){
+      res.status(500).json({sucess:false,error:err})
+   }
+}
 
 export const addProfilePicture = async(req,res)=>{
    try{
