@@ -98,3 +98,18 @@ export const getAllPosts = async(req,res)=>{
         res.status(500).json({error:err})
     }
 }
+
+
+export const deleteUserPost = async(req,res)=>{
+    try{
+        const postId=req.params.id;
+        Posts.findByIdAndDelete(postId).then(()=>{
+            return res.status(200).json({success:true,message:"Post Deleted Success Fully"})
+        }).catch((err)=>{
+            return res.status(401).json({success:false,message:"No post found",error:err})
+        })
+
+    }catch(err){
+        res.status(500).json({error:err})
+    }
+}
