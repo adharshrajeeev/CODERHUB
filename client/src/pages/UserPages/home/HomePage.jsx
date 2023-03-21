@@ -1,9 +1,13 @@
+
 import React from 'react'
+import Navbar from '../../../components/UserComponets/NavbarComp/Navbar'
 
 function HomePage() {
   return (
-    <div>HomePage</div>
-  )
+ 
+      <Navbar/>
+    
+  );
 }
 
-export default HomePage
+export default HomePage      
