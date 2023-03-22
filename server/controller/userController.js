@@ -10,14 +10,16 @@ import User from '../model/users.js';
 
 export const registerUser = async (req,res)=>{
    try{
+      console.log(req.body)
       const {error}= signupValidate(req.body)
       if(error){
-         res.status(400).json({error:error.details[0].message})
+         res.status(200).json({success:false,message:error.details[0].message})
       }else{
+         
          const {email,password,userName,phoneNumber,dateOfBirth,gender}=req.body
          const userdetails=await User.findOne({ email});
          if(userdetails){
-            res.status(403).json({error:"User already Registered"})
+            res.status(200).json({success:false,message:"User already Registered"})
          }else{
             const hashedpassword=await bcrypt.hash(password,10);
             const newUser= await User.create({
@@ -28,11 +30,12 @@ export const registerUser = async (req,res)=>{
                dateOfBirth,gender
 
             })
-            res.status(200).json({message:"success new user created",user:newUser})
+            res.status(200).json({success:true,message:"success new user created",user:newUser})
          }
       }
    }catch(err){
-         res.status(400).json({error:err})
+
+         res.status(500).json({error:err})
    }
 };
 
