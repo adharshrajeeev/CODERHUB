@@ -9,16 +9,53 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
+import { useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
+import { useNavigate } from "react-router-dom";
+import axios from '../../../utils/axios'
+import { LOGIN } from "../../../utils/ConstUrls";
+import {useDispatch} from 'react-redux'
+import {setLogin} from '../../../redux/store'
+export default  function  LoginPage() {
 
 
-export default function LoginPage() {
-  const handleSubmit = (event) => {
+  const [email,setEmail]=useState('');
+  const [password,setPassword]=useState("");
+  const navigate=useNavigate();
+  const dispatch=useDispatch();
+  const handleSubmit =async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+    
+    if(email==="" || password === ""){
+        return toast.error("Please Fill the Components")
+    }
+    const body= JSON.stringify({
+      email,
+      password
+    })
+    try{
+      
+    await axios.post(LOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
+ 
+      dispatch(setLogin({
+        user:data.userdetails,
+        token:data.token
+      }));
+      navigate('/home')
+    
+    }).catch((err)=>{
+      console.log(err)
+    })
+      // if(response.data.success){
+      //   console.log(response.data)
+      //  document.cookie=`"token:${response.data.token}`
+      //   navigate("/home")
+      // }else{
+      //     toast.error(response.data.message)
+      // }
+    }catch(err){
+        toast.error("Oops Something went wrong")
+    }
   };
 
   return (
@@ -83,6 +120,8 @@ export default function LoginPage() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
                   autoFocus
                 />
                 <TextField
@@ -93,6 +132,8 @@ export default function LoginPage() {
                   label="Password"
                   type="password"
                   id="password"
+                  value={password}
+                  onChange={(e)=>setPassword(e.target.value)}
                   autoComplete="current-password"
                 />
                 <FormControlLabel
@@ -124,6 +165,8 @@ export default function LoginPage() {
           </Grid>
         </Grid>
       </Box>
+      <Toaster  position="top-right"
+  reverseOrder={false} />
     </Container>
   );
 }

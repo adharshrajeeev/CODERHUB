@@ -12,6 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -43,11 +44,13 @@ const UserBox = styled(Box)(({ theme }) => ({
   },
 }));
 const Navbar = () => {
+
+  const navigate=useNavigate();
   const [open, setOpen] = useState(false);
   return (
     <AppBar position="sticky" sx={{backgroundColor:"RGB(11, 17, 32)"}}>
       <StyledToolbar>
-        <Typography variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
+        <Typography onClick={()=>navigate('/')} variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
           CODERHUB
         </Typography>
         <Pets sx={{ display: { xs: "block", sm: "none" } }} />
