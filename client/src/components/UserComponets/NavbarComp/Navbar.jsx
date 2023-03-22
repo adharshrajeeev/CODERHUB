@@ -13,6 +13,8 @@ import {
 } from "@mui/material";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { setLogout } from "../../../redux/store";
+import { useDispatch,useSelector } from "react-redux";
 
 const StyledToolbar = styled(Toolbar)({
   display: "flex",
@@ -47,10 +49,16 @@ const Navbar = () => {
 
   const navigate=useNavigate();
   const [open, setOpen] = useState(false);
+  const dispatch=useDispatch();
+  
+  const userName=useSelector((state)=>state.user.userName)
+  const handleLogout = ()=>{
+    dispatch(setLogout())
+  }
   return (
     <AppBar position="sticky" sx={{backgroundColor:"RGB(11, 17, 32)"}}>
       <StyledToolbar>
-        <Typography onClick={()=>navigate('/')} variant="h6" sx={{ display: { xs: "none", sm: "block" } }}>
+        <Typography onClick={()=>navigate('/')} variant="h6" sx={{ display: { xs: "none", sm: "block" },cursor:"pointer" }}>
           CODERHUB
         </Typography>
         <Pets sx={{ display: { xs: "block", sm: "none" } }} />
@@ -75,7 +83,7 @@ const Navbar = () => {
             sx={{ width: 30, height: 30 }}
             src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           />
-          <Typography variant="span">John</Typography>
+          <Typography variant="span">{userName}</Typography>
         </UserBox>
       </StyledToolbar>
       <Menu
@@ -94,7 +102,7 @@ const Navbar = () => {
       >
         <MenuItem>Profile</MenuItem>
         <MenuItem>My account</MenuItem>
-        <MenuItem>Logout</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </AppBar>
   );
