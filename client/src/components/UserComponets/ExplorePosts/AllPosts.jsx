@@ -1,22 +1,12 @@
 import { Box, Stack, Skeleton } from "@mui/material";
 import React, { useState,useEffect } from "react";
 import axios from '../../../utils/axios'
-import { ALL_POSTS } from "../../../utils/ConstUrls";
 import { Favorite, FavoriteBorder, MoreVert, Share } from "@mui/icons-material";
-import {
-  Avatar,
-  Card,
-  CardActions,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Checkbox,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import {Avatar,Card,CardActions,CardContent, CardHeader,CardMedia,Checkbox,IconButton, Typography,} from "@mui/material";
 import { useSelector } from "react-redux";
+import { EXPLORE_ALLPOST } from "../../../utils/ConstUrls";
 
-const Feed = () => {
+const AllPosts = () => {
   const [loading, setLoading] = useState(true);
   const [posts,setPosts]=useState([]);
 
@@ -29,8 +19,8 @@ const Feed = () => {
     const token=document.cookie.slice(6)
     console.log(token)
     try{
-      console.log(userId)
-      const response=await axios.get(`${ALL_POSTS}/${userId}`,{ headers: {'Authorization':`Bearer ${token}` } })
+
+      const response=await axios.get(EXPLORE_ALLPOST,{ headers: {'Authorization':`Bearer ${token}` } })
       console.log(response)
      setPosts(response.data)
     }catch(err){
@@ -105,4 +95,4 @@ const Feed = () => {
   );
 };
 
-export default Feed;
+export default AllPosts;

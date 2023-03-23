@@ -53,7 +53,8 @@ const Navbar = () => {
   
   const userName=useSelector((state)=>state.user.userName)
   const handleLogout = ()=>{
-    dispatch(setLogout())
+    document.cookie="token:";
+    dispatch(setLogout());
   }
   return (
     <AppBar position="sticky" sx={{backgroundColor:"RGB(11, 17, 32)"}}>
@@ -83,7 +84,8 @@ const Navbar = () => {
             sx={{ width: 30, height: 30 }}
             src="https://images.pexels.com/photos/846741/pexels-photo-846741.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2"
           />
-          <Typography variant="span">{userName}</Typography>
+          <Typography variant="span">{userName
+          ?userName:""}</Typography>
         </UserBox>
       </StyledToolbar>
       <Menu

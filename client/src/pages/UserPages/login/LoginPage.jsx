@@ -3,7 +3,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
@@ -11,7 +10,7 @@ import Typography from "@mui/material/Typography";
 import { Container } from "@mui/material";
 import { useState } from "react";
 import toast, { Toaster } from 'react-hot-toast';
-import { useNavigate } from "react-router-dom";
+import { useNavigate,Link } from "react-router-dom";
 import axios from '../../../utils/axios'
 import { LOGIN } from "../../../utils/ConstUrls";
 import {useDispatch} from 'react-redux'
@@ -36,7 +35,7 @@ export default  function  LoginPage() {
     try{
       
     await axios.post(LOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
- 
+      document.cookie=`token:${data.token}`
       dispatch(setLogin({
         user:data.userdetails,
         token:data.token
@@ -149,15 +148,10 @@ export default  function  LoginPage() {
                   Sign In
                 </Button>
                 <Grid container>
-                  <Grid item xs>
-                    <Link href="#" variant="body2">
-                      Forgot password?
-                    </Link>
-                  </Grid>
                   <Grid item>
-                    <Link href="#" variant="body2">
-                      {"Don't have an account? Sign Up"}
-                    </Link>
+                   <Link to={'/signup'}>
+                   <p>Dont Have and Account? Signup</p>
+                   </Link>
                   </Grid>
                 </Grid>
               </Box>

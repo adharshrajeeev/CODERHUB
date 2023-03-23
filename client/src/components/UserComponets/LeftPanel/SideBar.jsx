@@ -1,12 +1,11 @@
 import {
   AccountBox,
-  Article,
-  Group,
   Home,
+  Article,
   ModeNight,
   Person,
   Settings,
-  Storefront,
+  Message
 } from "@mui/icons-material";
 import {
   Box,
@@ -18,14 +17,16 @@ import {
   Switch,
 } from "@mui/material";
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const SideBar = ({mode,setMode}) => {
+  const navigate=useNavigate();
   return (
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="fixed">
         <List>
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#home">
+            <ListItemButton component="a" onClick={()=>navigate('/home')}>
               <ListItemIcon>
                 <Home />
               </ListItemIcon>
@@ -33,27 +34,27 @@ const SideBar = ({mode,setMode}) => {
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+            <ListItemButton component="a" onClick={()=>navigate('/explore')}>
               <ListItemIcon>
                 <Article />
               </ListItemIcon>
-              <ListItemText primary="Pages" />
+              <ListItemText primary="Explore" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
+          {/* <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
                 <Group />
               </ListItemIcon>
               <ListItemText primary="Groups" />
             </ListItemButton>
-          </ListItem>
+          </ListItem> */}
           <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
-                <Storefront />
+                <Message />
               </ListItemIcon>
-              <ListItemText primary="Marketplace" />
+              <ListItemText primary="Messages" />
             </ListItemButton>
           </ListItem>
           <ListItem disablePadding>
@@ -72,13 +73,15 @@ const SideBar = ({mode,setMode}) => {
               <ListItemText primary="Settings" />
             </ListItemButton>
           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
+          <ListItem disablePadding onClick={()=>navigate('/profile')}>
+             
+            <ListItemButton component="a">
               <ListItemIcon>
                 <AccountBox />
               </ListItemIcon>
               <ListItemText primary="Profile" />
             </ListItemButton>
+           
           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
