@@ -4,10 +4,10 @@ export const verifyToken = (req,res,next)=>{
     try{
         let authHeader=req.header("Authorization");
         if(!authHeader){
+           
             return res.status(403).json({error:"Access Denied"});
         }
         let token = authHeader.split(" ").pop();
-        console.log(token)
         jwt.verify(token,process.env.JWT_SECETKEY,(err,decoded)=>{
         if(err){
             return res.status(200).json({message:"Authentication failed"})

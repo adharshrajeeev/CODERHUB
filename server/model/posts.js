@@ -14,6 +14,9 @@ const PostSchema=mongoose.Schema({
         ref:"users",
         required:true
     },
+    userName:{
+        type:String,
+    },
     image:{
         url:String
     },

@@ -1,3 +1,4 @@
+
 import cloudinary from '../config/cloudinary.js';
 import Posts from '../model/posts.js';
 import User from '../model/users.js';
@@ -5,11 +6,12 @@ import User from '../model/users.js';
 
 
 export const addUserPosts = async (req, res) => {
+    console.log("here111e")
     try{
-        const {content,userId}=req.body
-      
+        const {content,userId,userName}=req.body
+        console.log("heree")
+        console.log(userName)
         if(req.file){
-
             const cloudImage=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Posts"
             });
@@ -20,13 +22,15 @@ export const addUserPosts = async (req, res) => {
                 image:{
                     PublicId:cloudImage.public_id,
                     url:cloudImage.url
-                }
+                },
+                userName:userName
             })
             return res.status(200).json(post)
         }
         const post=await Posts.create({
             content,
-            postedUser:userId
+            postedUser:userId,
+            userName:userName
         })
         res.status(200).json({message:"sucess post added",post})
     }catch(err){
@@ -108,6 +112,65 @@ export const deleteUserPost = async(req,res)=>{
         }).catch((err)=>{
             return res.status(401).json({success:false,message:"No post found",error:err})
         })
+
+    }catch(err){
+        res.status(500).json({error:err})
+    }
+}
+
+export const exploreAllPosts = async(req,res)=>{
+    try{
+        const posts=await Posts.find();
+        res.status(200).json(posts)
+    }catch(err){
+        res.status(500).json({error:err})
+    }
+}
+
+export const likePost=async(req,res)=>{
+    try{
+        
+        const {postId,userId}=req.query
+        return new Promise((resolve,reject)=>{
+            Posts.findOneAndUpdate({_id:postId},{
+                $addToSet:{
+                    likes:userId
+                }
+            }).then((response)=>{
+                resolve(res.status(200).json({message:"user liked post",response}))
+            }).catch((err)=>{
+                resolve(err)
+            }) 
+        })
+    }catch(err){
+        res.status(500).json({error:err})
+
+    }
+} 
+
+export const unLikePost=async(req,res)=>{
+    try{
+        
+        const {postId,userId}=req.query
+        const post=await Posts.findOneAndUpdate({_id:postId},{
+            $pull:{
+                likes:userId
+            }
+        })
+        return res.status(200).json({message:"unlkedpost",post})
+    }catch(err){
+        res.status(500).json({error:err})
+
+    }
+}
+
+
+export const getLikedPostCount=async(req,res)=>{
+    try{
+        const postId=req.params.id;
+        console.log(postId)
+       const {likes}=await Posts.findOne({_id:postId})
+        res.status(200).json(likes.length)
 
     }catch(err){
         res.status(500).json({error:err})

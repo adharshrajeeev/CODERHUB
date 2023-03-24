@@ -10,7 +10,7 @@ import User from '../model/users.js';
 
 export const registerUser = async (req,res)=>{
    try{
-      console.log(req.body)
+      // console.log(req.body)
       const {error}= signupValidate(req.body)
       if(error){
          res.status(200).json({success:false,message:error.details[0].message})
@@ -44,7 +44,7 @@ export const userLogin = async(req,res)=>{
    try{
       const {error}=userLoginValidate(req.body);
       if(error){
-         res.status(200).json({success:false,message:error.details[0].message})
+         res.status(201).json({success:false,message:error.details[0].message})
       }else{
          const {email,password}=req.body;
          const userdetails=await User.findOne({email});
