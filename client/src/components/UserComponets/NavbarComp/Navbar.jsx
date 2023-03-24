@@ -102,8 +102,6 @@ const Navbar = () => {
           horizontal: "right",
         }}
       >
-        <MenuItem>Profile</MenuItem>
-        <MenuItem>My account</MenuItem>
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </AppBar>

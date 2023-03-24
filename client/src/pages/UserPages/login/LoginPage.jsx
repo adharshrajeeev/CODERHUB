@@ -15,6 +15,11 @@ import axios from '../../../utils/axios'
 import { LOGIN } from "../../../utils/ConstUrls";
 import {useDispatch} from 'react-redux'
 import {setLogin} from '../../../redux/store'
+
+
+
+
+
 export default  function  LoginPage() {
 
 
@@ -35,12 +40,16 @@ export default  function  LoginPage() {
     try{
       
     await axios.post(LOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
-      document.cookie=`token:${data.token}`
-      dispatch(setLogin({
-        user:data.userdetails,
-        token:data.token
-      }));
-      navigate('/home')
+      if(data.success){
+        document.cookie=`token:${data.token}`
+        dispatch(setLogin({
+          user:data.userdetails,
+          token:data.token
+        }));
+        navigate('/home')
+      }else{
+        toast.error(data.message)
+      }
     
     }).catch((err)=>{
       console.log(err)

@@ -1,27 +1,63 @@
 import { Box, Stack, Skeleton } from "@mui/material";
 import React, { useState,useEffect } from "react";
 import axios from '../../../utils/axios'
-import { Favorite, FavoriteBorder, MoreVert, Share } from "@mui/icons-material";
+import { Favorite, FavoriteBorder, MoreVert } from "@mui/icons-material";
+import Badge from '@mui/material/Badge';
 import {Avatar,Card,CardActions,CardContent, CardHeader,CardMedia,Checkbox,IconButton, Typography,} from "@mui/material";
+import CommentIcon from '@mui/icons-material/Comment';
 import { useSelector } from "react-redux";
-import { EXPLORE_ALLPOST } from "../../../utils/ConstUrls";
+import { EXPLORE_ALLPOST, GET_LIKCOUNT, LIKE_POST, UNLIKE_POST } from "../../../utils/ConstUrls";
 
 const AllPosts = () => {
   const [loading, setLoading] = useState(true);
   const [posts,setPosts]=useState([]);
-
+  const [liked,setLiked]=useState(false);
+  const [likeCount,setLikeCount]=useState(0);
+ 
   const userId=useSelector((state)=>state.user._id)
+  const userImage=useSelector((state)=>state.user?.profilePic)
+  const token=useSelector((state)=>state.token)
   setTimeout(() => {
     setLoading(false);
   }, [3000]);
 
+  const handleLikePost=async(e)=>{
+    try{
+     
+      // console.log(e.target.value,"this is like post id")
+      console.log(token)
+      console.log("LIKE")
+        setLiked(true)
+        const postId=e.target.value;
+       const response=await axios.post(`${LIKE_POST}?postId=${postId}&userId=${userId}`,{ headers: {'Authorization':`Bearer ${token}` } });
+     const likeresponse=await  axios.get(`${GET_LIKCOUNT}/${postId}`,{ headers: {'Authorization':`Bearer ${token}` } });
+     setLikeCount(prev=>prev+1)
+    }catch(err){
+      console.log("Liked ERROR",err)
+    }
+  }
+
+  const handleUnlikePost=async(e)=>{
+    try{
+      console.log("unlike")
+      setLiked(false);
+      const postId=e.target.value;
+      const response=await axios.post(`${UNLIKE_POST}?postId=${postId}&userId=${userId}`,{ headers: {'Authorization':`Bearer ${token}` } })
+      console.log(response)
+      // const likeresponse=await  axios.get(`${GET_LIKCOUNT}/${postId}`,{ headers: {'Authorization':`Bearer ${token}` } });
+      setLikeCount(prev=>prev-1)
+    }catch(err){
+      console.log("unliedk error",err);
+    }
+  }
+
   const getUserPosts= async()=>{
     const token=document.cookie.slice(6)
-    console.log(token)
+
     try{
 
       const response=await axios.get(EXPLORE_ALLPOST,{ headers: {'Authorization':`Bearer ${token}` } })
-      console.log(response)
+    
      setPosts(response.data)
     }catch(err){
         console.log(err)
@@ -48,8 +84,7 @@ const AllPosts = () => {
          <Card key={index} sx={{ margin: 5 }}>
           <CardHeader
             avatar={
-              <Avatar sx={{ bgcolor: "red" }} aria-label="recipe">
-                R
+              <Avatar  src={userImage ? userImage : "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-library.com%2Ficon%2Fno-user-image-icon-3.html&psig=AOvVaw0Sk5AHaURvpA7Vxl0X7dO-&ust=1679733302736000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJjZhamU9P0CFQAAAAAdAAAAABAE"}>
               </Avatar>
             }
             action={
@@ -57,15 +92,23 @@ const AllPosts = () => {
                 <MoreVert />
               </IconButton>
             }
-            title={post.postedUser}
+            title={post.userName}
             subheader={post.createdAt}
           />
-          <CardMedia
+          {
+            post.image ?  <CardMedia
             component="img"
             height="20%"
             image={post?.image?.url}
-            alt="Paella dish"
-          />
+            alt="user posts"
+          /> : ""
+          }
+          {/* <CardMedia
+            component="img"
+            height="20%"
+            image={post?.image?.url}
+            alt="user posts"
+          /> */}
           <CardContent>
             <Typography variant="body2" color="text.secondary">
               {
@@ -74,14 +117,16 @@ const AllPosts = () => {
             </Typography>
           </CardContent>
           <CardActions disableSpacing>
-            <IconButton aria-label="add to favorites">
+            <IconButton aria-label="Like"  >
+            <Badge  badgeContent={liked ? likeCount : 0} color="primary">
               <Checkbox
                 icon={<FavoriteBorder />}
                 checkedIcon={<Favorite sx={{ color: "red" }} />}
-              />
+              value={post._id} onClick={liked ? handleUnlikePost : handleLikePost} />
+               </Badge>
             </IconButton>
-            <IconButton aria-label="share">
-              <Share />
+            <IconButton aria-label="comments">
+              <CommentIcon />
             </IconButton>
           </CardActions>
         </Card>)

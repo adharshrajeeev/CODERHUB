@@ -18,6 +18,7 @@ import {
 } from "@mui/material";
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import PostModal from "./PostModal";
 
 const SideBar = ({mode,setMode}) => {
   const navigate=useNavigate();
@@ -25,6 +26,11 @@ const SideBar = ({mode,setMode}) => {
     <Box flex={1} p={2} sx={{ display: { xs: "none", sm: "block" } }}>
       <Box position="fixed">
         <List>
+        <ListItem disablePadding p={1}>
+
+                <PostModal />
+   
+          </ListItem>
           <ListItem disablePadding>
             <ListItemButton component="a" onClick={()=>navigate('/home')}>
               <ListItemIcon>

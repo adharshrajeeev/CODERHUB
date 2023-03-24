@@ -13,6 +13,9 @@ export const  ALL_POSTS='/posts'
 export const FOLLOW_USER='/follow'
 export const UNFOLLOW_USER='/unFollow'
 export const ADD_USER_BIO='/addBio'
+export const LIKE_POST='/like'
+export const UNLIKE_POST='/unLike'
+export const GET_LIKCOUNT='/likeCount'
 
 
 

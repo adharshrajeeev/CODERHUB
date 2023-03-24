@@ -23,15 +23,15 @@ const Feed = () => {
   const userId=useSelector((state)=>state.user._id)
   setTimeout(() => {
     setLoading(false);
-  }, [3000]);
+  }, [2000]);
 
   const getUserPosts= async()=>{
     const token=document.cookie.slice(6)
-    console.log(token)
+  
     try{
-      console.log(userId)
+    
       const response=await axios.get(`${ALL_POSTS}/${userId}`,{ headers: {'Authorization':`Bearer ${token}` } })
-      console.log(response)
+      
      setPosts(response.data)
     }catch(err){
         console.log(err)
@@ -74,7 +74,7 @@ const Feed = () => {
             component="img"
             height="20%"
             image={post?.image?.url}
-            alt="Paella dish"
+            alt="userposts"
           />
           <CardContent>
             <Typography variant="body2" color="text.secondary">
