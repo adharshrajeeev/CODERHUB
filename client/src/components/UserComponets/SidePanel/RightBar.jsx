@@ -2,17 +2,12 @@ import {
   Avatar,
   AvatarGroup,
   Box,
-  Divider,
   ImageList,
   ImageListItem,
-  List,
-  ListItem,
-  ListItemAvatar,
-  ListItemText,
   Typography,
 } from "@mui/material";
 import React from "react";
-import UsersList from "../FriendsSuggestions/UsersList";
+import Suggestions from "../FriendsSuggestions/Suggestions";
 
 
 
@@ -83,7 +78,7 @@ const Rightbar = () => {
             />
           </ImageListItem>
         </ImageList>
-        <UsersList/>
+        <Suggestions/>
       </Box>
     </Box>
   );
