@@ -80,12 +80,12 @@ export const getAllUsers = async(req,res)=>{
 
 export const followUser= async (req,res)=>{
    try{
-     const {userId,followerId}=req.query;
+     const {userId,followerId}=req.body;
      
      const user=await User.findById(userId);
      const followers=await User.findById(followerId)
 
-     if(!followers || !user) return res.status(400).json({message:"follower not found"})
+     if(!followers || !user) return res.status(400).json({success:true,message:"follower not found"})
      
       User.updateOne({_id:user._id},{
          $addToSet:{
@@ -93,7 +93,7 @@ export const followUser= async (req,res)=>{
          }
       }).then(async(response)=>{
          console.log(response)
-         if(response.modifiedCount === 0) return res.status(401).json({message:`You already following`})
+         if(response.modifiedCount === 0) return res.status(200).json({success:false,message:`You already following`})
         const followed = await User.updateOne({_id:followers._id},{
             $addToSet:{
                followers:user._id
@@ -111,11 +111,11 @@ export const followUser= async (req,res)=>{
 
 export const unFollowUser = async (req,res)=>{
    try{
-      const {userId,followerId}=req.query;
+      const {userId,followerId}=req.body;
       const user=await User.findById(userId)
       const followers=await User.findById(followerId)
 
-       if(!followers || !user) return res.status(400).json({message:"follower not found"})
+       if(!followers || !user) return res.status(200).json({success:false,message:"follower not found"})
 
        User.updateOne({_id:user._id},{
          $pull:{
@@ -127,7 +127,7 @@ export const unFollowUser = async (req,res)=>{
                   followers:user._id
                }
             })
-             return  res.status(200).json({message:`Success Unfollowed user ${followers.userName}`})
+             return  res.status(200).json({success:true,message:`Success Unfollowed user ${followers.userName}`})
        })
    }catch(err){
       res.status(400).json({error:err})

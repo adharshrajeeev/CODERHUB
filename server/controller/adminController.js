@@ -11,7 +11,7 @@ export const adminLogin = async(req,res)=>{
           
           const {error}=adminLoginValidate(req.body)
      
-          if(error) return res.status(400).json({error:error.details[0].message})
+          if(error) return res.status(200).json({success:false,message:error.details[0].message})
 
           const {adminId,adminPassword}=req.body;
           const adminDetails=await Admin.findOne({adminId})
@@ -19,10 +19,10 @@ export const adminLogin = async(req,res)=>{
               
                const matchPassword = await bcrypt.compare(adminPassword,adminDetails.adminPassword)
             
-               if(!matchPassword) return res.status(400).json({error:"Admin Password is not matched"})
+               if(!matchPassword) return res.status(200).json({success:false,message:"Admin Password is not matched"})
       
                const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWTKEY)
-               res.status(200).json({adminToken})
+               res.status(200).json({success:true,message:"Login success",adminToken})
           }else{
               
                res.status(400).json({error:"admin credentials not found"})
