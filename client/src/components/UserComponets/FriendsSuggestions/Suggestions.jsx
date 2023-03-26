@@ -9,27 +9,57 @@ import {
   } from "@mui/material";
   import Button from '@mui/material/Button';
   import React, { useEffect, useState } from "react";
-import { SHOW_USERS } from "../../../utils/ConstUrls";
+import { FOLLOW_USER, SHOW_USERS, UNFOLLOW_USER } from "../../../utils/ConstUrls";
 import axios from '../../../utils/axios'
 import { useSelector } from "react-redux";
+import  toast,{Toaster}  from "react-hot-toast";
 
 function Suggestions() {
 
   const token=useSelector((state)=>state.token);
+  const userId=useSelector((state)=>state.user._id)
   const [userList,SetUserList]=useState([])
   const getUserLists=async()=>{
     try{
 
       const response=await axios.get(SHOW_USERS,{ headers: {'Authorization':`Bearer ${token}` } });
-      SetUserList(response.data)
+      SetUserList(response.data);
+      
     }catch(err){
       console.log("Oops somethingwent wrong")
     }
   }
 
 
-  const handleFollow = async()=>{
+  const handleFollow = async(e)=>{
+   try{
+      console.log(token,"toeknissss")
     
+     const followerId=e.target.value;
+     const body={
+      userId,followerId
+     }
+     const response=await axios.post(FOLLOW_USER,body,{ headers: {'Authorization':`Bearer ${token}`,"Content-Type": "application/json" } });
+    
+     toast.success(response.data.message)
+   }catch(err){
+    console.log("error in following",err)
+   }
+  }
+
+
+  const handleUnFollow=async(e)=>{
+      try{
+        const followerId=e.target.value;
+        const body={
+         userId,followerId
+        }
+        const response=await axios.post(UNFOLLOW_USER,body,{ headers: {'Authorization':`Bearer ${token}`,"Content-Type": "application/json" } })
+      
+        toast.success(response.data.message)
+    }catch(err){
+      console.log("Eroor in Unfollowing",err)
+    }
   }
 
     useEffect(()=>{
@@ -62,19 +92,27 @@ function Suggestions() {
                       >
                        {users.userName} 
                       </Typography>
-                      <Button sx={{display:"flex"}}
-                       variant="contained" size="small" onClick={handleFollow} >Follow</Button>
-                      {/* {" — I'll be in your neighborhood doing errands this…"} */}
+                      {/* {
+                        unfollowed &&  <Button sx={{display:"flex"}} variant="contained" size="small" value={users._id} onClick={handleFollow} >Follow</Button>
+                      
+                      } */}
+                   
+                          
+                          <Button sx={{display:"flex"}} variant="contained" size="small" value={users._id} onClick={handleFollow} >Follow</Button>
+                      
+                     
+                   
                     </React.Fragment>
                   }
                 />
               </ListItem>
               <Divider variant="inset" component="li" />
+              <Toaster  position="bottom-left"
+          reverseOrder={false} />
               </>
               )
             })
           }
-     
     </List>
       </>
   )

@@ -26,7 +26,7 @@ export const GET_LIKCOUNT='/likeCount'
 
 //ADMIN SIDE URLS===>>>>>>
 
-export const ADMINLOGIN='/login'
+export const ADMINLOGIN='/admin/login'
 export const GET_ALL_USERS='/allUsers'
 export const CHANGE_USER_STATUS='/changeStatus'
 export const GET_ALL_POSTS='/allPosts'

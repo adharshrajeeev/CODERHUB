@@ -84,7 +84,7 @@ const AllPosts = () => {
          <Card key={index} sx={{ margin: 5 }}>
           <CardHeader
             avatar={
-              <Avatar  src={userImage ? userImage : "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-library.com%2Ficon%2Fno-user-image-icon-3.html&psig=AOvVaw0Sk5AHaURvpA7Vxl0X7dO-&ust=1679733302736000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJjZhamU9P0CFQAAAAAdAAAAABAE"}>
+              <Avatar  src={"https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-library.com%2Ficon%2Fno-user-image-icon-3.html&psig=AOvVaw0Sk5AHaURvpA7Vxl0X7dO-&ust=1679733302736000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJjZhamU9P0CFQAAAAAdAAAAABAE"}>
               </Avatar>
             }
             action={
@@ -118,7 +118,7 @@ const AllPosts = () => {
           </CardContent>
           <CardActions disableSpacing>
             <IconButton aria-label="Like"  >
-            <Badge  badgeContent={liked ? likeCount : 0} color="primary">
+            <Badge  color="primary">
               <Checkbox
                 icon={<FavoriteBorder />}
                 checkedIcon={<Favorite sx={{ color: "red" }} />}
