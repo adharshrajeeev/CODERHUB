@@ -189,7 +189,7 @@ export const addProfilePicture = async(req,res)=>{
    
       const userId=req.params.id
      
-      if(!req.file) return res.status(400).json({error:"no image found"})
+      if(!req.file) return res.status(400).json({success:false,message:"no image found"})
       console.log(req.file)
       const profilePic=await cloudinary.uploader.upload(req.file.path,{
          folder:"Profile"
@@ -198,10 +198,10 @@ export const addProfilePicture = async(req,res)=>{
       const userPropic=await User.findOneAndUpdate({_id:userId},{
          profilePic:imageUrl
       })
-      res.status(200).json({message:"User Profile picture updated",imageUrl})
+      res.status(200).json({success:true,message:"User Profile picture updated",imageUrl})
 
    }catch(err){
-      res.status(500).json({error:err})
+      res.status(500).json({message:"oops something whent wrong"})
    }
 }
 
