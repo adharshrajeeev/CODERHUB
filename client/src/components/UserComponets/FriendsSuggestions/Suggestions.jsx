@@ -16,9 +16,14 @@ import  toast,{Toaster}  from "react-hot-toast";
 
 function Suggestions() {
 
+  const [isFollowing, setIsFollowing] = useState(false)
   const token=useSelector((state)=>state.token);
-  const userId=useSelector((state)=>state.user._id)
-  const [userList,SetUserList]=useState([])
+  const userId=useSelector((state)=>state.user._id);
+
+  const followers=useSelector((state)=>state.user.followers)
+
+  const [userList,SetUserList]=useState([]);
+
   const getUserLists=async()=>{
     try{
 
@@ -31,16 +36,16 @@ function Suggestions() {
   }
 
 
-  const handleFollow = async(e)=>{
+  const handleFollow = async(followerId)=>{
    try{
-      console.log(token,"toeknissss")
+  
     
-     const followerId=e.target.value;
+  
      const body={
       userId,followerId
      }
      const response=await axios.post(FOLLOW_USER,body,{ headers: {'Authorization':`Bearer ${token}`,"Content-Type": "application/json" } });
-    
+     setIsFollowing(true)
      toast.success(response.data.message)
    }catch(err){
     console.log("error in following",err)
@@ -55,7 +60,7 @@ function Suggestions() {
          userId,followerId
         }
         const response=await axios.post(UNFOLLOW_USER,body,{ headers: {'Authorization':`Bearer ${token}`,"Content-Type": "application/json" } })
-      
+        setIsFollowing(false);
         toast.success(response.data.message)
     }catch(err){
       console.log("Eroor in Unfollowing",err)
@@ -77,7 +82,7 @@ function Suggestions() {
             userList.map((users,index)=>{
               return (
                 <>
-                <ListItem key={index} alignItems="flex-start">
+                <ListItem key={users._id} alignItems="flex-start">
                 <ListItemAvatar>
                   <Avatar alt={users.userName} src={users.profilePic ? users.profilePic : "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-library.com%2Ficon%2Fno-user-image-icon-3.html&psig=AOvVaw0Sk5AHaURvpA7Vxl0X7dO-&ust=1679733302736000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJjZhamU9P0CFQAAAAAdAAAAABAE"} />
                 </ListItemAvatar>
@@ -98,7 +103,7 @@ function Suggestions() {
                       } */}
                    
                           
-                          <Button sx={{display:"flex"}} variant="contained" size="small" value={users._id} onClick={handleFollow} >Follow</Button>
+                          <Button sx={{display:"flex"}} variant="contained" size="small"  onClick={handleFollow(users._id)} > {isFollowing ? 'Unfollow' : 'Follow'}</Button>
                       
                      
                    
