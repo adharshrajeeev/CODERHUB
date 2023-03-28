@@ -6,14 +6,15 @@ import Avatar from '@mui/material/Avatar';
 import { CardActions, IconButton } from '@mui/material';
 import { Box } from "@mui/material";
 import UserPosts from '../Posts/UserPosts';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import  toast,{Toaster } from "react-hot-toast";
 import axios from '../../../utils/axios'
 import { ADD_PROFILEIMAGE } from '../../../utils/ConstUrls';
-import { useNavigate } from "react-router-dom";
+import {setProfilepic} from '../../../redux/store'
+
 
 const style = {
   position: 'absolute',
@@ -30,12 +31,14 @@ const style = {
 function Profile() {
 
   const [profilePicture, setProfilePicture] = useState("");
-  const navigate=useNavigate();
+  const dispatch=useDispatch()
   const uploadButtonRef = useRef(null);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
   const { userName, bio, profilePic, coverPic, following, followers } = useSelector((state) => state?.user);
+  // const profileImg=useSelector((state)=>state.user.profilePic)
   const userId=useSelector((state)=>state.user._id)
   const handleChangeImg = (e)=>{
     setProfilePicture(e.target.files[0])
@@ -53,11 +56,15 @@ function Profile() {
    formData.append('image',profilePicture);
    try{
     const token=document.cookie.slice(6)
-     const response=await axios.post(`${ADD_PROFILEIMAGE}/${userId}`,formData,{ headers: {'Authorization':`Bearer ${token}` } })
-    if(response.success){
-      navigate('/profile')
+     const {data}=await axios.post(`${ADD_PROFILEIMAGE}/${userId}`,formData,{ headers: {'Authorization':`Bearer ${token}` } })
+      console.log(data)
+     if(data.success){
+       handleClose();
+        dispatch(setProfilepic({imageUrl:data.imageUrl}))
+       toast.success("USER IMAGE UPDATED")
+      
     }else{
-      alert(response.message)
+      alert(data.message)
     }
    }catch(err){
   console.log(err)

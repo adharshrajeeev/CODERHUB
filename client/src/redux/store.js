@@ -17,6 +17,7 @@ export const authSlice= createSlice({
         setLogin : (state,action)=>{
             state.user=action.payload.user;
             state.token=action.payload.token;
+            
         },
         setLogout:(state)=>{
             state.user=null
@@ -36,11 +37,14 @@ export const authSlice= createSlice({
                 return post;
             })
             state.posts=updatedPost
+        },
+        setProfilepic:(state,action)=>{
+            state.user.profilePic=action.payload.imageUrl
         }
 
     }
 })
 
-export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts} = authSlice.actions
+export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic} = authSlice.actions
 
 export default authSlice.reducer;

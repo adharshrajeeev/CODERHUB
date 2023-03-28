@@ -5,12 +5,18 @@ import { Favorite, FavoriteBorder, MoreVert } from "@mui/icons-material";
 import Badge from '@mui/material/Badge';
 import {Avatar,Card,CardActions,CardContent, CardHeader,CardMedia,Checkbox,IconButton, Typography,} from "@mui/material";
 import CommentIcon from '@mui/icons-material/Comment';
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { EXPLORE_ALLPOST, GET_LIKCOUNT, LIKE_POST, UNLIKE_POST } from "../../../utils/ConstUrls";
+import { setPosts } from "../../../redux/store";
+
+
+
 
 const AllPosts = () => {
+  
+  const dispatch=useDispatch();
   const [loading, setLoading] = useState(true);
-  const [posts,setPosts]=useState([]);
+  const posts=useSelector((state)=>state?.posts)
   const [liked,setLiked]=useState(false);
   const [likeCount,setLikeCount]=useState(0);
  
@@ -57,8 +63,8 @@ const AllPosts = () => {
     try{
 
       const response=await axios.get(EXPLORE_ALLPOST,{ headers: {'Authorization':`Bearer ${token}` } })
-    
-     setPosts(response.data)
+      
+      dispatch(setPosts({posts:response.data}))
     }catch(err){
         console.log(err)
     }

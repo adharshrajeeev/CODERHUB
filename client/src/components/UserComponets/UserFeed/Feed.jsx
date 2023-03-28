@@ -14,12 +14,14 @@ import {
   IconButton,
   Typography,
 } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "../../../redux/store";
 
 const Feed = () => {
   const [loading, setLoading] = useState(true);
-  const [posts,setPosts]=useState([]);
-
+  const dispatch=useDispatch();
+  // const [posts,setPosts]=useState([]);
+  const posts=useSelector((state)=>state?.posts)
   const userId=useSelector((state)=>state.user._id)
   setTimeout(() => {
     setLoading(false);
@@ -31,8 +33,8 @@ const Feed = () => {
     try{
     
       const response=await axios.get(`${ALL_POSTS}/${userId}`,{ headers: {'Authorization':`Bearer ${token}` } })
-      
-     setPosts(response.data)
+      dispatch(setPosts({posts:response.data}))
+    
     }catch(err){
         console.log(err)
     }
