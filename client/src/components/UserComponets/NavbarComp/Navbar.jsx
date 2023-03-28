@@ -51,7 +51,8 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const dispatch=useDispatch();
   
-  const userName=useSelector((state)=>state.user.userName)
+  const userName=useSelector((state)=>state.user.userName);
+  
   const handleLogout = ()=>{
     document.cookie="token:";
     dispatch(setLogout());
