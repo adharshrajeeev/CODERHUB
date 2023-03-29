@@ -4,7 +4,7 @@ export const baseAdminUrl = "http://localhost:7000/api/admin"
 //USER SIDE URLS===>>>>>>>
 
 export const SIGNUP='/signup'
-export const LOGIN='/login'
+export const USER_LOGIN='/login'
 export const ADD_POST='/addPosts'
 export const SHOW_USERS='/users'
 export const SHOW_USER_POST='/userPosts'
