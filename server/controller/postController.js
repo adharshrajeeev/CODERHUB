@@ -8,9 +8,9 @@ import User from '../model/users.js';
 export const addUserPosts = async (req, res) => {
     console.log("here111e")
     try{
-        const {content,userId,userName}=req.body
+        const {content,userId,userName,profilePic}=req.body
         console.log("heree")
-        console.log(userName)
+        // console.log(userName)
         if(req.file){
             const cloudImage=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Posts"
@@ -18,23 +18,31 @@ export const addUserPosts = async (req, res) => {
             console.log(cloudImage)
             const post = await Posts.create({
                 content,
-                postedUser:userId,
+                postedUser:{
+                    _id:userId,
+                    userName,
+                    profilePic
+                },
                 image:{
                     PublicId:cloudImage.public_id,
                     url:cloudImage.url
                 },
                 userName:userName
             })
-            return res.status(200).json(post)
+            return res.status(200).json({success:true,message:"post added sucess",post})
         }
         const post=await Posts.create({
             content,
-            postedUser:userId,
-            userName:userName
+            postedUser:{
+                _id:userId,
+                userName:userName,
+                profilePic:profilePic
+            },
         })
-        res.status(200).json({message:"sucess post added",post})
+        res.status(200).json({success:true,message:"sucess post added",post})
     }catch(err){
-        res.status(400).json({success:false,error:err})
+        console.log(err)
+        res.status(400).json({success:false,error:err,message:"somehting went wrong"})
     }
 }
 
@@ -42,8 +50,8 @@ export const addUserPosts = async (req, res) => {
 export const getUserPost = async(req,res)=>{
     try{
         const userId=req.params.id;
-        const userPosts = await Posts.find({postedUser:userId})
-        res.status(200).json(userPosts)
+        const posts = await Posts.find({"postedUser._id":userId})
+        res.status(200).json({success:true,posts})
     }catch(err){
         res.status(400).json({success:false,error:err})
     }
@@ -120,7 +128,7 @@ export const deleteUserPost = async(req,res)=>{
 
 export const exploreAllPosts = async(req,res)=>{
     try{
-        const posts=await Posts.find();
+        const posts=await Posts.find().sort({ createdAt: -1 });
         res.status(200).json(posts)
     }catch(err){
         res.status(500).json({error:err})

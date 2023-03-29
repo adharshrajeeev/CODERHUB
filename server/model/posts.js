@@ -10,12 +10,19 @@ const PostSchema=mongoose.Schema({
         ref:"users"
     }],
     postedUser:{
-        type:mongoose.Types.ObjectId,
-        ref:"users",
-        required:true
-    },
-    userName:{
-        type:String,
+        _id: {
+            type: mongoose.Schema.Types.ObjectId,
+            required: true,
+            ref: 'user' 
+          },
+          userName: {
+            type: String,
+            required: true
+          },
+          profilePic: {
+            type: String,
+            required: true
+          }
     },
     image:{
         url:String
