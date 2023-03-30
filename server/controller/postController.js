@@ -138,7 +138,8 @@ export const exploreAllPosts = async(req,res)=>{
 export const likePost=async(req,res)=>{
     try{
         
-        const {postId,userId}=req.query
+        const {postId,userId}=req.body;
+        console.log(postId,userId,"hey all this is liekd")
         return new Promise((resolve,reject)=>{
             Posts.findOneAndUpdate({_id:postId},{
                 $addToSet:{
@@ -159,14 +160,16 @@ export const likePost=async(req,res)=>{
 export const unLikePost=async(req,res)=>{
     try{
         
-        const {postId,userId}=req.query
+        const {postId,userId}=req.body;
+        console.log(postId,userId,"no issue")
         const post=await Posts.findOneAndUpdate({_id:postId},{
             $pull:{
                 likes:userId
             }
         })
-        return res.status(200).json({message:"unlkedpost",post})
+        res.status(200).json({success:true,message:"user unliked post",post})
     }catch(err){
+      
         res.status(500).json({error:err})
 
     }
@@ -184,3 +187,4 @@ export const getLikedPostCount=async(req,res)=>{
         res.status(500).json({error:err})
     }
 }
+

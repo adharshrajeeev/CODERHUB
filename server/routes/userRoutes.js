@@ -20,8 +20,9 @@ router.get('/explore',verifyToken,exploreAllPosts)
 router.get('/editPost/:id',verifyToken,getEditPost)
 router.put('/updatePost/:id',verifyToken,upload.single('image'),updateUserPost)
 router.delete('/deletePost/:id',verifyToken,deleteUserPost)
-router.post('/like',likePost)
-router.post('/unLike',unLikePost);
+router.put('/like',verifyToken, likePost)
+router.put('/unLike',verifyToken,unLikePost);
+
 router.get('/likeCount/:id',getLikedPostCount)
 
 router.post('/follow',verifyToken,followUser) 
