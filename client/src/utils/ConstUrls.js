@@ -17,6 +17,7 @@ export const LIKE_POST='/like'
 export const UNLIKE_POST='/unLike'
 export const GET_LIKCOUNT='/likeCount'
 export const ADD_PROFILEIMAGE='/profilePicture'
+export const GET_LIKE_STATUS='/likeStatus'
 
 
 

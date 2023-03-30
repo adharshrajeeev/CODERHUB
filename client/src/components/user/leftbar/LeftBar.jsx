@@ -32,16 +32,13 @@ function LeftBar() {
     <div className="leftBar">
     <div className="container">
       <div className="menu">  
-        <div className="user">
-          {/* <img
-            src={currentUser.profilePic}
-            alt=""
-          /> */}
+        {/* <div className="user">
+          
           <span>adharsh</span>
-        </div>
+        </div> */}
         <div className="item">
-        <List>
-        <ListItem disablePadding p={1}>
+        <List sx={{ width: '100%', maxWidth: 360,color:"black"}}>
+        <ListItem > 
 
            <AddPostModal/>
    
