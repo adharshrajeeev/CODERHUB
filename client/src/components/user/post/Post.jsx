@@ -3,7 +3,6 @@ import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlin
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
 import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
-import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useEffect, useState } from "react";
@@ -11,6 +10,8 @@ import { useSelector } from "react-redux";
 import axios from '../../../utils/axios'
 import moment from 'moment'
 import {  LIKE_POST, UNLIKE_POST } from "../../../utils/ConstUrls";
+import PostMenuButton from "./PostMenuButton";
+
 
 
 const Post = ({ post }) => {
@@ -73,7 +74,8 @@ const Post = ({ post }) => {
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
-          <MoreHorizIcon />
+         {/* <PostMenuButton post={post} postedUser={post.postedUser._id}/> */}
+         <PostMenuButton postId={post._id} postedUserId={post.postedUser._id} userId={userId} />
         </div>
         <div className="content">
           <p>{post.content}</p>

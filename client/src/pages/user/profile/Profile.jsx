@@ -12,6 +12,7 @@ import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import {setProfilepic} from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
+import { Toaster } from 'react-hot-toast';
 import './profileStyle.scss'
 
 
@@ -167,6 +168,10 @@ function Profile() {
 
           </div>
         </div>
+        <Toaster
+  position="top-center"
+  reverseOrder={false}
+/>
         <RightBar />
       </div>
     </div>

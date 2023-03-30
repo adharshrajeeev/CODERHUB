@@ -8,6 +8,7 @@ import Profile from './pages/user/profile/Profile'
 import Register from './pages/user/register/Register';
 import Explore from './pages/user/explore/Explore';
 
+
 function App() {
   
   const isAuth = Boolean(useSelector((state) => state.user.token));
