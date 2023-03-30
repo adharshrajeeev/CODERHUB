@@ -8,22 +8,39 @@ import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import axios from '../../../utils/axios'
+import moment from 'moment'
+import { LIKE_POST } from "../../../utils/ConstUrls";
+
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
-  const postedDate=post.createdAt;
-  const currentDate=new Date(postedDate);
-  const postDate=currentDate.getDate() +  " " + currentDate.toLocaleString('default', { month: 'long' }) + " " + currentDate.getFullYear()
+  const [likes,setLikes]=useState(post.likes?.length)
   const userId=useSelector((state)=>state.user?.user?._id)
-  const liked = false;
   const {profilePic}=useSelector((state)=>state.user?.user)
   var imagefile
   if(post.postedUser?._id===userId){
-     imagefile=true
+    imagefile=true
+  }
+
+  const handleLike = async()=>{
+      try{  
+        const token = document.cookie.slice(6);
+        const body=JSON.stringify({
+          postId:post._id,
+          userId:userId
+        }
+        )
+        setLikes((cur)=>cur+1)
+        const response=await axios.put(LIKE_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } });
+        console.log(response,"like response")
+      }catch(err){
+        console.log("Like function error",err)
+      }
   }
 
   return (
-    <div className="post">
+    <div  className="post">
       <div className="container">
         <div className="user">
           <div className="userInfo">
@@ -35,7 +52,7 @@ const Post = ({ post }) => {
               >
                 <span className="name">{post.postedUser?.userName}</span>
               </Link>
-              <span className="date">{postDate}</span>
+              <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
           <MoreHorizIcon />
@@ -46,8 +63,8 @@ const Post = ({ post }) => {
         </div>
         <div className="info">
           <div className="item">
-            {liked ? <FavoriteOutlinedIcon /> : <FavoriteBorderOutlinedIcon />}
-            12 Likes
+            {post.likes?.includes(userId) ? <FavoriteOutlinedIcon  style={{color:"red"}}  /> : <FavoriteBorderOutlinedIcon onClick={handleLike} />}
+            {likes} Likes
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />

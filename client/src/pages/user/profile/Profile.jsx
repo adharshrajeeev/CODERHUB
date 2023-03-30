@@ -11,9 +11,9 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
 import {setProfilepic} from '../../../redux/userSlice'
-
+import Post from '../../../components/user/post/Post';
 import './profileStyle.scss'
-import UserPosts from '../../../components/user/post/UserPosts';
+
 
 
 
@@ -31,7 +31,8 @@ const style = {
 
 function Profile() {
 
-  const [posts, setPosts] = useState([])
+  const [posts, setPosts] = useState([]);
+ 
   const userId = useSelector((state) => state.user.user._id);
   const { profilePic, userName, coverPic } = useSelector((state) => state.user?.user);
 
@@ -42,11 +43,12 @@ function Profile() {
   const dispatch=useDispatch();
 
 
+
   const getUserPosts = async () => {
     try {
       const token = document.cookie.slice(6)
       const response = await axios.get(`${SHOW_USER_POST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
-      setPosts(response.data.posts)
+      setPosts(response.data.posts.filter((post)=>post.postedUser._id === userId))
 
     } catch (err) {
       console.log("error is getting user posts profile")
@@ -67,7 +69,7 @@ function Profile() {
  
 
    const formData=new FormData();
-   formData.append('image',profilePicture);
+   formData.append('image',profilePicture); 
    try{
     const token=document.cookie.slice(6)
      const {data}=await axios.post(`${ADD_PROFILEIMAGE}/${userId}`,formData,{ headers: {'Authorization':`Bearer ${token}` } })
@@ -157,7 +159,7 @@ function Profile() {
                 <div className='userPosts'>
 
                   {posts.map(post => (
-                    <UserPosts post={post} profilePic={profilePic} key={post._id} />
+                     <Post post={post} key={post._id}/>
                   ))}
                 </div>
               </div>
