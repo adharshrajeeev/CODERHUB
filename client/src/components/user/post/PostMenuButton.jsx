@@ -9,7 +9,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
+import axios from '../../../utils/axios'
 import toast  from 'react-hot-toast';
+import { DELETE_POSTS } from '../../../utils/ConstUrls';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -18,14 +20,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function PostMenuButton({postId,postedUserId,userId}) {
 
-    const [anchorEl, setAnchorEl] = useState(null);
+    const [anchorEl, setAnchorEl] = useState(false);
     const [clickOpen,SetClickOpen]=useState(false)
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
     };
     const handleClose = () => {
-      setAnchorEl(null);
+      setAnchorEl(false);
     };
 
     const handleClickOpen = () => {
@@ -34,6 +36,19 @@ function PostMenuButton({postId,postedUserId,userId}) {
       const handleClickClose = () => {
         SetClickOpen(false);
       };
+
+    const handleDeletePost = async ()=>{
+        try{
+            const token = document.cookie.slice(6)
+         const response=await   axios.delete(`${DELETE_POSTS}/${postId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
+         console.log(response);
+         handleClickClose();
+         handleClose();
+         
+        }catch(err){
+            console.log(":userpost delete error",err)
+        }
+    }  
 
   return (
    <>
@@ -56,16 +71,15 @@ function PostMenuButton({postId,postedUserId,userId}) {
         onClose={handleClickClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>{"Use Google's location service?"}</DialogTitle>
+        <DialogTitle style={{color:"red"}}>{"Are you sure to delete post?"}</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
+          <DialogContentText id="alert-dialog-slide-description" style={{color:'black'}}>
+            Once Post deleted Cannot be retreived!!!
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClickClose}>Disagree</Button>
-          <Button onClick={handleClickClose}>Agree</Button>
+          <Button onClick={handleClickClose}>Cancel</Button>
+          <Button onClick={handleDeletePost}>Accept</Button>
         </DialogActions>
       </Dialog>
       </Menu> :
