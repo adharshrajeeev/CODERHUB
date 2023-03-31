@@ -13,7 +13,10 @@ import adminRoutes from  './routes/adminRoutes.js'
 
 const app=express();
 dotenv.config();
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200
+}));
 app.use(morgan("dev"))
 app.use(bodyParser.json({ limit: '30mb', extended: true }))
 app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))

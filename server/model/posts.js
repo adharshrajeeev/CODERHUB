@@ -33,6 +33,15 @@ const PostSchema=mongoose.Schema({
         },
         postUserId:{
             type:mongoose.Types.ObjectId
+        },
+        createdAt:{
+            type:Date,
+        },
+        userName:{
+            type:String
+        },
+        userPic:{
+            type:String
         }
     }],
     isDelete:{

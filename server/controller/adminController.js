@@ -8,7 +8,7 @@ import Posts from '../model/posts.js'
 export const adminLogin = async(req,res)=>{
 
      try{
-          
+          console.log(req.body)
           const {error}=adminLoginValidate(req.body)
      
           if(error) return res.status(200).json({success:false,message:error.details[0].message})
@@ -25,11 +25,11 @@ export const adminLogin = async(req,res)=>{
                res.status(200).json({success:true,message:"Login success",adminToken})
           }else{
               
-               res.status(400).json({error:"admin credentials not found"})
+               res.status(200).json({success:false,message:"admin credentials not found"})
           }
           
      }catch(err){
-          res.status(400).json({error:err})
+          res.status(400).json({error:err,message:"server eroor"})
      }
 
 }

@@ -188,3 +188,28 @@ export const getLikedPostCount=async(req,res)=>{
     }
 }
 
+
+export const addPostComment = async(req,res)=>{
+    try{
+        console.log(req.body);
+        const commentDate=new Date();
+        const {postId,userId,content}=req.body;
+        const userDetails=await User.findOne({_id:userId})
+        const newComment={
+            postUserId:userId,
+            content:content,
+            createdAt:commentDate,
+            userName:userDetails.userName,
+            userPic:userDetails.profilePic
+        }
+        const comments=await Posts.findOneAndUpdate({_id:postId},{
+            $push:{
+                comments:newComment,
+            },
+        })
+        res.status(200).json(comments)
+    }catch(err){
+        res.status(500).json({error:err})
+    }
+}
+
