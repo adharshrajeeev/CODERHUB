@@ -1,5 +1,5 @@
 export const baseUserUrl = "http://localhost:7000/api/"
-export const baseAdminUrl = "http://localhost:7000/api/admin"
+// export const baseAdminUrl = "http://localhost:7000/api/admin"
 
 //USER SIDE URLS===>>>>>>>
 

@@ -35,6 +35,7 @@ function PostMenuButton({postId,postedUserId,userId}) {
       };
       const handleClickClose = () => {
         SetClickOpen(false);
+       
       };
 
     const handleDeletePost = async ()=>{
@@ -93,7 +94,6 @@ function PostMenuButton({postId,postedUserId,userId}) {
       }}
     >
       <MenuItem onClick={handleClose}>Report</MenuItem>
-      <MenuItem onClick={handleClose}>Save</MenuItem>
     </Menu>
     }
     

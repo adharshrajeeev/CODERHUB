@@ -7,6 +7,8 @@ import Home from './pages/user/home/Home';
 import Profile from './pages/user/profile/Profile'
 import Register from './pages/user/register/Register';
 import Explore from './pages/user/explore/Explore';
+import AdminLogin from './pages/admin/adminLogin/Login';
+import AdminHome from './pages/admin/adminHome/Home'
 
 
 function App() {
@@ -23,8 +25,8 @@ function App() {
           <Route path='/home' element={isAuth ? <Home /> : <Login/>} />
           <Route path='/profile' element={isAuth ? <Profile/> : <Navigate to={'/'}/>} />
           <Route path='/explore' element={isAuth ? <Explore/> : <Navigate to={'/'}/>} />
-          {/* <Route path='/admin' element={<AdminLogin/>} /> */}
-          <Route path='/admin/dashboard' element={<Home/>} />
+          <Route path='/admin' element={<AdminLogin/>} />
+          <Route path='/admin/dashboard' element={<AdminHome/>} />
           
           {/* <Route path='*' element={<PageNotFound />} /> */}
        </Routes>
