@@ -12,6 +12,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import axios from '../../../utils/axios'
 import { ADMINLOGIN } from '../../../utils/ConstUrls';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setAdminLogin } from '../../../redux/adminSlice';
 
 const theme = createTheme();
 
@@ -20,6 +22,7 @@ function Login() {
         const [adminId,setAdminId]=useState("")
         const [adminPassword,setAdminPassword]=useState("");
         const navigate=useNavigate();
+        const dispatch=useDispatch();
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -35,8 +38,9 @@ function Login() {
 
             axios.post(ADMINLOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
                 if(data.success){
+                    dispatch(setAdminLogin(data.adminToken))
                     localStorage.setItem('adminToken',data.adminToken);
-                    navigate('/admin/dashboard')
+                    navigate('/admin/dashboard');
                 }else{
                     toast.error(data.message)
                 }

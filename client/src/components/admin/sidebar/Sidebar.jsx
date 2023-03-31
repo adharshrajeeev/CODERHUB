@@ -11,10 +11,19 @@ import NotificationsNoneIcon from "@mui/icons-material/NotificationsNone";
 import SettingsSystemDaydreamOutlinedIcon from "@mui/icons-material/SettingsSystemDaydreamOutlined";
 import PsychologyOutlinedIcon from "@mui/icons-material/PsychologyOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './sidebar.scss'
 
 function Sidebar() {
+
+  const navigate=useNavigate();
+
+  const handleAdminLogout= ()=>{
+    console.log(localStorage.getItem("adminToken"))
+    localStorage.removeItem("adminToken");
+    navigate('/admin')
+  }
+
   return (  
     <div className="adminSidebar">
     <div className="top">
@@ -43,56 +52,12 @@ function Sidebar() {
             <span>Products</span>
           </li>
         </Link>
-        <li>
-          <CreditCardIcon className="icon" />
-          <span>Orders</span>
-        </li>
-        <li>
-          <LocalShippingIcon className="icon" />
-          <span>Delivery</span>
-        </li>
-        <p className="title">USEFUL</p>
-        <li>
-          <InsertChartIcon className="icon" />
-          <span>Stats</span>
-        </li>
-        <li>
-          <NotificationsNoneIcon className="icon" />
-          <span>Notifications</span>
-        </li>
-        <p className="title">SERVICE</p>
-        <li>
-          <SettingsSystemDaydreamOutlinedIcon className="icon" />
-          <span>System Health</span>
-        </li>
-        <li>
-          <PsychologyOutlinedIcon className="icon" />
-          <span>Logs</span>
-        </li>
-        <li>
-          <SettingsApplicationsIcon className="icon" />
-          <span>Settings</span>
-        </li>
-        <p className="title">USER</p>
-        <li>
-          <AccountCircleOutlinedIcon className="icon" />
-          <span>Profile</span>
-        </li>
-        <li>
-          <ExitToAppIcon className="icon" />
-          <span>Logout</span>
+        <p className="title">ADMIN</p>
+        <li onClick={handleAdminLogout}>
+          <ExitToAppIcon className="icon"  />
+          <span >Logout</span>
         </li>
       </ul>
-    </div>
-    <div className="bottom">
-      <div
-        className="colorOption"
-       
-      ></div>
-      <div
-        className="colorOption"
-       
-      ></div>
     </div>
   </div>
   )

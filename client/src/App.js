@@ -14,6 +14,8 @@ import AdminHome from './pages/admin/adminHome/Home'
 function App() {
   
   const isAuth = Boolean(useSelector((state) => state.user.token));
+  const adminAuth = Boolean(localStorage.getItem('adminToken'));
+
   const darkMode =false
 
   return (
@@ -26,7 +28,7 @@ function App() {
           <Route path='/profile' element={isAuth ? <Profile/> : <Navigate to={'/'}/>} />
           <Route path='/explore' element={isAuth ? <Explore/> : <Navigate to={'/'}/>} />
           <Route path='/admin' element={<AdminLogin/>} />
-          <Route path='/admin/dashboard' element={<AdminHome/>} />
+          <Route path='/admin/dashboard' element={adminAuth ? <AdminHome/> : <Navigate to={'/admin'}/>}  />
           
           {/* <Route path='*' element={<PageNotFound />} /> */}
        </Routes>

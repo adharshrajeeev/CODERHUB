@@ -28,7 +28,7 @@ export const GET_LIKE_STATUS='/likeStatus'
 //ADMIN SIDE URLS===>>>>>>
 
 export const ADMINLOGIN='/admin/login'
-export const GET_ALL_USERS='/allUsers'
-export const CHANGE_USER_STATUS='/changeStatus'
-export const GET_ALL_POSTS='/allPosts'
-export const DELETE_POSTS='/deletePost'
+export const GET_ALL_USERS='/admin/allUsers'
+export const CHANGE_USER_STATUS='/admin/changeStatus'
+export const GET_ALL_POSTS='/admin/allPosts'
+export const DELETE_POSTS='/admin/deletePost'
