@@ -75,7 +75,7 @@ const Post = ({ post }) => {
             </div>
           </div>
          {/* <PostMenuButton post={post} postedUser={post.postedUser._id}/> */}
-         <PostMenuButton postId={post._id} postedUserId={post.postedUser._id} userId={userId} />
+         <PostMenuButton postId={post._id} postedUserId={post.postedUser._id} userId={userId}  />
         </div>
         <div className="content">
           <p>{post.content}</p>
@@ -88,14 +88,14 @@ const Post = ({ post }) => {
           </div>
           <div className="item" onClick={() => setCommentOpen(!commentOpen)}>
             <TextsmsOutlinedIcon />
-            12 Comments
+            {post.comments.length}
           </div>
           <div className="item">
             <ShareOutlinedIcon />
             Share
           </div>  
         </div>
-        {commentOpen && <Comments />}
+        {commentOpen && <Comments postId={post._id} userId={userId} comments={post.comments}/>}
       </div>
     </div>
   );

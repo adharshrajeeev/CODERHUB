@@ -6,7 +6,8 @@ import {
   ModeNight,
   Person,
   Settings,
-  Message
+  Message,
+  Logout
 } from "@mui/icons-material";
 import {
   List,
@@ -19,14 +20,22 @@ import {
 import './LeftBarStyle.scss' 
 import { useNavigate } from 'react-router-dom';
 import AddPostModal from '../modals/AddPostModal';
-
+import { useDispatch } from 'react-redux';
+import {setLogout} from '../../../redux/userSlice';
+import toast,{Toaster} from 'react-hot-toast'
 
 
 
 function LeftBar() {
 
   const navigate=useNavigate();
+  const dispatch=useDispatch();
 
+  const handleLogout =()=>{
+    localStorage.removeItem("token");
+    dispatch(setLogout());
+    
+  }
 
   return (
     <div className="leftBar">
@@ -101,6 +110,16 @@ function LeftBar() {
             </ListItemButton>
            
           </ListItem>
+          <ListItem disablePadding onClick={handleLogout}>
+             
+             <ListItemButton component="a">
+               <ListItemIcon>
+                 <Logout />
+               </ListItemIcon>
+               <ListItemText primary="Logout" />
+             </ListItemButton>
+            
+           </ListItem>
           <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>

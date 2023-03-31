@@ -27,8 +27,8 @@ function Sidebar() {
   return (  
     <div className="adminSidebar">
     <div className="top">
-      <Link to="/" style={{ textDecoration: "none" }}>
-        <span className="logo">lamadmin</span>
+      <Link to="/admin/dashboard" style={{ textDecoration: "none" }}>
+        <span className="logo">CODERHUB ADMIN</span>
       </Link>
     </div>
     <hr />
@@ -49,7 +49,7 @@ function Sidebar() {
         <Link to="/products" style={{ textDecoration: "none" }}>
           <li>
             <StoreIcon className="icon" />
-            <span>Products</span>
+            <span>POSTS</span>
           </li>
         </Link>
         <p className="title">ADMIN</p>

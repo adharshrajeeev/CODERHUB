@@ -1,43 +1,51 @@
+import { useState } from 'react';
+import axios from '../../../utils/axios'
+import { ADD_COMMENTS } from '../../../utils/ConstUrls';
+import moment from 'moment';
+import './comments.scss'
 
-import "./comments.scss";
+
+const Comments = ({postId,userId,comments,postedUserName,userPic}) => {
+
+    const [postComments,setPostComments]=useState('')
+
+    console.log(postedUserName,userPic)
+    const handleSubmitComment = async()=>{
+
+      console.log(postComments);
+      setPostComments("");
 
 
-const Comments = () => {
+      try{
+        const formData=new FormData();
+        formData.append("postId",postId);
+        formData.append("content",postComments);
+        formData.append("userId",userId);
+        const token=document.cookie.slice(6);
+       const response=await axios.post(ADD_COMMENTS,formData,{ headers: {'Authorization':`Bearer ${token}`,"Content-Type": "application/json" } });
+       console.log(response)
+      }catch(err){
+        console.log("comment added error",err)
+      }
+    }
 
-  //Temporary
-  const comments = [
-    {
-      id: 1,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam. Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "John Doe",
-      userId: 1,
-      profilePicture:
-        "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2",
-    },
-    {
-      id: 2,
-      desc: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Autem nequeaspernatur ullam aperiam",
-      name: "Jane Doe",
-      userId: 2,
-      profilePicture:
-        "https://images.pexels.com/photos/1036623/pexels-photo-1036623.jpeg?auto=compress&cs=tinysrgb&w=1600",
-    },
-  ];
+  //Temporary       
+  
   return (
-    <div className="comments">
+    <div className="userComments">
       <div className="write">
         {/* <img src={currentUser.profilePic} alt="" /> */}
-        <input type="text" placeholder="write a comment" />
-        <button>Send</button>
+        <input type="text" placeholder="write a comment" value={postComments} onChange={(e)=>setPostComments(e.target.value)}/>
+        <button onClick={handleSubmitComment}>Send</button>
       </div>
       {comments.map((comment) => (
         <div className="comment">
-          <img src={comment.profilePicture} alt="" />
-          <div className="info">
-            <span>{comment.name}</span>
-            <p>{comment.desc}</p>
+          <img src={comment.userPic} alt="" />
+          <div className="commentsinfo">
+            <span>{comment.userName}</span>
+            <p>{comment.content}</p>
           </div>
-          <span className="date">1 hour ago</span>
+          <span className="date">{moment(comment.createdAt).fromNow()}</span>
         </div>
       ))}
     </div>
