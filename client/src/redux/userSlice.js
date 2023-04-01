@@ -33,11 +33,15 @@ const userSlice=createSlice({
             state.posts=action.payload
         },
         setPost:(state,action)=>{
+    
             const updatedPost =  state.posts.map((post)=>{
-                if(post._id ===  action.payload.post_id) return action.payload.post;
+               
+                if(post._id ===  action.payload._id) return action.payload;
                 return post;
             })
+           
             state.posts=updatedPost
+           
         },
         setProfilepic:(state,action)=>{
             state.user.profilePic=action.payload

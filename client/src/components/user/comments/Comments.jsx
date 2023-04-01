@@ -2,17 +2,18 @@ import { useState } from 'react';
 import axios from '../../../utils/axios'
 import { ADD_COMMENTS } from '../../../utils/ConstUrls';
 import moment from 'moment';
+import {useDispatch} from 'react-redux'
+import { setPost } from '../../../redux/userSlice';
 import './comments.scss'
 
 
-const Comments = ({postId,userId,comments,postedUserName,userPic}) => {
+const Comments = ({postId,userId,comments}) => {
+
+
 
     const [postComments,setPostComments]=useState('')
-
-    console.log(postedUserName,userPic)
+    const dispatch = useDispatch();
     const handleSubmitComment = async()=>{
-
-      console.log(postComments);
       setPostComments("");
 
 
@@ -23,7 +24,8 @@ const Comments = ({postId,userId,comments,postedUserName,userPic}) => {
         formData.append("userId",userId);
         const token=document.cookie.slice(6);
        const response=await axios.post(ADD_COMMENTS,formData,{ headers: {'Authorization':`Bearer ${token}`,"Content-Type": "application/json" } });
-       console.log(response)
+
+       dispatch(setPost(response.data))
       }catch(err){
         console.log("comment added error",err)
       }

@@ -16,13 +16,13 @@ function ExplorePosts() {
 
   // const [posts,setPosts]=useState([]);
   const posts=useSelector((state)=>state.user.posts);
-  console.log(posts,"this is posts")
+
   const dispatch = useDispatch();
   const exploreAllPosts = async()=>{
     try{
       const token = document.cookie.slice(6)
       const {data}=await axios.get(EXPLORE_ALLPOST,{ headers: { 'Authorization': `Bearer ${token}` } })
-      console.log(posts,"this is second posts")
+
       dispatch(setPosts(data))
     }catch(err){
       console.log("explore post error",err)
