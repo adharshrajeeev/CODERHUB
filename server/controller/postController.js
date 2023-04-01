@@ -202,12 +202,13 @@ export const addPostComment = async(req,res)=>{
             userName:userDetails.userName,
             userPic:userDetails.profilePic
         }
-        const comments=await Posts.findOneAndUpdate({_id:postId},{
+      await Posts.findOneAndUpdate({_id:postId},{
             $push:{
                 comments:newComment,
             },
         })
-        res.status(200).json(comments)
+        const post=await Posts.findOne({_id:postId})
+        res.status(200).json(post)
     }catch(err){
         res.status(500).json({error:err})
     }
