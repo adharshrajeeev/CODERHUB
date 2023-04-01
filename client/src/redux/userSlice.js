@@ -30,7 +30,7 @@ const userSlice=createSlice({
             }
         },
         setPosts:(state,action)=>{
-            state.posts=action.payload.posts
+            state.posts=action.payload
         },
         setPost:(state,action)=>{
             const updatedPost =  state.posts.map((post)=>{

@@ -5,7 +5,7 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useSelector } from "react-redux";
 import axios from '../../../utils/axios'
 import moment from 'moment'

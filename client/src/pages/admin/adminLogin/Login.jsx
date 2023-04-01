@@ -40,7 +40,7 @@ function Login() {
                 if(data.success){
                     dispatch(setAdminLogin(data.adminToken))
                     localStorage.setItem('adminToken',data.adminToken);
-                    navigate('/admin/dashboard');
+                    navigate('/admin/dashboard'); 
                 }else{
                     toast.error(data.message)
                 }

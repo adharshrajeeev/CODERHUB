@@ -85,7 +85,8 @@ function AddPostModal() {
     const token=document.cookie.slice(6)
 
       const response=await axios.post(ADD_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } });
-      console.log(response,"this is response")
+      console.log(response,"this is response");
+      
       setOpen(false)
       }catch(err){
         toast.error("oops something went wrong")
