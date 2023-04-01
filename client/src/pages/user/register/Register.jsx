@@ -1,5 +1,5 @@
 import  React,{useState} from 'react';
-import Avatar from '@mui/material/Avatar';
+import CodeIcon from '@mui/icons-material/Code';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -63,16 +63,14 @@ export default  function Register() {
         <Box
           sx={{
             marginTop: 8,
-            display: 'flex',
+            display: 'flex',     
             flexDirection: 'column',
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-      
-          </Avatar>
+            <h1>CODERHUB</h1> <CodeIcon/>
           <Typography component="h1" variant="h5">
-            Sign up
+           SIGNUP
           </Typography>
           <Box component="form"  onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -168,9 +166,9 @@ export default  function Register() {
             </Grid>
           </Box>
         </Box>
-        <Toaster  position="top-right"
+        <Toaster  position="top-center"
   reverseOrder={false} />
       </Container>
  
   );
-}
+}        

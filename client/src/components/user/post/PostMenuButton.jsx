@@ -9,9 +9,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
-import axios from '../../../utils/axios'
+import axios from '../../../utils/axios';
+import {useDispatch} from 'react-redux'
 import toast  from 'react-hot-toast';
 import { DELETE_POSTS } from '../../../utils/ConstUrls';
+import { setPosts } from '../../../redux/userSlice';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -20,6 +22,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function PostMenuButton({postId,postedUserId,userId}) {
 
+    const dispatch=useDispatch();
     const [anchorEl, setAnchorEl] = useState(false);
     const [clickOpen,SetClickOpen]=useState(false)
     const open = Boolean(anchorEl);
@@ -40,9 +43,9 @@ function PostMenuButton({postId,postedUserId,userId}) {
 
     const handleDeletePost = async ()=>{
         try{
-            const token = document.cookie.slice(6)
-         const response=await   axios.delete(`${DELETE_POSTS}/${postId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
-         console.log(response);
+          const token = document.cookie.slice(6); 
+         const response=await axios.delete(`${DELETE_POSTS}/${postId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
+          dispatch(setPosts(response.data.posts))
          handleClickClose();
          handleClose();
          
@@ -67,7 +70,7 @@ function PostMenuButton({postId,postedUserId,userId}) {
         <MenuItem onClick={handleClickOpen}>Delete</MenuItem>
         <Dialog
         open={clickOpen}
-        TransitionComponent={Transition}
+        TransitionComponent={Transition} 
         keepMounted
         onClose={handleClickClose}
         aria-describedby="alert-dialog-slide-description"

@@ -17,11 +17,12 @@ import {
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import { Box } from "@mui/system";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import axios from '../../../utils/axios'
 import { ADD_POST } from "../../../utils/ConstUrls";
-import { useNavigate } from "react-router-dom";
+
+import { setPosts } from '../../../redux/userSlice';
 
 
 const SytledModal = styled(Modal)({
@@ -52,9 +53,8 @@ function AddPostModal() {
     const userName=useSelector((state)=>state.user.user.userName);
     const profilePic=useSelector((state)=>state.user.user.profilePic);
     const userImage=useSelector((state)=>state.user?.user.profilePic)
- 
-    const navigate=useNavigate();
-  
+
+    const dispatch=useDispatch();
     const handleChange=(e)=>{
       setImage(e.target.files[0])
     }
@@ -85,8 +85,8 @@ function AddPostModal() {
     const token=document.cookie.slice(6)
 
       const response=await axios.post(ADD_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } });
-      console.log(response,"this is response");
-      
+      dispatch(setPosts(response.data.posts))
+      setPost("")
       setOpen(false)
       }catch(err){
         toast.error("oops something went wrong")
