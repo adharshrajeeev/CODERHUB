@@ -1,6 +1,6 @@
 .login {
     height: 100vh;
-    background-color: rgb(193, 190, 255);
+    background-color: rgb(216, 233, 255);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -15,8 +15,8 @@
   
       .left {
         flex: 1;
-        background: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)),
-          url("https://images.pexels.com/photos/3228727/pexels-photo-3228727.jpeg?auto=compress&cs=tinysrgb&w=1600")
+        background: 
+          url("https://cutewallpaper.org/28/desktop-wallpaper-tags/316047135.jpg")
             center;
         background-size: cover;
         padding: 50px;
@@ -26,14 +26,14 @@
         color: white;
   
         h1 {
-          font-size: 100px;
+          font-size: 50px;
           line-height: 100px;
         }
         
-        p {
-        }
+     
   
         span {
+          margin-top: 200px;
           font-size: 14px;
         }
         
@@ -75,7 +75,7 @@
             width: 50%;
             padding: 10px;
             border: none;
-            background-color: #938eef;
+            background-color: #000000;
             color: white;
             font-weight: bold;
             cursor: pointer;
