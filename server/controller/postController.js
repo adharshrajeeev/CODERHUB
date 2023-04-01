@@ -16,7 +16,7 @@ export const addUserPosts = async (req, res) => {
                 folder:"Posts"
             });
             console.log(cloudImage)
-            const post = await Posts.create({
+           await Posts.create({
                 content,
                 postedUser:{
                     _id:userId,
@@ -29,9 +29,10 @@ export const addUserPosts = async (req, res) => {
                 },
                 userName:userName
             })
-            return res.status(200).json({success:true,message:"post added sucess",post})
+            const posts=await Posts.find().sort({ createdAt: -1 });
+            return res.status(200).json({success:true,message:"post added sucess",posts})
         }
-        const post=await Posts.create({
+        await Posts.create({
             content,
             postedUser:{
                 _id:userId,
@@ -39,7 +40,8 @@ export const addUserPosts = async (req, res) => {
                 profilePic:profilePic
             },
         })
-        res.status(200).json({success:true,message:"sucess post added",post})
+        const posts=await Posts.find().sort({ createdAt: -1 });
+        res.status(200).json({success:true,message:"sucess post added",posts})
     }catch(err){
         console.log(err)
         res.status(400).json({success:false,error:err,message:"somehting went wrong"})
@@ -50,7 +52,7 @@ export const addUserPosts = async (req, res) => {
 export const getUserPost = async(req,res)=>{
     try{
         const userId=req.params.id;
-        const posts = await Posts.find({"postedUser._id":userId})
+        const posts = await Posts.find({"postedUser._id":userId}).sort({ createdAt: -1 });
         res.status(200).json({success:true,posts})
     }catch(err){
         res.status(400).json({success:false,error:err})
@@ -103,7 +105,7 @@ export const getAllPosts = async(req,res)=>{
         const userId=req.params.id
         const user=await User.findOne({_id:userId})
         const followingIds= user.following.map(follower =>follower._id )
-        const userPosts=await Posts.find({postedUser:{$in:followingIds}})
+        const userPosts=await Posts.find({postedUser:{$in:followingIds}}).sort({ createdAt: -1 });
 
         res.status(200).json(userPosts)
     }catch(err){
@@ -114,9 +116,13 @@ export const getAllPosts = async(req,res)=>{
 
 export const deleteUserPost = async(req,res)=>{
     try{
+       
         const postId=req.params.id;
-        Posts.findByIdAndDelete(postId).then(()=>{
-            return res.status(200).json({success:true,message:"Post Deleted Success Fully"})
+     
+        Posts.findByIdAndDelete(postId).then(async()=>{
+            const posts=await Posts.find().sort({ createdAt: -1 });
+            return res.status(200).json({success:true,message:"Post Deleted Success Fully",posts});
+
         }).catch((err)=>{
             return res.status(401).json({success:false,message:"No post found",error:err})
         })
@@ -191,7 +197,7 @@ export const getLikedPostCount=async(req,res)=>{
 
 export const addPostComment = async(req,res)=>{
     try{
-        console.log(req.body);
+   
         const commentDate=new Date();
         const {postId,userId,content}=req.body;
         const userDetails=await User.findOne({_id:userId})

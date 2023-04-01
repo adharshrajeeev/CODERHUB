@@ -68,12 +68,21 @@ export const userLogin = async(req,res)=>{
 export const getAllUsers = async(req,res)=>{
       try{
 
-         const users = await User.find()
+         const users = await User.find().limit(5)
          res.status(200).json(users)
 
       }catch(err){
          res.status(400).json({error:err})
       } 
+}
+
+
+export const getUserSuggestion = async (req,res)=>{ /// needed to complete 
+   try{
+         const users=await User.find()
+   }catch(err){
+      res.status(400).json({error:err,message:"oops suggestion user server error"})
+   }
 }
 
 

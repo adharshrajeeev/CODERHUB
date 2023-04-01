@@ -14,7 +14,8 @@ router.post('/signup',registerUser);
 router.post('/login',userLogin)
 router.post('/addPosts',verifyToken,upload.single('image'),addUserPosts);
 
-router.get('/users',verifyToken,getAllUsers)
+router.get('/users',verifyToken,getAllUsers);
+router.get('/suggestionUsers/:id',verifyToken) //need to rectify
 router.get('/userPosts/:id',verifyToken,getUserPost);
 
 router.get('/posts/:id',verifyToken,getAllPosts);
