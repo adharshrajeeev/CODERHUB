@@ -21,7 +21,7 @@ import { useSelector,useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import axios from '../../../utils/axios'
 import { ADD_POST } from "../../../utils/ConstUrls";
-
+import CircularProgress from '@mui/material/CircularProgress';
 import { setPosts } from '../../../redux/userSlice';
 
 
@@ -43,7 +43,7 @@ const UserBox = styled(Box)({
 
 function AddPostModal() {
 
-
+    const [loading,setLoading]=useState(false)
     const [open, setOpen] = useState(false);
     const [isImage,setIsImage]=useState(false);
     const [images,setImage]=useState("");
@@ -57,10 +57,11 @@ function AddPostModal() {
     const dispatch=useDispatch();
     const handleChange=(e)=>{
       setImage(e.target.files[0])
+      setIsImage(images.name)
     }
   
     const handleSubmit = async(e)=>{
-  
+      setLoading(true)
       try{
         if(post===""){
          return  toast('Please Fill the components!',
@@ -80,14 +81,26 @@ function AddPostModal() {
       formData.append("userName",userName)
       formData.append("profilePic",profilePic)
       if(images){
+        console.log(images,"iamge")
         formData.append('image',images)
       }
     const token=document.cookie.slice(6)
 
       const response=await axios.post(ADD_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } });
-      dispatch(setPosts(response.data.posts))
-      setPost("")
-      setOpen(false)
+      if(response.data.success){
+        setLoading(false);
+        dispatch(setPosts(response.data.posts));
+        setIsImage("")
+        setPost("")
+        setOpen(false)
+
+      }else{
+        setIsImage("")
+        setPost("")
+        setOpen(false)
+        setLoading(false);
+        toast.error("oops something went wrong")
+      }
       }catch(err){
         toast.error("oops something went wrong")
       }
@@ -147,8 +160,10 @@ function AddPostModal() {
             />
             <Stack direction="row" gap={1} mt={2} mb={3}>
               <IconButton color="primary" aria-label="upload picture" component="label">
+                
                 <input hidden accept="image/*" type="file" name="file" onChange={handleChange} />
                 <PhotoCamera />
+                <span style={{fontSize:"15px"}} >{isImage && isImage }</span>
               </IconButton>
             </Stack>
             <ButtonGroup
@@ -156,7 +171,8 @@ function AddPostModal() {
               variant="contained"
               aria-label="outlined primary button group"
             >
-              <Button onClick={handleSubmit}>Post</Button>
+             {loading ?  <CircularProgress />
+            : <Button onClick={handleSubmit}>Post</Button>}               
             </ButtonGroup>
           </Box>
         </SytledModal>

@@ -11,7 +11,7 @@ import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
 import axios from '../../../utils/axios';
 import {useDispatch} from 'react-redux'
-import toast  from 'react-hot-toast';
+import EditPostModal  from '../modals/EditPostModal'
 import { DELETE_POSTS } from '../../../utils/ConstUrls';
 import { setPosts } from '../../../redux/userSlice';
 
@@ -66,7 +66,8 @@ function PostMenuButton({postId,postedUserId,userId}) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Edit</MenuItem>
+        {/* <MenuItem onClick={handleClose}>Edit</MenuItem> */}
+        <EditPostModal/>
         <MenuItem onClick={handleClickOpen}>Delete</MenuItem>
         <Dialog
         open={clickOpen}
