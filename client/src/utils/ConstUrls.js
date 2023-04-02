@@ -20,6 +20,7 @@ export const GET_LIKCOUNT='/likeCount'
 export const ADD_PROFILEIMAGE='/profilePicture'
 export const GET_LIKE_STATUS='/likeStatus'
 export const ADD_COMMENTS='/addComment'
+export const GET_EDITPOST_DETAILS='/editPost'
 
 
 

@@ -40,13 +40,13 @@ function Sidebar() {
           <span>Dashboard</span>
         </li>
         <p className="title">LISTS</p>
-        <Link to="/users" style={{ textDecoration: "none" }}>
+        <Link to="/admin/users" style={{ textDecoration: "none" }}>
           <li>
             <PersonOutlineIcon className="icon" />
             <span>Users</span>
           </li>
         </Link>
-        <Link to="/products" style={{ textDecoration: "none" }}>
+        <Link to="/admin/posts" style={{ textDecoration: "none" }}>
           <li>
             <StoreIcon className="icon" />
             <span>POSTS</span>

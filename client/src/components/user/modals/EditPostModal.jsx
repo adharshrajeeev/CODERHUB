@@ -8,7 +8,7 @@ import {
     TextField,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import MenuItem from '@mui/material/MenuItem';
 import IconButton from '@mui/material/IconButton';
@@ -17,9 +17,9 @@ import { Box } from "@mui/system";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import axios from '../../../utils/axios'
-import { ADD_POST } from "../../../utils/ConstUrls";
+import { ADD_POST, GET_EDITPOST_DETAILS } from "../../../utils/ConstUrls";
 import CircularProgress from '@mui/material/CircularProgress';
-import { setPosts } from '../../../redux/userSlice';
+import { getPostDetails, setPosts } from '../../../redux/userSlice';
 
 
 const SytledModal = styled(Modal)({
@@ -38,7 +38,10 @@ const UserBox = styled(Box)({
 
 
 
-function AddPostModal() {
+function  EditPostModal({postId,userId}) {
+
+   
+    
 
     const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false);
@@ -46,10 +49,26 @@ function AddPostModal() {
     const [images, setImage] = useState("");
     const [post, setPost] = useState("")
     const { _id } = useSelector((state) => state.user.user)
-    // const token=useSelector((state)=>state.token);
     const userName = useSelector((state) => state.user.user.userName);
     const profilePic = useSelector((state) => state.user.user.profilePic);
-    const userImage = useSelector((state) => state.user?.user.profilePic)
+    const userImage = useSelector((state) => state.user?.user.profilePic);
+    const [editPost,setEditPost]=useState(null);
+
+    // const getEditPostDetail = async()=>{
+
+    //     try{
+    //         const token=document.cookie.slice(6)
+    //         const {data}= await axios.get(`${GET_EDITPOST_DETAILS}/${postId}`,{ headers: {'Authorization':`Bearer ${token}` } });
+    //         console.log(data.postDetails,"thissis is edit")
+    //         setEditPost(data.postDetails)
+    //     }catch(err){
+    //         console.log("get edit post aerrror",err)  
+    //     }
+    // }
+    
+    // useEffect(()=>{
+    //     getEditPostDetail(); 
+    // },[postId])
 
     const dispatch = useDispatch();
     const handleChange = (e) => {
@@ -140,7 +159,7 @@ function AddPostModal() {
                         rows={3}
                         placeholder="What's on your mind?"
                         variant="standard"
-                        value={post}
+                        value={editPost.content}
                         onChange={(e) => setPost(e.target.value)}
                     />
                     <Stack direction="row" gap={1} mt={2} mb={3}>
@@ -167,4 +186,4 @@ function AddPostModal() {
     )
 }
 
-export default AddPostModal
+export default EditPostModal

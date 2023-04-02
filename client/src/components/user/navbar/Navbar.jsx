@@ -7,7 +7,7 @@ import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import './NavbarStyle.scss'
 import { useSelector } from 'react-redux';
 
@@ -15,6 +15,7 @@ function Navbar() {
 
 
   const userName=useSelector((state)=>state.user?.user?.userName);
+  const navigate=useNavigate();
 
   return (
     <div className="navbar">
@@ -35,7 +36,7 @@ function Navbar() {
       </div>
     </div>
     <div className="right">
-      <PersonOutlinedIcon />
+      <PersonOutlinedIcon onClick={()=>navigate('/profile')} sx={{cursor:"pointer"}}/>
       <EmailOutlinedIcon />
       <NotificationsOutlinedIcon />
       <div className="user">
