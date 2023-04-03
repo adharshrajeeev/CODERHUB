@@ -25,15 +25,15 @@ function Login() {
       
     await axios.post(USER_LOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
       if(data.success){
-        document.cookie=`token:${data.token}`
+        
         dispatch(setLogin({
           user:data.userdetails,
           token:data.token
         }));
+        localStorage.setItem("token",data.token)
         console.log("suceess1")
-        
-        navigate('/home');
-        console.log("suceess2")
+       return navigate("/home");
+     
       }else{
         toast.error(data.message)
       }

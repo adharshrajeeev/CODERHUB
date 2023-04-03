@@ -1,6 +1,5 @@
 import React from 'react'
 import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
 import "./style.scss";
 import Login from './pages/user/login/Login';
 import Home from './pages/user/home/Home';
@@ -9,12 +8,13 @@ import Register from './pages/user/register/Register';
 import Explore from './pages/user/explore/Explore';
 import AdminLogin from './pages/admin/adminLogin/Login';
 import AdminHome from './pages/admin/adminHome/Home'
+import AdminUserList from './pages/admin/adminUserList/AdminUserList';
 
 
+const isAuth = Boolean(localStorage.getItem('token'));
+const adminAuth = Boolean(localStorage.getItem('adminToken'));
 function App() {
   
-  const isAuth = Boolean(useSelector((state) => state.user.token));
-  const adminAuth = Boolean(localStorage.getItem('adminToken'));
 
   const darkMode =false
 
@@ -22,13 +22,14 @@ function App() {
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
        <BrowserRouter>
        <Routes>
-       <Route path='/' element={!isAuth ? <Login /> : <Home/>} /> 
+       <Route path='/' element={<Login /> } /> 
           <Route path='/signUp' element={<Register />} />
-          <Route path='/home' element={isAuth ? <Home /> : <Login/>} />
-          <Route path='/profile' element={isAuth ? <Profile/> : <Navigate to={'/'}/>} />
-          <Route path='/explore' element={isAuth ? <Explore/> : <Navigate to={'/'}/>} />
+          <Route path='/home' element={ <Home /> } />
+          <Route path='/profile' element={ <Profile/> } />
+          <Route path='/explore' element={ <Explore/> } />
           <Route path='/admin' element={<AdminLogin/>} />
           <Route path='/admin/dashboard' element={adminAuth ? <AdminHome/> : <Navigate to={'/admin'}/>}  />
+          <Route path='/admin/users' element={adminAuth ? <AdminUserList/> : <Navigate to={'/admin'}/>}  />
           
           {/* <Route path='*' element={<PageNotFound />} /> */}
        </Routes>

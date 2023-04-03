@@ -39,8 +39,8 @@ function Login() {
             axios.post(ADMINLOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
                 if(data.success){
                     dispatch(setAdminLogin(data.adminToken))
-                    localStorage.setItem('adminToken',data.adminToken);
                     navigate('/admin/dashboard'); 
+                    localStorage.setItem('adminToken',data.adminToken);
                 }else{
                     toast.error(data.message)
                 }

@@ -66,8 +66,8 @@ function PostMenuButton({postId,postedUserId,userId}) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        {/* <MenuItem onClick={handleClose}>Edit</MenuItem> */}
-        <EditPostModal postId={postId} userId={userId}/>
+        <MenuItem onClick={handleClose}>Edit</MenuItem>
+        {/* <EditPostModal postId={postId} userId={userId}/> */}
         <MenuItem onClick={handleClickOpen}>Delete</MenuItem>
         <Dialog
         open={clickOpen}

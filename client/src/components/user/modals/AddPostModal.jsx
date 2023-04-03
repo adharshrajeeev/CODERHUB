@@ -63,18 +63,20 @@ function AddPostModal() {
     const handleSubmit = async(e)=>{
       setLoading(true)
       try{
-        if(post===""){
-         return  toast('Please Fill the components!',
-         {
+        if(post.trim()===""){
+      //    return  toast('Please Fill the Post!',
+      //    {
            
-           style: {
-             borderRadius: '10px',
-             background: '#333',
-             color: '#fff',
-           },
-         }
-       )
+      //      style: {
+      //        borderRadius: '10px',
+      //        background: '#333',
+      //        color: '#fff',
+      //      },
+      //    }
+      //  )
+           return toast.error("Please fill the component")
         }
+        
       const formData=new FormData();
       formData.append("userId",_id);
       formData.append("content",post);

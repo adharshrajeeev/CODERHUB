@@ -33,7 +33,8 @@ function LeftBar() {
 
   const handleLogout =()=>{
     localStorage.removeItem("token");
-    dispatch(setLogout());
+    // dispatch(setLogout());
+    navigate('/')
     
   }
 

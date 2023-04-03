@@ -20,7 +20,7 @@ function Home() {
   const getTotalUsers = async()=>{
     
     try{
-
+      
       const {data}=await axios.get(GET_ALL_USERS,{ headers: { 'Authorization': `Bearer ${adminToken}`,"Content-Type": "application/json" } }); 
       setUserCount(data.length)
     }catch(err){
