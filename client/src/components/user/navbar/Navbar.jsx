@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -11,11 +11,16 @@ import { Link, useNavigate } from "react-router-dom";
 import './NavbarStyle.scss'
 import { useSelector } from 'react-redux';
 
+
+
 function Navbar() {
 
 
   const userName=useSelector((state)=>state.user?.user?.userName);
   const navigate=useNavigate();
+
+
+
 
   return (
     <div className="navbar">

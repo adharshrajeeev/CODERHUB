@@ -13,7 +13,8 @@ import Typography from '@mui/material/Typography';
 import {setProfilepic} from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
 import { Toaster } from 'react-hot-toast';
-import './profileStyle.scss'
+import './profileStyle.scss';
+import { fetchUserDetails } from '../../../api/UserServices';
 
 
 
@@ -32,10 +33,15 @@ const style = {
 
 function Profile() {
 
+
+ 
+
   const [posts, setPosts] = useState([]);
  
-  const userId = useSelector((state) => state.user.user._id);
-  const { profilePic, userName, coverPic } = useSelector((state) => state.user?.user);
+  const userId = useSelector((state) => state?.user?.user?._id);
+  const profilePic=useSelector((state) => state.user?.user?.profilePic);
+  const userName = useSelector((state)=>state.user?.user?.userName)
+  const  coverPic  = useSelector((state)=>state.user?.user?.coverPic)
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -47,7 +53,7 @@ function Profile() {
 
   const getUserPosts = async () => {
     try {
-      const token = document.cookie.slice(6)
+      const token = localStorage.getItem('token')
       const response = await axios.get(`${SHOW_USER_POST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
       setPosts(response.data.posts.filter((post)=>post.postedUser._id === userId))
 
@@ -72,7 +78,7 @@ function Profile() {
    const formData=new FormData();
    formData.append('image',profilePicture); 
    try{
-    const token=document.cookie.slice(6)
+    const token=localStorage.getItem('token')
      const {data}=await axios.post(`${ADD_PROFILEIMAGE}/${userId}`,formData,{ headers: {'Authorization':`Bearer ${token}` } })
       console.log(data)
      if(data.success){
@@ -90,8 +96,11 @@ function Profile() {
   }
 
   useEffect(() => {
+    fetchUserDetails();
     getUserPosts();
+
   }, [])
+ 
 
   return (
 

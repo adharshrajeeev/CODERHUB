@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route,Navigate,redirect  } from 'react-router-dom'
 import "./style.scss";
 import Login from './pages/user/login/Login';
 import Home from './pages/user/home/Home';
@@ -11,8 +11,8 @@ import AdminHome from './pages/admin/adminHome/Home'
 import AdminUserList from './pages/admin/adminUserList/AdminUserList';
 
 
-const isAuth = Boolean(localStorage.getItem('token'));
 const adminAuth = Boolean(localStorage.getItem('adminToken'));
+const isAuth = Boolean(localStorage.getItem('token'));
 function App() {
   
 

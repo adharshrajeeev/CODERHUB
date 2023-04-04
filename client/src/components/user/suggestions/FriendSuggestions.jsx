@@ -6,12 +6,17 @@ import DefaultPhoto from '../../../assets/noProfilePicture.jpg'
 function FriendSuggestions() {
 
     const [userList,SetUsers]=useState([])
-
+    
     const getFriendSuggestions =  async ()=>{
-     const token = document.cookie.slice(6)
-     const {data} =  await axios.get(SHOW_USERS,{ headers: { 'Authorization': `Bearer ${token}` } });
-     console.log(data,"user list")
-        SetUsers(data);
+      try{
+
+        const token =localStorage.getItem('token')
+        const {data} =  await axios.get(SHOW_USERS,{ headers: { 'Authorization': `Bearer ${token}` } });
+        console.log(data,"user list")
+           SetUsers(data);
+      }catch(err){
+        console.log("suggestions catch err",err)
+      }
     }
 
     const handleDismiss =  (userId)=>{

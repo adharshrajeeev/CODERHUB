@@ -10,7 +10,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Add as AddIcon,
 } from "@mui/icons-material";
@@ -23,6 +23,8 @@ import axios from '../../../utils/axios'
 import { ADD_POST } from "../../../utils/ConstUrls";
 import CircularProgress from '@mui/material/CircularProgress';
 import { setPosts } from '../../../redux/userSlice';
+import { fetchUserDetails } from "../../../api/UserServices";
+
 
 
 const SytledModal = styled(Modal)({
@@ -43,16 +45,17 @@ const UserBox = styled(Box)({
 
 function AddPostModal() {
 
+
     const [loading,setLoading]=useState(false)
     const [open, setOpen] = useState(false);
     const [isImage,setIsImage]=useState(false);
     const [images,setImage]=useState("");
     const [post,setPost]=useState("")
-    const {_id}=useSelector((state)=>state.user.user)
+    const _id=useSelector((state)=>state.user?.user?._id)
     // const token=useSelector((state)=>state.token);
-    const userName=useSelector((state)=>state.user.user.userName);
-    const profilePic=useSelector((state)=>state.user.user.profilePic);
-    const userImage=useSelector((state)=>state.user?.user.profilePic)
+    const userName=useSelector((state)=>state.user?.user?.userName);
+    const profilePic=useSelector((state)=>state.user?.user?.profilePic);
+    const userImage=useSelector((state)=>state.user?.user?.profilePic)
 
     const dispatch=useDispatch();
     const handleChange=(e)=>{
@@ -81,12 +84,15 @@ function AddPostModal() {
       formData.append("userId",_id);
       formData.append("content",post);
       formData.append("userName",userName)
-      formData.append("profilePic",profilePic)
+      if(profilePic){
+
+        formData.append("profilePic",profilePic)
+      }
       if(images){
         console.log(images,"iamge")
         formData.append('image',images)
       }
-    const token=document.cookie.slice(6)
+      const token=localStorage.getItem('token')
 
       const response=await axios.post(ADD_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } });
       if(response.data.success){

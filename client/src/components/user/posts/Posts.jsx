@@ -6,22 +6,25 @@ import { ALL_POSTS } from "../../../utils/ConstUrls";
 import { useSelector } from "react-redux";
 
 const Posts = () => {
+
+
+  useEffect(()=>{
+    getAllPosts();
+  },[])
  
   const [posts,setPost]=useState([])
-  const userId=useSelector((state)=>state.user.user?._id)
+  const userId=useSelector((state)=>state.user?.user?._id)
 
   const getAllPosts = async()=>{
     try{
-      const token = document.cookie.slice(6);
+      const token = localStorage.getItem('token');
       const {data}=await axios.get(`${ALL_POSTS}/${userId}`,{ headers: { 'Authorization': `Bearer ${token}` } });
       setPost(data)
     }catch(err){
         console.log("home user posts error",err)
     }
   }
-  useEffect(()=>{
-    getAllPosts();
-  },[])
+
 
   return <div className="posts">
     {posts.map(post=>(

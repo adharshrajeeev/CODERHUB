@@ -22,7 +22,7 @@ const Comments = ({ postId, userId, comments }) => {
       formData.append("postId", postId);
       formData.append("content", postComments);
       formData.append("userId", userId);
-      const token = document.cookie.slice(6);
+      const token = localStorage.getItem('token')
       const response = await axios.post(ADD_COMMENTS, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } });
 
       dispatch(setPost(response.data))

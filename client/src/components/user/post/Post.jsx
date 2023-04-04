@@ -18,7 +18,7 @@ const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
 
   const userId=useSelector((state)=>state.user?.user?._id)
-  const {profilePic}=useSelector((state)=>state.user?.user);
+  const profilePic=useSelector((state)=>state.user?.user?.profilePic);
   const [likeCount,SetLikeCount]=useState(post.likes?.length)
   const [Like,setLiked]=useState(post.likes?.includes(userId) ? FavoriteOutlinedIcon :  FavoriteBorderOutlinedIcon);
 
@@ -31,7 +31,7 @@ const Post = ({ post }) => {
 
   const handleLike = async()=>{
       try{  
-        const token = document.cookie.slice(6);
+        const token = localStorage.getItem('token')
         const body=JSON.stringify({
           postId:post._id,
           userId:userId

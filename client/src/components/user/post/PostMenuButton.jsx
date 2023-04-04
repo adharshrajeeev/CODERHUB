@@ -43,7 +43,7 @@ function PostMenuButton({postId,postedUserId,userId}) {
 
     const handleDeletePost = async ()=>{
         try{
-          const token = document.cookie.slice(6); 
+          const token =localStorage.getItem('token')
          const response=await axios.delete(`${DELETE_POSTS}/${postId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
           dispatch(setPosts(response.data.posts))
          handleClickClose();

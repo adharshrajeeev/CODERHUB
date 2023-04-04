@@ -20,7 +20,7 @@ function ExplorePosts() {
   const dispatch = useDispatch();
   const exploreAllPosts = async () => {
     try {
-      const token = document.cookie.slice(6)
+      const token = localStorage.getItem('token')
       const { data } = await axios.get(EXPLORE_ALLPOST, { headers: { 'Authorization': `Bearer ${token}` } })
 
       dispatch(setPosts(data))
