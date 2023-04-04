@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route,Navigate,redirect  } from 'react-router-dom'
+import { BrowserRouter, Routes, Route,Navigate  } from 'react-router-dom'
 import "./style.scss";
 import Login from './pages/user/login/Login';
 import Home from './pages/user/home/Home';

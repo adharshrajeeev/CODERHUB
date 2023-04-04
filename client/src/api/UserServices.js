@@ -4,13 +4,13 @@ import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
 import jwt from 'jwt-decode';
 
+const token=localStorage.getItem('token');
+const decode=jwt(token);
 
 export const fetchUserDetails = async()=>{
     
     try{
         
-        const token=localStorage.getItem('token');
-        const decode=jwt(token);
         
         axios.get(`${GET_USER_DETAILS}/${decode.id}`,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
             store.dispatch(setLogin({
@@ -30,3 +30,5 @@ export const fetchUserDetails = async()=>{
     }
    
 } 
+
+

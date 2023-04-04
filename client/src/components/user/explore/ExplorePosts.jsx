@@ -9,25 +9,27 @@ import { setPosts } from '../../../redux/userSlice';
 
 function ExplorePosts() {
 
-  useEffect(() => {
-    exploreAllPosts();
-  }, [])
-
+  
 
   // const [posts,setPosts]=useState([]);
-  const posts = useSelector((state) => state.user.posts);
-
+  
+  const posts = useSelector((state) => state.user?.posts);
   const dispatch = useDispatch();
   const exploreAllPosts = async () => {
     try {
       const token = localStorage.getItem('token')
-      const { data } = await axios.get(EXPLORE_ALLPOST, { headers: { 'Authorization': `Bearer ${token}` } })
 
-      dispatch(setPosts(data))
+      const response = await axios.get(EXPLORE_ALLPOST, { headers: { 'Authorization': `Bearer ${token}` } })
+
+      dispatch(setPosts(response.data))
     } catch (err) {
       console.log("explore post error", err)
     }
   }
+
+  useEffect(() => {
+    exploreAllPosts();
+  }, [])
 
 
   return (

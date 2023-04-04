@@ -4,7 +4,7 @@ import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
-
+import { useSelector } from 'react-redux';
 
 function Explore() {
 
@@ -12,6 +12,7 @@ function Explore() {
     fetchUserDetails();
   },[])
 
+  const userId=useSelector((state)=>state?.user?.user?._id)
   return (
     <div>
       <Navbar/>
@@ -22,7 +23,7 @@ function Explore() {
         <ExplorePosts/>
       </div>
         </div>
-        <RightBar/>
+        <RightBar userId={userId}/>
       </div>
     </div>
   )

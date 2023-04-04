@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import axios from '../../../utils/axios'
-import { SHOW_USERS } from '../../../utils/ConstUrls';
+import { GET_USER_SUGGESTIONS } from '../../../utils/ConstUrls';
 import DefaultPhoto from '../../../assets/noProfilePicture.jpg'
 
-function FriendSuggestions() {
 
-    const [userList,SetUsers]=useState([])
-    
+function FriendSuggestions({userId}) {
+
+    const [userList,SetUsers]=useState([]);
+
     const getFriendSuggestions =  async ()=>{
       try{
-
+        console.log(userId)
         const token =localStorage.getItem('token')
-        const {data} =  await axios.get(SHOW_USERS,{ headers: { 'Authorization': `Bearer ${token}` } });
-        console.log(data,"user list")
-           SetUsers(data);
+        const {data} =  await axios.get(`${GET_USER_SUGGESTIONS}/${userId}`,{ headers: { 'Authorization': `Bearer ${token}` } });
+       
+           SetUsers(data); 
+           console.log(userList,"this is suggestions")
       }catch(err){
         console.log("suggestions catch err",err)
       }
@@ -38,7 +40,7 @@ function FriendSuggestions() {
             <div className="userInfo">
               <img
                 src={user.profilePic ? user.profilePic : DefaultPhoto}
-                alt="picture"
+                alt="profilePicture"
               />
               <span>{user.userName}</span>
             </div>

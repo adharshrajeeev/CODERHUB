@@ -1,13 +1,15 @@
 import FriendSuggestions from "../suggestions/FriendSuggestions";
 import "./rightBar.scss";
 
-const RightBar = () => {
+
+
+const RightBar = ({userId}) => {
   return (
     <div className="rightBar">
       <div className="container">
         <div className="item">
 
-          <FriendSuggestions/>
+          <FriendSuggestions userId={userId}/>
 
         </div>
         <div className="item">

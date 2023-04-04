@@ -25,7 +25,7 @@ function Navbar() {
   return (
     <div className="navbar">
     <div className="left">
-      <Link to="/" style={{ textDecoration: "none" }}>
+      <Link to="/home" style={{ textDecoration: "none" }}>
         <span>CODERHUB</span>
       </Link>
       <HomeOutlinedIcon />

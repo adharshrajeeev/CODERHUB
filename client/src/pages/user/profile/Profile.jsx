@@ -181,7 +181,7 @@ function Profile() {
   position="top-center"
   reverseOrder={false}
 />
-        <RightBar />
+        <RightBar userId={userId}/>
       </div>
     </div>
 

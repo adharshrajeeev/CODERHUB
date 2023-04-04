@@ -5,15 +5,16 @@ import Posts from "../../../components/user/posts/Posts"
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
 
+import { useSelector } from 'react-redux';
 import "./home.scss"
 function Home() {
 
   useEffect(()=>{
-    console.log("calll here at home")
     fetchUserDetails();
   },[])
 
-
+  const userId=useSelector((state)=>state?.user?.user?._id)
+ 
   return (
     <div>
       <Navbar/>
@@ -25,7 +26,7 @@ function Home() {
   
       </div>
         </div>
-        <RightBar/>
+        <RightBar userId={userId}/>
       </div>
     </div>
   )
