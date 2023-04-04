@@ -62,8 +62,8 @@ export const getUserPost = async(req,res)=>{
 
 export const getEditPost=async(req,res)=>{
     try{
-        const userPost=await Posts.findById(req.params.id)
-        res.status(200).json({success:true,userPost})
+        const postDetails=await Posts.findById(req.params.id)
+        res.status(200).json({success:true,postDetails})
     }catch(err){
         res.status(500).json({success:false,error:err})
     }

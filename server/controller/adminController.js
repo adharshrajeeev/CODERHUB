@@ -37,12 +37,12 @@ export const adminLogin = async(req,res)=>{
 
 export const getAllUsers = async (req,res)=>{
      try{
-          if(!req.admin) return res.status(401).json({message:"No Authentication"})
-          const users=await User.find();
-          if(!users){
-               return   res.status(200).json({message:"no users found"}) 
-          }
-          
+               console.log("admin here")
+          // if(!req.admin) return res.status(401).json({message:"No Authentication"})
+          const users= await User.find();
+          // if(!users){
+          //      return   res.status(200).json({message:"no users found"}) 
+          // }
           res.status(200).json(users)
           
 

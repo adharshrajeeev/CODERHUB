@@ -13,7 +13,7 @@ export const verifyToken = (req,res,next)=>{
         if(err){
             return res.status(200).json({message:"Authentication failed"})
         }
-        req.decoded=decoded;
+        req.token=token;
         next();
     })
 

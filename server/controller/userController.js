@@ -77,6 +77,18 @@ export const getAllUsers = async(req,res)=>{
 }
 
 
+export const getUserDetails = async (req,res)=>{
+   try{  
+         
+         const userdetails=await User.findById(req.params.id);
+         
+         res.status(200).json({userdetails})
+   }catch(err){
+      res.status(400).json({error:err,message:"oops suggestion user server error"})
+   }
+}
+
+
 export const getUserSuggestion = async (req,res)=>{ /// needed to complete 
    try{
          const users=await User.find()
