@@ -2,7 +2,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import cloudinary from '../config/cloudinary.js';
-import { signupValidate, userBioValidation, userLoginValidate } from '../middlewares/validation.js';
+import { signupValidate, userLoginValidate } from '../middlewares/validation.js';
 
 import User from '../model/users.js';
 
@@ -91,7 +91,17 @@ export const getUserDetails = async (req,res)=>{
 
 export const getUserSuggestion = async (req,res)=>{ /// needed to complete 
    try{
-         const users=await User.find()
+         const userId=req.params.id
+         const user=await User.findById(userId);
+         const allUsers=await User.find({_id:{$ne:userId}}).limit(5)
+         const following=user.following.map((userFollowing)=>userFollowing._id); 
+         if(following) return res.status(201).json(allUsers)
+
+         const friendSuggestions=await User.find({following:{$nin:following}}); 
+         console.log(friendSuggestions,"please frinds")
+         res.status(200).json(friendSuggestions)
+         
+
    }catch(err){
       res.status(400).json({error:err,message:"oops suggestion user server error"})
    }
