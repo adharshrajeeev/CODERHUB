@@ -95,10 +95,10 @@ export const getUserSuggestion = async (req,res)=>{ /// needed to complete
          const user=await User.findById(userId);
          const allUsers=await User.find({_id:{$ne:userId}}).limit(5)
          const following=user.following.map((userFollowing)=>userFollowing._id); 
-         if(following) return res.status(201).json(allUsers)
+         if(following.length === 0) return res.status(201).json(allUsers)
 
          const friendSuggestions=await User.find({following:{$nin:following}}); 
-         console.log(friendSuggestions,"please frinds")
+       
          res.status(200).json(friendSuggestions)
          
 
@@ -268,4 +268,30 @@ export const UpdateUserPicture = async (req,res)=>{
    } catch (err) {
       res.status(500).json({success:false,error:err})
    }
+}
+
+
+export const getAllConnections=async(req,res)=>{
+   try{
+      const user=await User.findOne({_id:req.params.id});
+      const following=user.following.map(following=>following._id);
+      
+      let connections=await User.find({$and:[{_id:{$nin:user.following}},{_id:{$ne:req.params.id}}]})
+      res.status(200).json(connections)
+   }catch(err){
+      res.status(500).json({success:false,error:"oops somethig went wrong in connections"})
+   }
+}
+
+export const getAllFollowings = async(req,res)=>{
+   try{
+      const user=await User.findById(req.params.id);
+      const following = await user.following.map(following=>following._id);
+      let followings = await  User.find({_id:{$in:following}});
+
+      res.status(200).json(followings)
+   }catch(err){
+      res.status(500).json({success:false,error:"oops somethig went wrong in follwing"})
+   }
+   
 }

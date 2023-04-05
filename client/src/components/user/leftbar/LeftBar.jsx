@@ -113,13 +113,13 @@ function LeftBar() {
                     <ListItemIcon>
                       <Person />
                     </ListItemIcon>
-                    <ListItemText primary="Followers" />
+                    <ListItemText primary="Following" />
                   </ListItemButton>
                   <ListItemButton sx={{ pl: 4 }}  onClick={()=>navigate('/people-follwers')}>
                     <ListItemIcon>
                       <Person />
                     </ListItemIcon>
-                    <ListItemText primary="Following" />
+                    <ListItemText primary="Followers" />
                   </ListItemButton>
                 </List>
               </Collapse>

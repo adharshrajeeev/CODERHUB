@@ -2,7 +2,7 @@ import React from 'react'
 import './FriendsStyle.css'
 
 
-function Followers() {
+function Followers({users}) {
   return (
     <div className="card-container">
 

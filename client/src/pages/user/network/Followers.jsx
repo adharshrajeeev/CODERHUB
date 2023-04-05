@@ -2,7 +2,7 @@ import React from 'react'
 import './FriendStyle.scss'
 import Navbar from '../../../components/user/navbar/Navbar'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import FollowignLists from '../../../components/user/friendslist/FriendsList';
+import FollowignLists from '../../../components/user/friendslist/FollowersList';
 
 function Followers() {
   return (

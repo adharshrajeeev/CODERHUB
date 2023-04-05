@@ -46,5 +46,15 @@ button.communityFollow {
 	padding: 10px 25px;
     margin-bottom: 15px;
 }
+button.followingList {
+	background-color: #038ccb;
+	border: none;
+	border-radius: 7px;
+	color: #ffffff;
+	font-family: Montserrat, sans-serif;
+	font-weight: 500;
+	padding: 10px 25px;
+    margin-bottom: 15px;
+}
 
 
