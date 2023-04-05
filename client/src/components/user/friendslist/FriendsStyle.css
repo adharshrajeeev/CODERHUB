@@ -56,5 +56,15 @@ button.followingList {
 	padding: 10px 25px;
     margin-bottom: 15px;
 }
+button.followersLists {
+	background-color: #038ccb;
+	border: none;
+	border-radius: 7px;
+	color: #ffffff;
+	font-family: Montserrat, sans-serif;
+	font-weight: 500;
+	padding: 10px 25px;
+    margin-bottom: 15px;
+}
 
 

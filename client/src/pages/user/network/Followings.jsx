@@ -12,36 +12,36 @@ import { GET_FOLLOWING_LIST } from '../../../utils/ConstUrls';
 
 function Followings() {
 
-    const [following,setFollowing]=useState([])
-    const userId=decodeToken();
+  const [following, setFollowing] = useState([])
+  const userId = decodeToken();
 
-    const listFollowingUsers =  async()=>{
-      const token=localStorage.getItem('token')
-      axios.get(`${GET_FOLLOWING_LIST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response)=>{
-        setFollowing(response.data)
-      }).catch((err)=>{
-        toast.error("Oops Something went wrong")
-      })
-    }
+  const listFollowingUsers = async () => {
+    const token = localStorage.getItem('token')
+    axios.get(`${GET_FOLLOWING_LIST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
+      setFollowing(response.data)
+    }).catch((err) => {
+      toast.error("Oops Something went wrong")
+    })
+  }
 
-    useEffect(()=>{
-      listFollowingUsers();
-    },[])
+  useEffect(() => {
+    listFollowingUsers();
+  }, [])
 
   return (
     <>
-      <Navbar/>
+      <Navbar />
       <div style={{ display: "flex" }}>
-        <LeftBar/>
+        <LeftBar />
         <div style={{ flex: 8 }}>
-      <div className="friendsList">
-      <Box sx={{ flexGrow: 1 }}>
+          <div className="friendsList">
+            <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 {
-                  following.map((users,index)=>(
-                <Grid item xs={4}>
-                   <FollowignLists users={users} key={index} />
-                </Grid>
+                  following.map((users, index) => (
+                    <Grid item xs={4}>
+                      <FollowignLists users={users} key={index} />
+                    </Grid>
 
                   ))
                 }
@@ -49,15 +49,15 @@ function Followings() {
 
               </Grid>
             </Box>
-    
-      </div>
+
+          </div>
         </div>
         <Toaster
-        position="top-center"
-        reverseOrder={false}
-      />
+          position="top-center"
+          reverseOrder={false}
+        />
       </div>
-   </>
+    </>
   )
 }
 

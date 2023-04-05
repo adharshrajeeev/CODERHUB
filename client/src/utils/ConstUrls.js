@@ -24,6 +24,7 @@ export const ADD_COMMENTS='/addComment'
 export const GET_EDITPOST_DETAILS='/editPost'
 export const GET_CONNECTIONS='/connections'
 export const GET_FOLLOWING_LIST='/followings'
+export const GET_FOLLOWERS_LIST='/followers'
 export const GET_USER_SUGGESTIONS='/suggestionUsers'
 
 
