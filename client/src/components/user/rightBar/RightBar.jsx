@@ -3,13 +3,13 @@ import "./rightBar.scss";
 
 
 
-const RightBar = ({userId}) => {
+const RightBar = () => {
   return (
     <div className="rightBar">
       <div className="container">
         <div className="item">
 
-          <FriendSuggestions userId={userId}/>
+          <FriendSuggestions />
 
         </div>
         <div className="item">

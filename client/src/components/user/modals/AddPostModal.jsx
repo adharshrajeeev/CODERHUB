@@ -23,7 +23,7 @@ import axios from '../../../utils/axios'
 import { ADD_POST } from "../../../utils/ConstUrls";
 import CircularProgress from '@mui/material/CircularProgress';
 import { setPosts } from '../../../redux/userSlice';
-import { fetchUserDetails } from "../../../api/UserServices";
+// import { fetchUserDetails } from "../../../api/UserServices";
 
 
 

@@ -12,64 +12,73 @@ import {
 import {
   List,
   ListItem,
-  ListItemButton, 
+  ListItemButton,
   ListItemIcon,
   ListItemText,
   Switch,
 } from "@mui/material";
-import './LeftBarStyle.scss' 
+import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
+import Collapse from '@mui/material/Collapse';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import './LeftBarStyle.scss'
 import { useNavigate } from 'react-router-dom';
 import AddPostModal from '../modals/AddPostModal';
-import { useDispatch } from 'react-redux';
-import {setLogout} from '../../../redux/userSlice';
-import toast,{Toaster} from 'react-hot-toast'
+
+
 
 
 
 function LeftBar() {
 
-  const navigate=useNavigate();
-  const dispatch=useDispatch();
+  const navigate = useNavigate();
 
-  const handleLogout =()=>{
+
+  const [open, setOpen] = React.useState(true);
+
+  const handleClick = () => {
+    setOpen(!open);
+  };
+
+  const handleLogout = () => {
     localStorage.removeItem("token");
     // dispatch(setLogout());
     navigate('/')
-    
+
   }
 
   return (
     <div className="leftBar">
-    <div className="container">
-      <div className="menu">  
-        {/* <div className="user">
+      <div className="container">
+        <div className="menu">
+          {/* <div className="user">
           
           <span>adharsh</span>
         </div> */}
-        <div className="item">
-        <List sx={{ width: '100%', maxWidth: 360,color:"black"}}>
-        <ListItem > 
+          <div className="item">
+            <List sx={{ width: '100%', maxWidth: 360, color: "black" }}>
+              <ListItem >
 
-           <AddPostModal/>
-   
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" onClick={()=>navigate('/home')}>
-              <ListItemIcon>
-                <Home />
-              </ListItemIcon>
-              <ListItemText primary="Homepage" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" onClick={()=>navigate('/explore')}>
-              <ListItemIcon>
-                <Article />
-              </ListItemIcon>
-              <ListItemText primary="Explore" />
-            </ListItemButton>
-          </ListItem>
-          {/* <ListItem disablePadding>
+                <AddPostModal />
+
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component="a" onClick={() => navigate('/home')}>
+                  <ListItemIcon>
+                    <Home />
+                  </ListItemIcon>
+                  <ListItemText primary="Homepage" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component="a" onClick={() => navigate('/explore')}>
+                  <ListItemIcon>
+                    <Article />
+                  </ListItemIcon>
+                  <ListItemText primary="Explore" />
+                </ListItemButton>
+              </ListItem>
+              {/* <ListItem disablePadding>
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
                 <Group />
@@ -77,119 +86,85 @@ function LeftBar() {
               <ListItemText primary="Groups" />
             </ListItemButton>
           </ListItem> */}
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemIcon>
-                <Message />
-              </ListItemIcon>
-              <ListItemText primary="Messages" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemIcon>
-                <Person />
-              </ListItemIcon>
-              <ListItemText primary="Friends" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemIcon>
-                <Settings />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding onClick={()=>navigate('/profile')}>
-             
-            <ListItemButton component="a">
-              <ListItemIcon>
-                <AccountBox />
-              </ListItemIcon>
-              <ListItemText primary="Profile" />
-            </ListItemButton>
-           
-          </ListItem>
-          <ListItem disablePadding onClick={handleLogout}>
-             
-             <ListItemButton component="a">
-               <ListItemIcon>
-                 <Logout />
-               </ListItemIcon>
-               <ListItemText primary="Logout" />
-             </ListItemButton>
-            
-           </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton component="a" href="#simple-list">
-              <ListItemIcon>
-                <ModeNight />
-              </ListItemIcon>
-              <Switch />
-            </ListItemButton>
-          </ListItem>
-        </List>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#simple-list">
+                  <ListItemIcon>
+                    <Message />
+                  </ListItemIcon>
+                  <ListItemText primary="Messages" />
+                </ListItemButton>
+              </ListItem>
+              <ListItemButton onClick={handleClick}>
+                <ListItemIcon>
+                <PeopleAltIcon />
+                </ListItemIcon>
+                <ListItemText primary="My Network" />
+                {open ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={open} timeout="auto" unmountOnExit>
+                <List component="div" disablePadding>
+                  <ListItemButton sx={{ pl: 4 }} onClick={()=>navigate('/connections')}>
+                    <ListItemIcon>
+                      <Person />
+                    </ListItemIcon>
+                    <ListItemText primary="Connections" />
+                  </ListItemButton>
+                  <ListItemButton sx={{ pl: 4 }}  onClick={()=>navigate('/people-following')}>
+                    <ListItemIcon>
+                      <Person />
+                    </ListItemIcon>
+                    <ListItemText primary="Followers" />
+                  </ListItemButton>
+                  <ListItemButton sx={{ pl: 4 }}  onClick={()=>navigate('/people-follwers')}>
+                    <ListItemIcon>
+                      <Person />
+                    </ListItemIcon>
+                    <ListItemText primary="Following" />
+                  </ListItemButton>
+                </List>
+              </Collapse>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#simple-list">
+                  <ListItemIcon>
+                    <Settings />
+                  </ListItemIcon>
+                  <ListItemText primary="Settings" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding onClick={() => navigate('/profile')}>
+
+                <ListItemButton component="a">
+                  <ListItemIcon>
+                    <AccountBox />
+                  </ListItemIcon>
+                  <ListItemText primary="Profile" />
+                </ListItemButton>
+
+              </ListItem>
+              <ListItem disablePadding onClick={handleLogout}>
+
+                <ListItemButton component="a">
+                  <ListItemIcon>
+                    <Logout />
+                  </ListItemIcon>
+                  <ListItemText primary="Logout" />
+                </ListItemButton>
+
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component="a" href="#simple-list">
+                  <ListItemIcon>
+                    <ModeNight />
+                  </ListItemIcon>
+                  <Switch />
+                </ListItemButton>
+              </ListItem>
+              
+            </List>
+          </div>
         </div>
-        {/* <div className="item">
-          <img src={Groups} alt="" />
-          <span>Groups</span>
-        </div>
-        <div className="item">
-          <img src={Market} alt="" />
-          <span>Marketplace</span>
-        </div>
-        <div className="item">
-          <img src={Watch} alt="" />
-          <span>Watch</span>
-        </div>
-        <div className="item">
-          <img src={Memories} alt="" />
-          <span>Memories</span>
-        </div>
-      </div>
-      <hr />
-      <div className="menu">
-        <span>Your shortcuts</span>
-        <div className="item">
-          <img src={Events} alt="" />
-          <span>Events</span>
-        </div>
-        <div className="item">
-          <img src={Gaming} alt="" />
-          <span>Gaming</span>
-        </div>
-        <div className="item">
-          <img src={Gallery} alt="" />
-          <span>Gallery</span>
-        </div>
-        <div className="item">
-          <img src={Videos} alt="" />
-          <span>Videos</span>
-        </div>
-        <div className="item">
-          <img src={Messages} alt="" />
-          <span>Messages</span>
-        </div>
-      </div>
-      <hr />
-      <div className="menu">
-        <span>Others</span>
-        <div className="item">
-          <img src={Fund} alt="" />
-          <span>Fundraiser</span>
-        </div>
-        <div className="item">
-          <img src={Tutorials} alt="" />
-          <span>Tutorials</span>
-        </div>
-        <div className="item">
-          <img src={Courses} alt="" />
-          <span>Courses</span>
-        </div> */}
       </div>
     </div>
-  </div>
   )
 }
 

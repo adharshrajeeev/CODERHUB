@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import axios from '../../../utils/axios'
+import axios from '../../../utils/axios';
+import CircularProgress from '@mui/material/CircularProgress';
 import { GET_USER_SUGGESTIONS } from '../../../utils/ConstUrls';
 import DefaultPhoto from '../../../assets/noProfilePicture.jpg'
+import jwtDecode from 'jwt-decode';
+// import {userId} from '../../../utils/decodeToken'
 
-
-function FriendSuggestions({userId}) {
+function FriendSuggestions() {
 
     const [userList,SetUsers]=useState([]);
+    const [isLoading,setIsLoading]=useState(false);
 
     const getFriendSuggestions =  async ()=>{
       try{
-        console.log(userId)
+        const userId=jwtDecode(localStorage.getItem('token'))
+        setIsLoading(true)
         const token =localStorage.getItem('token')
-        const {data} =  await axios.get(`${GET_USER_SUGGESTIONS}/${userId}`,{ headers: { 'Authorization': `Bearer ${token}` } });
+        const {data} =  await axios.get(`${GET_USER_SUGGESTIONS}/${userId.id}`,{ headers: { 'Authorization': `Bearer ${token}` } });
        
            SetUsers(data); 
-           console.log(userList,"this is suggestions")
+          setIsLoading(false)
       }catch(err){
         console.log("suggestions catch err",err)
       }
@@ -33,7 +37,8 @@ function FriendSuggestions({userId}) {
   return (
     <div>
         <span>Pleople U may know</span>
-        {
+
+        {   isLoading ? <CircularProgress/> :
             userList.map((user,index)=>(
 
           <div className="user" key={index}>

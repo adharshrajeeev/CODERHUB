@@ -2,12 +2,17 @@ import store from '../redux/store'
 import { GET_USER_DETAILS } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
-import jwt from 'jwt-decode';
+import jwt_decode from 'jwt-decode';
 
-const token=localStorage.getItem('token');
-const decode=jwt(token);
 
 export const fetchUserDetails = async()=>{
+    try{
+    
+        var token=localStorage.getItem('token');
+        var decode=jwt_decode(token);
+    }catch(err){
+        console.log("decode error",err)
+    }
     
     try{
         

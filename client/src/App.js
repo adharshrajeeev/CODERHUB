@@ -1,5 +1,5 @@
 import React from 'react'
-import { BrowserRouter, Routes, Route,Navigate  } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import "./style.scss";
 import Login from './pages/user/login/Login';
 import Home from './pages/user/home/Home';
@@ -9,31 +9,81 @@ import Explore from './pages/user/explore/Explore';
 import AdminLogin from './pages/admin/adminLogin/Login';
 import AdminHome from './pages/admin/adminHome/Home'
 import AdminUserList from './pages/admin/adminUserList/AdminUserList';
+import AuthorizeUser from './protected/AuthUser';
+import AuthorizeAdmin from './protected/AuthAdmin';
+import Connections from './pages/user/network/Connections';
+import Followings from './pages/user/network/Followings';
+import Followers from './pages/user/network/Followers';
 
 
-const adminAuth = Boolean(localStorage.getItem('adminToken'));
-const isAuth = Boolean(localStorage.getItem('token'));
+
 function App() {
-  
 
-  const darkMode =false
+
+  const darkMode = false
 
   return (
     <div className={`theme-${darkMode ? "dark" : "light"}`}>
-       <BrowserRouter>
-       <Routes>
-       <Route path='/' element={<Login /> } /> 
+      <BrowserRouter>
+        <Routes>
+          {/* USER ROUTES */}
+          <Route path='/' element={<Login />} />
           <Route path='/signUp' element={<Register />} />
-          <Route path='/home' element={ <Home /> } />
-          <Route path='/profile' element={ <Profile/> } />
-          <Route path='/explore' element={ <Explore/> } />
-          <Route path='/admin' element={<AdminLogin/>} />
-          <Route path='/admin/dashboard' element={adminAuth ? <AdminHome/> : <Navigate to={'/admin'}/>}  />
-          <Route path='/admin/users' element={adminAuth ? <AdminUserList/> : <Navigate to={'/admin'}/>}  />
-          
+
+          <Route path='/home' element={
+            <AuthorizeUser>
+              <Home />
+            </AuthorizeUser>
+          }
+          />
+          <Route path='/profile' element={
+            <AuthorizeUser>
+              <Profile />
+            </AuthorizeUser>
+          }
+          />
+
+          <Route path='/explore' element={
+            <AuthorizeUser>
+              <Explore />
+            </AuthorizeUser>
+          } />
+
+           <Route path='/connections' element={
+            <AuthorizeUser>
+              <Connections />
+            </AuthorizeUser>
+          } />
+
+          <Route path='/people-following' element={
+            <AuthorizeUser>
+              <Followings />
+            </AuthorizeUser>
+          } />
+          <Route path='/people-follwers' element={
+            <AuthorizeUser>
+              <Followers />
+            </AuthorizeUser>
+          } />
+
+{/* ========================================ADMIN ROUTESS============================================================= */}
+          <Route path='/admin' element={<AdminLogin />} />
+
+          <Route path='/admin/dashboard' element={
+            <AuthorizeAdmin>
+              <AdminHome />
+            </AuthorizeAdmin>
+          } />
+
+          <Route path='/admin/users' element={
+            <AuthorizeAdmin>
+              <AdminUserList />
+            </AuthorizeAdmin>
+          } />
+
           {/* <Route path='*' element={<PageNotFound />} /> */}
-       </Routes>
-       </BrowserRouter>
+        </Routes>
+      </BrowserRouter>
     </div>
   )
 }

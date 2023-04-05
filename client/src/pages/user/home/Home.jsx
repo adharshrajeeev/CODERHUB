@@ -5,7 +5,7 @@ import Posts from "../../../components/user/posts/Posts"
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
 
-import { useSelector } from 'react-redux';
+
 import "./home.scss"
 function Home() {
 
@@ -13,7 +13,7 @@ function Home() {
     fetchUserDetails();
   },[])
 
-  const userId=useSelector((state)=>state?.user?.user?._id)
+
  
   return (
     <div>
@@ -26,7 +26,7 @@ function Home() {
   
       </div>
         </div>
-        <RightBar userId={userId}/>
+        <RightBar />
       </div>
     </div>
   )
