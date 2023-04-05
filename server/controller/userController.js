@@ -295,3 +295,14 @@ export const getAllFollowings = async(req,res)=>{
    }
    
 }
+
+export const getAllFollowers = async (req,res)=>{
+   try{
+         const user=await User.findById(req.params.id);
+         const followers=await user.followers.map(followers => followers._id);
+         let followersList=await User.find({_id:{$in:followers}});
+         res.status(200).json(followersList)
+   }catch(err){
+      res.status(500).json({success:false,error:"oops somethig went wrong in follwing"})
+   }
+}
