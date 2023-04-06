@@ -14,6 +14,7 @@ import {useDispatch} from 'react-redux'
 import EditPostModal  from '../modals/EditPostModal'
 import { DELETE_POSTS } from '../../../utils/ConstUrls';
 import { setPosts } from '../../../redux/userSlice';
+import PostReportModal from './PostReportModal';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -97,7 +98,7 @@ function PostMenuButton({postId,postedUserId,userId}) {
         'aria-labelledby': 'basic-button',
       }}
     >
-      <MenuItem onClick={handleClose}>Report</MenuItem>
+      <PostReportModal postId={postId} postedUserId={postedUserId} userId={userId} />
     </Menu>
     }
     
