@@ -38,7 +38,7 @@ const Post = ({ post }) => {
         }
         )
 
-        if(Like==FavoriteOutlinedIcon){
+        if(Like===FavoriteOutlinedIcon){
           const  response=await axios.put(UNLIKE_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } });
           setLiked(FavoriteBorderOutlinedIcon);
           SetLikeCount(count=>count-1)
