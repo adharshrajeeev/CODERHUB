@@ -104,9 +104,8 @@ export const getAllPosts = async(req,res)=>{
        
         const userId=req.params.id
         const user=await User.findOne({_id:userId})
-        const followingIds= user.following.map(follower =>follower._id )
-        const userPosts=await Posts.find({postedUser:{$in:followingIds}}).sort({ createdAt: -1 });
-
+        const followingIds= user.following.map(follower =>follower._id );
+        const userPosts=await Posts.find({"postedUser._id":{$in:followingIds}}).sort({ createdAt: -1 });
         res.status(200).json(userPosts)
     }catch(err){
         res.status(500).json({error:err})

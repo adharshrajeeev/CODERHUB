@@ -3,6 +3,7 @@ import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
         getLikedPostCount, getUserPost, likePost, unLikePost, updateUserPost } from '../controller/postController.js';
 import { addProfilePicture, addUserBio, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfilePic, getUserSuggestion, registerUser,
+        removeFollower,
         unFollowUser,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
 
@@ -31,6 +32,7 @@ router.get('/likeCount/:id',getLikedPostCount)
 
 router.post('/follow',verifyToken,followUser) 
 router.post('/unFollow',verifyToken,unFollowUser)
+router.post('/removeFollower',verifyToken,removeFollower)
 
 router.post('/addBio',verifyToken,addUserBio)
 router.get('/bio/:id',verifyToken,getUserBio)

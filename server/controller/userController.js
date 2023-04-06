@@ -142,9 +142,9 @@ export const followUser= async (req,res)=>{
 
 export const unFollowUser = async (req,res)=>{
    try{
-      const {userId,followerId}=req.body;
+      const {userId,followingId}=req.body;
       const user=await User.findById(userId)
-      const followers=await User.findById(followerId)
+      const followers=await User.findById(followingId)
 
        if(!followers || !user) return res.status(200).json({success:false,message:"follower not found"})
 
@@ -165,6 +165,28 @@ export const unFollowUser = async (req,res)=>{
    }
 }
 
+
+export const removeFollower= async(req,res)=>{
+   try{
+      const {userId,followerId}=req.body
+      User.updateOne({_id:followerId},{
+         $pull:{
+            following:userId
+         }
+      }).then(async(response)=>{
+         await User.updateOne({_id:userId},{
+            $pull:{
+               followers:followerId
+            }
+         })
+         return  res.status(200).json({success:true,message:`Success Removed user`})
+      }).catch((err)=>{
+         res.status(400).json({error:err})
+      })
+   }catch(err){
+      res.status(400).json({error:err})
+   }
+}
 
 export const addUserBio=async(req,res)=>{
    
