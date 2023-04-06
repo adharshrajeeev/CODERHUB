@@ -18,7 +18,16 @@ function Following({users,listFollowingUsers}) {
     const token=localStorage.getItem('token');
 
     axios.post(UNFOLLOW_USER,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-      toast.success(response.data.message)
+      toast(response.data.message,
+        {
+          icon: '👏',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
       listFollowingUsers();
     }).catch((err)=>{
       toast.error("OOPS Something went wrong");

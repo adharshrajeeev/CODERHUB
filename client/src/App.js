@@ -14,6 +14,7 @@ import AuthorizeAdmin from './protected/AuthAdmin';
 import Connections from './pages/user/network/Connections';
 import Followings from './pages/user/network/Followings';
 import Followers from './pages/user/network/Followers';
+import UserProfiles from './pages/user/profile/UserProfiles';
 
 
 
@@ -39,6 +40,12 @@ function App() {
           <Route path='/profile' element={
             <AuthorizeUser>
               <Profile />
+            </AuthorizeUser>
+          }
+          />
+           <Route path='/user-profile/:id' element={
+            <AuthorizeUser>
+              <UserProfiles />
             </AuthorizeUser>
           }
           />

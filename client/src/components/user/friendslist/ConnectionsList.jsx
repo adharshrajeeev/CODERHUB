@@ -20,7 +20,16 @@ function Followers({ users,listAllUsers }) {
     })
     const token=localStorage.getItem('token')
     axios.post(FOLLOW_USER,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-      toast.success(response.data.message);
+      toast(response.data.message,
+        {
+          icon: '👏',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
       listAllUsers();
     }).catch((err)=>{
       toast.error("oops something went wrong")

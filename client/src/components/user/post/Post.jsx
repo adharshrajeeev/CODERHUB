@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import axios from '../../../utils/axios'
 import moment from 'moment'
 import {  LIKE_POST, UNLIKE_POST } from "../../../utils/ConstUrls";
+import toast,{Toaster} from 'react-hot-toast'
 import PostMenuButton from "./PostMenuButton";
 
 
@@ -39,22 +40,29 @@ const Post = ({ post }) => {
         )
 
         if(Like===FavoriteOutlinedIcon){
-          const  response=await axios.put(UNLIKE_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } });
-          setLiked(FavoriteBorderOutlinedIcon);
-          SetLikeCount(count=>count-1)
-          console.log(response,"unlike response")
+     axios.put(UNLIKE_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
+
+       setLiked(FavoriteBorderOutlinedIcon);
+       SetLikeCount(count=>count-1)
+     }).catch((err)=>{
+        toast.error("Oops Something went Wrong")
+     })
+       
 
           
         }else{
 
-          const response=await axios.put(LIKE_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } });
-          setLiked(FavoriteOutlinedIcon);
-          SetLikeCount(count=>count+1)
-          console.log(response,"like response")
+         await axios.put(LIKE_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
 
+           setLiked(FavoriteOutlinedIcon);
+           SetLikeCount(count=>count+1)
+         }).catch((err)=>{
+          toast.error("Oops Something Went Wrong ")  
+         })
+         
         }
       }catch(err){
-        console.log("Like function error",err)
+        toast.error("Oops Something Went Wrong ")
       }
   }
 
@@ -65,12 +73,22 @@ const Post = ({ post }) => {
           <div className="userInfo">
            { imagefile ?  <img src={profilePic} alt="" /> : <img src={post.postedUser?.profilePic} alt="" />}
             <div className="details">
-              <Link
-                to={`/profile/${post.userId}`}
+              {
+                userId === post.postedUser._id ?  <Link 
+                to={`/profile`}
                 style={{ textDecoration: "none", color: "inherit" }}
               >
                 <span className="name">{post.postedUser?.userName}</span>
               </Link>
+              :
+              <Link 
+              to={`/user-profile/${post?.postedUser?._id}`}
+              style={{ textDecoration: "none", color: "inherit" }}
+            >
+              <span className="name">{post.postedUser?.userName}</span>
+            </Link>
+              }
+             
               <span className="date">{moment(post.createdAt).fromNow()}</span>
             </div>
           </div>
@@ -97,6 +115,7 @@ const Post = ({ post }) => {
         </div>
         {commentOpen && <Comments postId={post._id} userId={userId} comments={post.comments}/>}
       </div>
+      <Toaster/>
     </div>
   );
 };

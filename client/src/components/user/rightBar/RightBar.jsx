@@ -1,4 +1,4 @@
-import FriendSuggestions from "../suggestions/FriendSuggestions";
+
 import "./rightBar.scss";
 
 
@@ -9,7 +9,7 @@ const RightBar = () => {
       <div className="container">
         <div className="item">
 
-          <FriendSuggestions />
+          {/* <FriendSuggestions /> */}
 
         </div>
         <div className="item">
