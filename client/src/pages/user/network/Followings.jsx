@@ -40,7 +40,7 @@ function Followings() {
                 {
                   following.map((users, index) => (
                     <Grid item xs={4}>
-                      <FollowignLists users={users} key={index} />
+                      <FollowignLists users={users} key={index} listFollowingUsers={listFollowingUsers} />
                     </Grid>
 
                   ))

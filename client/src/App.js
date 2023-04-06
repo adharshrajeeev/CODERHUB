@@ -60,7 +60,7 @@ function App() {
               <Followings />
             </AuthorizeUser>
           } />
-          <Route path='/people-follwers' element={
+          <Route path='/people-followers' element={
             <AuthorizeUser>
               <Followers />
             </AuthorizeUser>

@@ -3,7 +3,8 @@ import Post from "../post/Post";
 import axios from '../../../utils/axios'
 import "./posts.scss";
 import { ALL_POSTS } from "../../../utils/ConstUrls";
-import { useSelector } from "react-redux";
+import decodeToken from '../../../utils/Services';
+
 
 const Posts = () => {
 
@@ -13,7 +14,7 @@ const Posts = () => {
   },[])
  
   const [posts,setPost]=useState([])
-  const userId=useSelector((state)=>state.user?.user?._id)
+  const userId=decodeToken();
 
   const getAllPosts = async()=>{
     try{

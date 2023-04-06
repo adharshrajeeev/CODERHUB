@@ -23,6 +23,7 @@ import axios from '../../../utils/axios'
 import { ADD_POST } from "../../../utils/ConstUrls";
 import CircularProgress from '@mui/material/CircularProgress';
 import { setPosts } from '../../../redux/userSlice';
+import noProfilePicture from '../../../assets/noProfilePicture.jpg'
 // import { fetchUserDetails } from "../../../api/UserServices";
 
 
@@ -87,6 +88,8 @@ function AddPostModal() {
       if(profilePic){
 
         formData.append("profilePic",profilePic)
+      }else{
+        formData.append("profilePic",noProfilePicture)
       }
       if(images){
         console.log(images,"iamge")

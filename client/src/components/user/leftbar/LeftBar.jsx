@@ -115,7 +115,7 @@ function LeftBar() {
                     </ListItemIcon>
                     <ListItemText primary="Following" />
                   </ListItemButton>
-                  <ListItemButton sx={{ pl: 4 }}  onClick={()=>navigate('/people-follwers')}>
+                  <ListItemButton sx={{ pl: 4 }}  onClick={()=>navigate('/people-followers')}>
                     <ListItemIcon>
                       <Person />
                     </ListItemIcon>

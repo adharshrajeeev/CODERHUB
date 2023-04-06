@@ -27,7 +27,7 @@ function Followers() {
 
   useEffect(()=>{
     getAllFollowers();
-  })
+  },[])
   return (
     <>
       <Navbar />
@@ -41,7 +41,7 @@ function Followers() {
                 {
                   followers.map((users, index) => (
                     <Grid item xs={4}>
-                      <FollowersList users={users} key={index} />
+                      <FollowersList users={users} key={index} getAllFollowers={getAllFollowers} />
                     </Grid>
 
                   ))
