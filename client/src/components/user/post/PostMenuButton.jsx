@@ -14,14 +14,14 @@ import {useDispatch} from 'react-redux'
 import EditPostModal  from '../modals/EditPostModal'
 import { DELETE_POSTS } from '../../../utils/ConstUrls';
 import { setPosts } from '../../../redux/userSlice';
-import PostReportModal from './PostReportModal';
+import PostReportModal from '../modals/PostReportModal';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
   });
 
 
-function PostMenuButton({postId,postedUserId,userId}) {
+function PostMenuButton({postId,postedUserId,userId,content,postImage}) {
 
     const dispatch=useDispatch();
     const [anchorEl, setAnchorEl] = useState(false);
@@ -67,8 +67,8 @@ function PostMenuButton({postId,postedUserId,userId}) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Edit</MenuItem>
-        {/* <EditPostModal postId={postId} userId={userId}/> */}
+       <EditPostModal postId={postId} postedUserId={postedUserId} userId={userId} content={content} postImage={postImage}/>
+  
         <MenuItem onClick={handleClickOpen}>Delete</MenuItem>
         <Dialog
         open={clickOpen}

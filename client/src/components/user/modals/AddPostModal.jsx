@@ -10,7 +10,7 @@ import {
     Tooltip,
     Typography,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, {  useState } from "react";
 import {
     Add as AddIcon,
 } from "@mui/icons-material";
@@ -51,7 +51,6 @@ function AddPostModal() {
     const [open, setOpen] = useState(false);
     const [isImage,setIsImage]=useState(false);
     const [images,setImage]=useState("");
-    const [showError,setError]=useState(false)
     const [post,setPost]=useState("")
     const _id=useSelector((state)=>state.user?.user?._id)
     // const token=useSelector((state)=>state.token);

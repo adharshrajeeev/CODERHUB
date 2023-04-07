@@ -1,189 +1,108 @@
-import {
-    Avatar,
-    Button,
-    ButtonGroup,
-    Modal,
-    Stack,
-    styled,
-    TextField,
-    Typography,
-} from "@mui/material";
-import React, { useEffect, useState } from "react";
-
+import React, { useState } from 'react'
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
 import MenuItem from '@mui/material/MenuItem';
-import IconButton from '@mui/material/IconButton';
-import PhotoCamera from '@mui/icons-material/PhotoCamera';
-import { Box } from "@mui/system";
-import { useSelector, useDispatch } from "react-redux";
-import toast, { Toaster } from "react-hot-toast";
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+import TextField from '@mui/material/TextField';
 import axios from '../../../utils/axios'
-import { ADD_POST, GET_EDITPOST_DETAILS } from "../../../utils/ConstUrls";
-import CircularProgress from '@mui/material/CircularProgress';
-import { getPostDetails, setPosts } from '../../../redux/userSlice';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import { UPDATE_USER_POST } from '../../../utils/ConstUrls';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%', 
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+  };
 
 
-const SytledModal = styled(Modal)({
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-});
+function EditPostModal({postId,postedUserId,userId,content,postImage}) {
 
-const UserBox = styled(Box)({
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    marginBottom: "20px",
-});;
-
-
-
-
-function  EditPostModal({postId,userId}) {
-
-   
-    
-
-    const [loading, setLoading] = useState(false)
     const [open, setOpen] = useState(false);
-    const [isImage, setIsImage] = useState(false);
-    const [images, setImage] = useState("");
-    const [post, setPost] = useState("")
-    const { _id } = useSelector((state) => state.user.user)
-    const userName = useSelector((state) => state.user.user.userName);
-    const profilePic = useSelector((state) => state.user.user.profilePic);
-    const userImage = useSelector((state) => state.user?.user.profilePic);
-    const [editPost,setEditPost]=useState(null);
-
-    // const getEditPostDetail = async()=>{
-
-    //     try{
-    //         const token=document.cookie.slice(6)
-    //         const {data}= await axios.get(`${GET_EDITPOST_DETAILS}/${postId}`,{ headers: {'Authorization':`Bearer ${token}` } });
-    //         console.log(data.postDetails,"thissis is edit")
-    //         setEditPost(data.postDetails)
-    //     }catch(err){
-    //         console.log("get edit post aerrror",err)  
-    //     }
-    // }
+    const [loading, setLoading] = useState(false);
+    const [editcontent,setEditContent]=useState(content);
+    const [editImage,setEditImage]=useState(postImage);
+    const handleClose = () => setOpen(false);
     
-    // useEffect(()=>{
-    //     getEditPostDetail(); 
-    // },[postId])
 
-    const dispatch = useDispatch();
-    const handleChange = (e) => {
-        setImage(e.target.files[0])
-        setIsImage(images.name)
+    const getPostDetailsOnOpen = ()=>{
+        setOpen(true);
     }
 
-    const handleSubmit = async (e) => {
-        setLoading(true)
-        try {
-            if (post === "") {
-                return toast('Please Fill the components!',
-                    {
+    const handlePostSubmit = async()=>{
+        console.log(postId,"post id daaa")
+        const token=localStorage.getItem('token');
+        try{
+            const formData=new FormData();
+            formData.append("content",editcontent);
+            formData.append("userId",userId);
+            formData.append("postId",postId)
+            if(editImage){
+                console.log(editImage,"iamge")
+                formData.append('image',editImage)
+              }
+            axios.put(UPDATE_USER_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } }).then((response)=>{
+                console.log(response,"post repose")
+            }).catch((err)=>{
+                console.log("edit post ",err)
+            })
+        }catch(err){
 
-                        style: {
-                            borderRadius: '10px',
-                            background: '#333',
-                            color: '#fff',
-                        },
-                    }
-                )
-            }
-            const formData = new FormData();
-            formData.append("userId", _id);
-            formData.append("content", post);
-            formData.append("userName", userName)
-            formData.append("profilePic", profilePic)
-            if (images) {
-                console.log(images, "iamge")
-                formData.append('image', images)
-            }
-            const token = document.cookie.slice(6)
-
-            const response = await axios.post(ADD_POST, formData, { headers: { 'Authorization': `Bearer ${token}` } });
-            if (response.data.success) {
-                setLoading(false);
-                dispatch(setPosts(response.data.posts));
-                setIsImage("")
-                setPost("")
-                setOpen(false)
-
-            } else {
-                setIsImage("")
-                setPost("")
-                setOpen(false)
-                setLoading(false);
-                toast.error("oops something went wrong")
-            }
-        } catch (err) {
-            toast.error("oops something went wrong")
         }
     }
-
-
-    return (
-        <>
-            <MenuItem onClick={(e) => setOpen(true)}>Edit</MenuItem>
-            <SytledModal
-                open={open}
-                onClose={(e) => setOpen(false)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box
-                    width={400}
-                    height={280}
-                    bgcolor={"white"}
-                    color={"text.primary"}
-                    p={3}
-                    borderRadius={5}
-                >
-                    <Typography variant="h6" color="gray" textAlign="center">
-                        Edit Post
-                    </Typography>
-                    <UserBox>
-                        <Avatar
-                            src={userImage ? userImage : "https://www.google.com/url?sa=i&url=https%3A%2F%2Ficon-library.com%2Ficon%2Fno-user-image-icon-3.html&psig=AOvVaw0Sk5AHaURvpA7Vxl0X7dO-&ust=1679733302736000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJjZhamU9P0CFQAAAAAdAAAAABAE"}
-                            sx={{ width: 30, height: 30 }}
-                        />
-                        <Typography fontWeight={500} variant="span">
-                            {userName}
-                        </Typography>
-                    </UserBox>
-                    <TextField
-                        sx={{ width: "100%" }}
-                        id="standard-multiline-static"
-                        multiline
-                        rows={3}
-                        placeholder="What's on your mind?"
-                        variant="standard"
-                        value={editPost.content}
-                        onChange={(e) => setPost(e.target.value)}
-                    />
-                    <Stack direction="row" gap={1} mt={2} mb={3}>
-                        <IconButton color="primary" aria-label="upload picture" component="label">
-
-                            <input hidden accept="image/*" type="file" name="file" onChange={handleChange} />
-                            <PhotoCamera />
-                            <span style={{ fontSize: "15px" }} >{isImage && isImage}</span>
-                        </IconButton>
-                    </Stack>
-                    <ButtonGroup
-                        fullWidth
-                        variant="contained"
-                        aria-label="outlined primary button group"
-                    >
-                        {loading ? <CircularProgress />
-                            : <Button onClick={handleSubmit}>Post</Button>}
-                    </ButtonGroup>
-                </Box>
-            </SytledModal>
-            <Toaster position="top-right"
-                reverseOrder={false} />
-        </>
-    )
+ 
+  return (
+    <>
+     <MenuItem  onClick={getPostDetailsOnOpen} >Edit</MenuItem>
+     <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box sx={style}  borderRadius={5}>
+        {/* <Stack direction="row"  spacing={2}> */}
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+          <TextField
+              sx={{ width: "100%" }}
+              id="standard-multiline-static"
+              multiline
+              rows={3}
+              variant="standard"   
+              value={editcontent}
+              onChange={(e)=>setEditContent(e.target.value)}
+            />
+          </Typography>
+        {editImage ?  <img src={editImage} style={{width:"100px",height:"100px",marginTop:"20px"}} alt="postImage" /> : ""} 
+       {
+        editImage ? <Button variant="contained" component="label">
+        Upload
+        <input hidden accept="image/*" multiple type="file" />
+      </Button> : ""
+       }
+          <LoadingButton
+            size="small"
+            sx={{marginTop:"50px",alignContent:"left"}}
+            onClick={handlePostSubmit}
+            endIcon={<SendIcon />}
+            loading={loading}
+            loadingPosition="end"   
+            variant="contained" > 
+             <span>Post</span>
+            </LoadingButton>
+        {/* </Stack> */}
+        </Box>
+      </Modal>
+    </>
+  )
 }
 
 export default EditPostModal

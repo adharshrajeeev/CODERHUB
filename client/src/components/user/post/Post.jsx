@@ -19,9 +19,10 @@ const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
 
   const userId=useSelector((state)=>state.user?.user?._id)
-  const profilePic=useSelector((state)=>state.user?.user?.profilePic);
+  let profilePic=useSelector((state)=>state.user?.user?.profilePic);
   const [likeCount,SetLikeCount]=useState(post.likes?.length)
   const [Like,setLiked]=useState(post.likes?.includes(userId) ? FavoriteOutlinedIcon :  FavoriteBorderOutlinedIcon);
+
 
   var imagefile
   if(post.postedUser?._id===userId){
@@ -93,7 +94,7 @@ const Post = ({ post }) => {
             </div>
           </div>
          {/* <PostMenuButton post={post} postedUser={post.postedUser._id}/> */}
-         <PostMenuButton postId={post._id} postedUserId={post.postedUser._id} userId={userId}  />
+         <PostMenuButton postId={post._id} postedUserId={post.postedUser._id} userId={userId} content={post.content} postImage={post?.image?.url} />
         </div>
         <div className="content">
           <p>{post.content}</p>
