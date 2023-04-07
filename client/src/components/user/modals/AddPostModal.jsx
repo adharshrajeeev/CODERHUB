@@ -51,6 +51,7 @@ function AddPostModal() {
     const [open, setOpen] = useState(false);
     const [isImage,setIsImage]=useState(false);
     const [images,setImage]=useState("");
+    const [showError,setError]=useState(false)
     const [post,setPost]=useState("")
     const _id=useSelector((state)=>state.user?.user?._id)
     // const token=useSelector((state)=>state.token);
@@ -65,22 +66,12 @@ function AddPostModal() {
     }
   
     const handleSubmit = async(e)=>{
-      setLoading(true)
       try{
         if(post.trim()===""){
-      //    return  toast('Please Fill the Post!',
-      //    {
-           
-      //      style: {
-      //        borderRadius: '10px',
-      //        background: '#333',
-      //        color: '#fff',
-      //      },
-      //    }
-      //  )
-           return toast.error("Please fill the component")
+          return toast.error("Please fill the component")
         }
         
+        setLoading(true)
       const formData=new FormData();
       formData.append("userId",_id);
       formData.append("content",post);
@@ -185,10 +176,10 @@ function AddPostModal() {
              {loading ?  <CircularProgress />
             : <Button onClick={handleSubmit}>Post</Button>}               
             </ButtonGroup>
+          <Toaster  />
           </Box>
         </SytledModal>
-          <Toaster  position="top-right"
-    reverseOrder={false} />
+          
       </>
     )
 }

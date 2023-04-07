@@ -7,7 +7,11 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormControl from '@mui/material/FormControl';
-import FormLabel from '@mui/material/FormLabel';
+import LoadingButton from '@mui/lab/LoadingButton';
+import SendIcon from '@mui/icons-material/Send';
+import axios from '../../../utils/axios'
+import { REPORT_POST } from '../../../utils/ConstUrls';
+import toast from 'react-hot-toast'
 
 
 const style = {
@@ -26,8 +30,44 @@ const style = {
 function PostReportModal({ postId, postedUserId, userId }) {
 
     const [open, setOpen] = useState(false);
+    const [selectedValue, setSelectedValue] = useState('Spam');
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
+
+    const [loading, setLoading] = useState(false);
+    
+    const handleRadioChange = (event) => {
+        setSelectedValue(event.target.value);
+        
+      };
+    
+
+    const handleReport = async()=>{
+        setLoading(true);
+        const body=JSON.stringify({
+            content:selectedValue,
+            userId:userId,
+            postId:postId
+        })
+        const token=localStorage.getItem('token')
+        axios.post(REPORT_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
+            setLoading(false)
+            if(response.data.success) {
+                setOpen(false)
+                toast.success(response.data.message);
+
+            }else{
+                setOpen(false);
+                toast.error(response.data.message);
+            } 
+            
+        }).catch((err)=>{   
+            setLoading(false)
+            setOpen(false);
+            toast.error("Oops Something went wrong")
+        })
+       
+    }
 
     return (
         <>
@@ -48,10 +88,20 @@ function PostReportModal({ postId, postedUserId, userId }) {
                                 aria-labelledby="demo-radio-buttons-group-label"
                                 defaultValue="Spam"
                                 name="radio-buttons-group"
+                                value={selectedValue}
+                                onChange={handleRadioChange}
                             >
-                                <FormControlLabel value="female" control={<Radio />} label="Spam" />
-                                <FormControlLabel value="male" control={<Radio />} label="Its Inappropriate" />
-                                
+                                <FormControlLabel value="Spam"  control={<Radio />} label="Spam" />
+                                <FormControlLabel value="Its Inappropriate"  control={<Radio />} label="Its Inappropriate" />
+                                <LoadingButton
+                                    size="small"
+                                    onClick={handleReport}
+                                    endIcon={<SendIcon />}
+                                    loading={loading}
+                                    loadingPosition="end"
+                                    variant="contained" >
+                                     <span>Report</span>
+                                </LoadingButton>
                             </RadioGroup>
                         </FormControl>
                     </Typography>
