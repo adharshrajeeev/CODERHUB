@@ -10,6 +10,8 @@ import axios from '../../../utils/axios'
 import Button from '@mui/material/Button';
 import toast,{Toaster} from 'react-hot-toast'
 import { UPDATE_USER_POST } from '../../../utils/ConstUrls';
+import { setPost } from '../../../redux/userSlice';
+import { useDispatch } from 'react-redux';
 
 const style = {
     position: 'absolute',
@@ -30,6 +32,7 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
     const [editcontent,setEditContent]=useState(content);
     const [selectedImage, setSelectedImage] = useState();
     const [editImage,setEditImage]=useState(postImage);
+    const dispatch=useDispatch();
     const handleClose = () => setOpen(false);
     
 
@@ -62,6 +65,7 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
             axios.put(UPDATE_USER_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } }).then((response)=>{
               setOpen(false);
               setLoading(false);
+              dispatch(setPost(response.data.post))
               toast.success("Success post updated Success fully")
             }).catch((err)=>{
               setOpen(false);
