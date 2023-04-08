@@ -7,9 +7,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import TextField from '@mui/material/TextField';
 import axios from '../../../utils/axios'
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import toast,{Toaster} from 'react-hot-toast'
 import { UPDATE_USER_POST } from '../../../utils/ConstUrls';
 
 const style = {
@@ -29,6 +28,7 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [editcontent,setEditContent]=useState(content);
+    const [selectedImage, setSelectedImage] = useState();
     const [editImage,setEditImage]=useState(postImage);
     const handleClose = () => setOpen(false);
     
@@ -36,11 +36,21 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
     const getPostDetailsOnOpen = ()=>{
         setOpen(true);
     }
+    const handleImageChange = (e) =>{
+      if (e.target.files && e.target.files.length > 0) {
+        setSelectedImage(e.target.files[0]);
+        setEditImage(e.target.files[0]);
+      }
 
+    }
     const handlePostSubmit = async()=>{
-        console.log(postId,"post id daaa")
-        const token=localStorage.getItem('token');
-        try{
+
+      if(editcontent.trim()===""){
+        return toast.error("please Fill the Component")
+      }
+      const token=localStorage.getItem('token');
+      try{
+          setLoading(true)
             const formData=new FormData();
             formData.append("content",editcontent);
             formData.append("userId",userId);
@@ -50,11 +60,15 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
                 formData.append('image',editImage)
               }
             axios.put(UPDATE_USER_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } }).then((response)=>{
-                console.log(response,"post repose")
+              setOpen(false);
+              setLoading(false);
+              toast.success("Success post updated Success fully")
             }).catch((err)=>{
-                console.log("edit post ",err)
+              setOpen(false);
+              toast.error("Oops Someting went wrong try again later");
             })
         }catch(err){
+          toast.error("Oops Someting went wrong try again later");
 
         }
     }
@@ -81,11 +95,20 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
               onChange={(e)=>setEditContent(e.target.value)}
             />
           </Typography>
-        {editImage ?  <img src={editImage} style={{width:"100px",height:"100px",marginTop:"20px"}} alt="postImage" /> : ""} 
+        {editImage ?  <img src={editImage} style={{width:"100px",height:"100px",marginTop:"20px"}} alt="postImage" /> : "" } 
+        {selectedImage && (
+          <div >
+            <img
+              src={URL.createObjectURL(selectedImage)}
+              style={{width:"100px",height:"100px"}}
+              alt="Thumb"
+            />
+          </div>
+        )}
        {
         editImage ? <Button variant="contained" component="label">
-        Upload
-        <input hidden accept="image/*" multiple type="file" />
+        Change
+        <input hidden accept="image/*" onChange={handleImageChange} multiple type="file" name="file" />
       </Button> : ""
        }
           <LoadingButton
@@ -101,6 +124,7 @@ function EditPostModal({postId,postedUserId,userId,content,postImage}) {
         {/* </Stack> */}
         </Box>
       </Modal>
+        <Toaster/>
     </>
   )
 }
