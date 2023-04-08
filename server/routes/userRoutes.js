@@ -1,8 +1,8 @@
 import express from 'express'
 import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
-        getLikedPostCount, getUserPost, likePost, unLikePost, updateUserPost } from '../controller/postController.js';
-import { addProfilePicture, addUserBio, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfilePic, getUserSuggestion, registerUser,
+        getLikedPostCount, getUserPost, likePost, reportPostByUser, unLikePost, updateUserPost } from '../controller/postController.js';
+import { addProfilePicture, addUserBio, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUserSuggestion, registerUser,
         removeFollower,
         unFollowUser,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
@@ -20,10 +20,13 @@ router.get('/users',verifyToken,getAllUsers);
 router.get('/suggestionUsers/:id',getUserSuggestion) //need to rectify
 router.get('/userPosts/:id',verifyToken,getUserPost);
 
+router.get('/userProfileDetails',verifyToken,getUserProfileInfo)
+
+
 router.get('/posts/:id',verifyToken,getAllPosts);
 router.get('/explore',verifyToken,exploreAllPosts)
 router.get('/editPost/:id',verifyToken,getEditPost)
-router.put('/updatePost/:id',verifyToken,upload.single('image'),updateUserPost)
+router.put('/updatePost',verifyToken,upload.single('image'),updateUserPost)
 router.delete('/deletePost/:id',verifyToken,deleteUserPost)
 router.put('/like',verifyToken, likePost)
 router.put('/unLike',verifyToken,unLikePost);
@@ -51,4 +54,5 @@ router.get('/followings/:id',verifyToken,getAllFollowings)
 router.get('/followers/:id',verifyToken,getAllFollowers)
 
 
+router.post('/reportPost',verifyToken,reportPostByUser)
 export default router

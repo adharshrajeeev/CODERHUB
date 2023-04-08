@@ -47,8 +47,23 @@ const PostSchema=mongoose.Schema({
     isDelete:{
         type:Boolean,
         default:false
-    }
-   
+    },
+    isBlocked:{
+        type:Boolean,
+        default:false
+    },
+    reports:[{
+        content:{
+            type:String
+        },
+        userId:{
+            type:mongoose.Types.ObjectId
+        },
+    }],
+    isPrivate:{
+        type:Boolean,
+        default:false
+    },
 
 },{timestamps:true})
 

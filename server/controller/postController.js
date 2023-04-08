@@ -72,27 +72,29 @@ export const getEditPost=async(req,res)=>{
 
 export const updateUserPost= async(req,res)=>{
     try{
-        const postId=req.params.id
-        const {content}=req.body;
-
+      
+        const {content,postId,userId}=req.body;
+        console.log("content",content,"posteIId",postId,"userId",userId)
         if(req.file){
             const cloudImage=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Posts"
             });
-            const UpdatePost=await Posts.findOneAndUpdate({_id:postId},{
+            await Posts.findOneAndUpdate({_id:postId},{
                 $set:{
                     "image.url":cloudImage.url,
                     content:content
                 }
             })
-            return res.status(200).json({success:true,UpdatePost})
+            const post=await Posts.findOne({_id:postId})
+            return res.status(200).json({success:true,post,message:"post updated"})
         }
-        const UpdatePost=await Posts.findOneAndUpdate({_id:postId},{
+        await Posts.findOneAndUpdate({_id:postId},{
             $set:{
                 content:content
             }
         })
-         res.status(200).json({success:true,UpdatePost})
+        const post=await Posts.findOne({_id:postId})
+         res.status(200).json({success:true,post,message:"post updated"})
 
     }catch(err){
         res.status(500).json({success:false,error:err})
@@ -134,10 +136,12 @@ export const deleteUserPost = async(req,res)=>{
 export const exploreAllPosts = async(req,res)=>{
     try{
         const posts=await Posts.find().sort({ createdAt: -1 });
+
         res.status(200).json(posts)
     }catch(err){
+        console.log("error indfoo")
         res.status(500).json({error:err})
-    }
+    }   
 }
 
 export const likePost=async(req,res)=>{
@@ -153,7 +157,7 @@ export const likePost=async(req,res)=>{
             }).then((response)=>{
                 resolve(res.status(200).json({message:"user liked post",response}))
             }).catch((err)=>{
-                resolve(err)
+                resolve(res.status(400).json({message:"Oops Something went wrong in Like",error:err}))
             }) 
         })
     }catch(err){
@@ -219,3 +223,18 @@ export const addPostComment = async(req,res)=>{
     }
 }
 
+export const reportPostByUser =  async(req,res)=>{
+    const {userId,postId,content}=req.body;
+    const newReport={
+        content:content,
+        userId:userId
+    }
+  const post =  await Posts.findOneAndUpdate({_id:postId},{
+        $addToSet:{
+             reports:newReport
+        }
+    })
+  if(!post) return res.status(401).json({success:false,message:"Post Not Found"});
+  console.log(post,"report")
+  res.status(200).json({success:true,message:"U have Reported post",post})
+}

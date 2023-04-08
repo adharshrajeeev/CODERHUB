@@ -5,12 +5,13 @@ import cloudinary from '../config/cloudinary.js';
 import { signupValidate, userLoginValidate } from '../middlewares/validation.js';
 
 import User from '../model/users.js';
+import Posts from '../model/posts.js';
 
 
 
 export const registerUser = async (req,res)=>{
    try{
-      // console.log(req.body)
+    
       const {error}= signupValidate(req.body)
       if(error){
          res.status(200).json({success:false,message:error.details[0].message})
@@ -84,7 +85,28 @@ export const getUserDetails = async (req,res)=>{
          
          res.status(200).json({userdetails})
    }catch(err){
+     
       res.status(400).json({error:err,message:"oops suggestion user server error"})
+   }
+}
+
+
+
+export const getUserProfileInfo = async (req,res)=>{
+   try{
+    
+         const {personId,userId}=req.query;
+   
+
+         const userData=await User.findById(personId);
+         
+         const posts=await Posts.find({"postedUser._id":personId}).sort({ createdAt: -1 });
+         const isFollowing=await User.findOne({following:{$in:personId}});
+         if(isFollowing) return res.status(200).json({userData,posts,isFollowing:true})
+
+         res.status(200).json({userData,posts,isFollowing:false});
+   }catch(err){
+      res.status(500).json({error:err,message:"oops suggestion user server error"})
    }
 }
 
@@ -123,7 +145,7 @@ export const followUser= async (req,res)=>{
             following:followers._id
          }
       }).then(async(response)=>{
-         console.log(response)
+     
          if(response.modifiedCount === 0) return res.status(200).json({success:false,message:`You already following`})
         const followed = await User.updateOne({_id:followers._id},{
             $addToSet:{
@@ -195,7 +217,7 @@ export const addUserBio=async(req,res)=>{
    // if(error) return res.status(500).json({error:error.details[0].message})
 
    const {userId,bio}= req.body;
-   console.log(userId,bio)
+
    const user=await User.findOneAndUpdate({_id:userId},
       {
          userBio:bio
@@ -243,7 +265,7 @@ export const addProfilePicture = async(req,res)=>{
       const userId=req.params.id
      
       if(!req.file) return res.status(201).json({success:false,message:"no image found"})
-      console.log(req.file)
+   
       const profilePic=await cloudinary.uploader.upload(req.file.path,{
          folder:"Profile"
       })
