@@ -4,7 +4,9 @@ import { ADD_COMMENTS } from '../../../utils/ConstUrls';
 import moment from 'moment';
 import { useDispatch } from 'react-redux'
 import { setPost } from '../../../redux/userSlice';
+import {Toaster} from 'react-hot-toast'
 import './comments.scss'
+import CommentsOptions from './CommentsOptions';
 
 
 const Comments = ({ postId, userId, comments }) => {
@@ -48,8 +50,13 @@ const Comments = ({ postId, userId, comments }) => {
             <p>{comment.content}</p>
           </div>
           <span className="date">{moment(comment.createdAt).fromNow()}</span>
+          <span className="commentOption">
+
+           <CommentsOptions commentId={comment._id} postId={postId} userId={userId} commentedUserId={comment.userId}/>
+            </span>
         </div>
       ))}
+      <Toaster/>
     </div>
   );
 };

@@ -31,6 +31,7 @@ export const GET_FOLLOWERS_LIST='/followers'
 export const GET_USER_SUGGESTIONS='/suggestionUsers';
 export const REPORT_POST='/reportPost'
 export const UPDATE_USER_POST='/updatePost'
+export const DELETE_COMMENT='/deleteComment'
 
 
 
