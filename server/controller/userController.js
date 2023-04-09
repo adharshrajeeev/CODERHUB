@@ -281,6 +281,31 @@ export const addProfilePicture = async(req,res)=>{
 }
 
 
+export const addCoverPicture = async (req,res)=>{
+   try{
+      const userId=req.params.id;
+      if(!req.file) return res.status(201).json({success:false,message:"no image found"})
+
+      const coverPic = await cloudinary.uploader.upload(req.file.path,{
+         folder:"Cover"
+      });
+
+      const coverUrl=coverPic.url;
+      User.findOneAndUpdate({_id:userId},{
+         coverPic:coverUrl
+      }).then(async(response)=>{
+         const user=await User.findOne({_id:userId});
+      res.status(200).json({success:true,message:"User Cover Pictured Added",coverUrl})
+
+      }).catch((err)=>{
+      res.status(401).json({message:"oops something whent wrong"})
+
+      })
+   }catch(err){
+      res.status(500).json({message:"oops something whent wrong"})
+   }
+}
+
 export const getUserProfilePic = async (req,res)=>{
    try{
       const userId=req.params.id;
