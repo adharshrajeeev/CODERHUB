@@ -31,17 +31,19 @@ function Login() {
           token:data.token
         }));
         localStorage.setItem("token",data.token)
-        console.log("suceess1")
        return navigate("/home");
      
       }else{
+        
         toast.error(data.message)
       }
     
-    }).catch((err)=>{
-      console.log(err)
+    }).catch((err)=>{      
+     
+     toast.error(err.response.data.message)
     })
     }catch(err){
+      
         toast.error("Oops Something went wrong")
     }
   };

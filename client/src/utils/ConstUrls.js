@@ -37,6 +37,7 @@ export const UPDATE_USER_POST='/updatePost'
 
 
 
+
 //ADMIN SIDE URLS===>>>>>>
 
 export const ADMINLOGIN='/admin/login'
