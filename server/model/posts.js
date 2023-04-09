@@ -31,7 +31,7 @@ const PostSchema=mongoose.Schema({
         content:{
             type:String
         },
-        postUserId:{
+        userId:{
             type:mongoose.Types.ObjectId
         },
         createdAt:{

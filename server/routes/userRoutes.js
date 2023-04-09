@@ -1,6 +1,6 @@
 import express from 'express'
 import upload from '../config/multer.js';
-import {  addPostComment, addUserPosts, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
+import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
         getLikedPostCount, getUserPost, likePost, reportPostByUser, unLikePost, updateUserPost } from '../controller/postController.js';
 import { addCoverPicture, addProfilePicture, addUserBio, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUserSuggestion, registerUser,
         removeFollower,
@@ -50,7 +50,8 @@ router.get('/profilePic/:id',verifyToken,getUserProfilePic)
 router.put('/updateProPic/:id',verifyToken,upload.single('image'),UpdateUserPicture);
 
 
-router.post('/addComment',verifyToken,addPostComment)
+router.post('/addComment',verifyToken,addPostComment);
+router.put('/deleteComment',verifyToken,deletePostComment)
 
 router.get('/connections/:id',verifyToken,getAllConnections);
 router.get('/followings/:id',verifyToken,getAllFollowings)

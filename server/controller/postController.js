@@ -205,7 +205,7 @@ export const addPostComment = async(req,res)=>{
         const {postId,userId,content}=req.body;
         const userDetails=await User.findOne({_id:userId})
         const newComment={
-            postUserId:userId,
+            userId:userId,
             content:content,
             createdAt:commentDate,
             userName:userDetails.userName,
@@ -221,6 +221,21 @@ export const addPostComment = async(req,res)=>{
     }catch(err){
         res.status(500).json({error:err})
     }
+}
+
+
+
+export const deletePostComment = async(req,res)=>{
+    const {postId,commentId}=req.body;
+    Posts.findOneAndUpdate({_id:postId} , 
+        { $pull: { comments: { _id: commentId } } }
+    ).then(async(response)=>{
+        const post=await Posts.findOne({_id:postId})
+        res.status(200).json(post)
+    }).catch((err)=>{
+        res.status(500).json({error:err})
+    })
+    
 }
 
 export const reportPostByUser =  async(req,res)=>{
