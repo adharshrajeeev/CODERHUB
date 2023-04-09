@@ -46,6 +46,9 @@ const userSlice=createSlice({
         setProfilepic:(state,action)=>{
             state.user.profilePic=action.payload
         },
+        setCoverPic:(state,action)=>{
+            state.user.coverPic=action.payload
+        },
         getPostDetails:(state,action)=>{
             const postId=action.payload;
             console.log(postId,"id post redux")
@@ -55,6 +58,6 @@ const userSlice=createSlice({
     }
 })
 
-export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,getPostDetails} = userSlice.actions;
+export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,getPostDetails,setCoverPic} = userSlice.actions;
 
 export default userSlice.reducer;

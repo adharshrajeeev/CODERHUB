@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from '../../../utils/axios'
-import { ADD_PROFILEIMAGE, SHOW_USER_POST } from '../../../utils/ConstUrls';
+import { ADD_COVERPICTURE, ADD_PROFILEIMAGE, SHOW_USER_POST } from '../../../utils/ConstUrls';
 import { useDispatch, useSelector } from 'react-redux';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
@@ -10,11 +10,12 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
-import {setProfilepic} from '../../../redux/userSlice'
+import {setCoverPic, setProfilepic} from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
-import { Toaster } from 'react-hot-toast';
+import toast,{ Toaster } from 'react-hot-toast';
 import './profileStyle.scss';
 import { fetchUserDetails } from '../../../api/UserServices';
+import decodeToken from '../../../utils/Services';
 
 
 
@@ -38,7 +39,7 @@ function Profile() {
 
   const [posts, setPosts] = useState([]);
  
-  const userId = useSelector((state) => state?.user?.user?._id);
+  const userId = decodeToken();
   const profilePic=useSelector((state) => state.user?.user?.profilePic);
   const userName = useSelector((state)=>state.user?.user?.userName)
   const  coverPic  = useSelector((state)=>state.user?.user?.coverPic)
@@ -47,6 +48,11 @@ function Profile() {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [profilePicture, setProfilePicture] = useState("");
+
+  const [openCover,setOpenCover]=useState(false);
+  const handleOpenCover = () => setOpenCover(true);
+  const handleCloseCover = () => setOpenCover(false);
+  const [coverPicture,setCoverPicture]= useState("");
   const dispatch=useDispatch();
 
 
@@ -62,6 +68,34 @@ function Profile() {
     }
   }
 
+  const handleCoverChange = (e)=>{
+    setCoverPicture(e.target.files[0])
+  }
+
+  const handleCoverSubmit = async (e) => {
+    e.preventDefault();
+    if(coverPicture ===""){
+     return alert("oops cannot send null image")
+    }
+    const formData=new FormData();
+    formData.append('image',coverPicture); 
+    try{
+     const token=localStorage.getItem('token')
+      const {data}=await axios.post(`${ADD_COVERPICTURE}/${userId}`,formData,{ headers: {'Authorization':`Bearer ${token}` } })
+       console.log(data)
+      if(data.success){
+        handleCloseCover();
+         dispatch(setCoverPic(data.coverUrl ))
+        toast.success("USER COVER PICTURE ADDED")
+       
+     }else{
+       alert(data.message)
+     }
+    }catch(err){
+       console.log(err)
+    }
+ 
+   }
 
   const handleChangeImg = (e)=>{
     setProfilePicture(e.target.files[0])
@@ -84,7 +118,7 @@ function Profile() {
      if(data.success){
        handleClose();
         dispatch(setProfilepic(data.imageUrl ))
-      //  toast.success("USER IMAGE UPDATED")
+       toast.success("USER IMAGE UPDATED")
       
     }else{
       alert(data.message)
@@ -99,7 +133,7 @@ function Profile() {
     fetchUserDetails();
     getUserPosts();
 
-  }, [])
+  },[])
  
 
   return (
@@ -117,10 +151,12 @@ function Profile() {
                     src={coverPic}
                     alt="Coverpicture"
                     className="cover"
+                    onClick={handleOpenCover}
                   /> : <img
                     src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRwJHtrA3c6twCYZPlOkAsZG1QcjGW04SyPqA&usqp=CAU"
                     alt="Coverpicture"
                     className="cover"
+                    onClick={handleOpenCover}
                   />
                 }
 
@@ -150,8 +186,36 @@ function Profile() {
                       </Typography>
                       <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                         <form onSubmit={handleImageSumbit}>
-                          <label for="myfile">Select a file:</label>
+                          <label htmlFor="myfile">Select a file:</label>
                            <input accept="image/*" type="file" name="file" onChange={handleChangeImg} />
+                          <input type="submit" />
+                        </form>
+                      </Typography>
+                    </Box>
+                  </Fade>
+                </Modal>
+                <Modal
+                  aria-labelledby="transition-modal-title"
+                  aria-describedby="transition-modal-description"
+                  open={openCover}
+                  onClose={handleCloseCover}
+                  closeAfterTransition
+                  slots={{ backdrop: Backdrop }}
+                  slotProps={{
+                    backdrop: {
+                      timeout: 500,
+                    },
+                  }}
+                >
+                  <Fade in={openCover}>
+                    <Box sx={style}>
+                      <Typography id="transition-modal-title" variant="h6" component="h2">
+                        ADD COVER PICTURE
+                      </Typography>
+                      <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+                        <form onSubmit={handleCoverSubmit}>
+                          <label htmlFor="myfile">Select a file: </label>
+                           <input accept="image/*" type="file" name="file" onChange={handleCoverChange} />
                           <input type="submit" />
                         </form>
                       </Typography>
