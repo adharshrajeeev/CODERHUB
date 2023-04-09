@@ -15,14 +15,15 @@ function ExplorePosts() {
   
   const posts = useSelector((state) => state.user?.posts);
   const dispatch = useDispatch();
+  const userId=useSelector((state)=>state.user?.user?._id)
   const exploreAllPosts = async () => {
     try {
       const token = localStorage.getItem('token')
-      const response = await axios.get(EXPLORE_ALLPOST, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
+      const response = await axios.get(`${EXPLORE_ALLPOST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
 
       dispatch(setPosts(response.data))
     } catch (err) {
-      console.log("explore post error", err)
+      console.log("explore post error", err) 
     }
   }
 

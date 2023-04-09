@@ -4,7 +4,7 @@ import { ADD_COMMENTS } from '../../../utils/ConstUrls';
 import moment from 'moment';
 import { useDispatch } from 'react-redux'
 import { setPost } from '../../../redux/userSlice';
-import {Toaster} from 'react-hot-toast'
+import {Toaster, toast} from 'react-hot-toast'
 import './comments.scss'
 import CommentsOptions from './CommentsOptions';
 
@@ -16,6 +16,9 @@ const Comments = ({ postId, userId, comments }) => {
   const [postComments, setPostComments] = useState('')
   const dispatch = useDispatch();
   const handleSubmitComment = async () => {
+    if(postComments.trim()===""){
+      return toast.error("Please Fill Comment!!")
+    }
     setPostComments("");
 
 

@@ -12,6 +12,8 @@ import SendIcon from '@mui/icons-material/Send';
 import axios from '../../../utils/axios'
 import { REPORT_POST } from '../../../utils/ConstUrls';
 import toast from 'react-hot-toast'
+import { useDispatch } from 'react-redux';
+import { setPosts } from '../../../redux/userSlice';
 
 
 const style = {
@@ -23,14 +25,15 @@ const style = {
     bgcolor: 'background.paper',
     border: 1,
     borderRadius: '16px',
-    boxShadow: 24,
-    p: 4,
+    boxShadow: 24, 
+    p: 4,  
 };
 
 function PostReportModal({ postId, postedUserId, userId }) {
 
     const [open, setOpen] = useState(false);
     const [selectedValue, setSelectedValue] = useState('Spam');
+    const dispatch=useDispatch();
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
@@ -54,6 +57,7 @@ function PostReportModal({ postId, postedUserId, userId }) {
             setLoading(false)
             if(response.data.success) {
                 setOpen(false)
+                dispatch(setPosts(response.data.posts))
                 toast.success(response.data.message);
 
             }else{
