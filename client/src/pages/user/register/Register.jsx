@@ -10,6 +10,7 @@ import Container from '@mui/material/Container';
 import { Link,useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
 import axios from '../../../utils/axios'
+import profilePhoto from '../../../assets/noProfilePicture.jpg'
 import { SIGNUP } from "../../../utils/ConstUrls";
 
 

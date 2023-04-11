@@ -243,8 +243,12 @@ function Profile() {
                 <div className="uInfo">
                   <div className="center">
                     <span>{userName}</span>
-                    {/* <button>follow</button> */}
                   </div>
+                  {/* <div className='details'>
+                  <button>follow</button>
+                    <button>follow</button>
+                    <button>follow</button>
+                  </div> */}
                 </div>
                 <div className='userPosts'>
 

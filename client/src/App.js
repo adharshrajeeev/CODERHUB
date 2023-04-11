@@ -15,6 +15,7 @@ import Connections from './pages/user/network/Connections';
 import Followings from './pages/user/network/Followings';
 import Followers from './pages/user/network/Followers';
 import UserProfiles from './pages/user/profile/UserProfiles';
+import AdminPostList from './pages/admin/adminPosts/AdminPostList';
 
 
 
@@ -74,6 +75,8 @@ function App() {
           } />
 
 {/* ========================================ADMIN ROUTESS============================================================= */}
+
+
           <Route path='/admin' element={<AdminLogin />} />
 
           <Route path='/admin/dashboard' element={
@@ -88,6 +91,11 @@ function App() {
             </AuthorizeAdmin>
           } />
 
+          <Route path='/admin/posts' element={
+            <AuthorizeAdmin>
+              <AdminPostList />
+            </AuthorizeAdmin>
+          } /> 
           {/* <Route path='*' element={<PageNotFound />} /> */}
         </Routes>
       </BrowserRouter>

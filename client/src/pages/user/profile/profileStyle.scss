@@ -76,6 +76,11 @@
             color: themed("textColorSoft");
           }
         }
+        .details{
+          display: flex ;
+          flex-direction: row;
+         
+        }
 
         .center {
           flex: 1;
