@@ -6,16 +6,16 @@ import User from '../model/users.js';
 
 
 export const addUserPosts = async (req, res) => {
-    console.log("here111e")
+   
     try{
         const {content,userId,userName,profilePic}=req.body
-        console.log("heree")
+        // console.log("heree")
         // console.log(userName)
         if(req.file){
             const cloudImage=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Posts"
             });
-            console.log(cloudImage)
+           
            await Posts.create({
                 content,
                 postedUser:{
@@ -38,7 +38,7 @@ export const addUserPosts = async (req, res) => {
                 _id:userId,
                 userName:userName,
                 profilePic:profilePic
-            },
+            },  
         })
         const posts=await Posts.find().sort({ createdAt: -1 });
         res.status(200).json({success:true,message:"sucess post added",posts})
@@ -107,9 +107,10 @@ export const getAllPosts = async(req,res)=>{
         const userId=req.params.id
         const user=await User.findOne({_id:userId})
         const followingIds= user.following.map(follower =>follower._id );
-        const userPosts=await Posts.find({"postedUser._id":{$in:followingIds}}).sort({ createdAt: -1 });
+        const userPosts=await Posts.find({$and:[{"postedUser._id":{$in:followingIds}},{"reports.userId":{$ne:userId}}]}).sort({ createdAt: -1 });
         res.status(200).json(userPosts)
     }catch(err){
+        console.log(err)
         res.status(500).json({error:err})
     }
 }
@@ -135,11 +136,13 @@ export const deleteUserPost = async(req,res)=>{
 
 export const exploreAllPosts = async(req,res)=>{
     try{
-        const posts=await Posts.find().sort({ createdAt: -1 });
+       
 
+        const userId=req.params.id
+        const posts=await Posts.find({"reports.userId":{$ne:userId}}).sort({ createdAt: -1 });
         res.status(200).json(posts)
     }catch(err){
-        console.log("error indfoo")
+        
         res.status(500).json({error:err})
     }   
 }
@@ -148,7 +151,7 @@ export const likePost=async(req,res)=>{
     try{
         
         const {postId,userId}=req.body;
-        console.log(postId,userId,"hey all this is liekd")
+       
         return new Promise((resolve,reject)=>{
             Posts.findOneAndUpdate({_id:postId},{
                 $addToSet:{
@@ -170,7 +173,7 @@ export const unLikePost=async(req,res)=>{
     try{
         
         const {postId,userId}=req.body;
-        console.log(postId,userId,"no issue")
+      
         const post=await Posts.findOneAndUpdate({_id:postId},{
             $pull:{
                 likes:userId
@@ -188,7 +191,7 @@ export const unLikePost=async(req,res)=>{
 export const getLikedPostCount=async(req,res)=>{
     try{
         const postId=req.params.id;
-        console.log(postId)
+   
        const {likes}=await Posts.findOne({_id:postId})
         res.status(200).json(likes.length)
 
@@ -248,8 +251,7 @@ export const reportPostByUser =  async(req,res)=>{
         $addToSet:{
              reports:newReport
         }
-    })
-  if(!post) return res.status(401).json({success:false,message:"Post Not Found"});
-  console.log(post,"report")
-  res.status(200).json({success:true,message:"U have Reported post",post})
+    },{new:true})
+  const posts=await Posts.find({"reports.userId":{$ne:userId}}).sort({ createdAt: -1 });
+  res.status(200).json({success:true,message:"U have Reported post",posts})
 }

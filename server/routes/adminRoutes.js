@@ -1,5 +1,5 @@
 import express from 'express'
-import { adminLogin, changeUserStatus, deleteUserPosts, getAlluserPosts, getAllUsers } from '../controller/adminController.js';
+import { adminLogin, changePostStatus, changeUserStatus, deleteUserPosts, getAlluserPosts, getAllUsers } from '../controller/adminController.js';
 import { adminVerification } from '../middlewares/adminAuth.js';
 
 const router=express.Router();
@@ -12,6 +12,7 @@ router.get('/allUsers',adminVerification,getAllUsers)
 
 router.put('/changeStatus',adminVerification,changeUserStatus)
 router.get('/allPosts',adminVerification,getAlluserPosts)
+router.put('/postStatus',adminVerification,changePostStatus)
 router.patch('/deletePost/:id',adminVerification,deleteUserPosts)
 
 

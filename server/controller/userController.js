@@ -28,8 +28,8 @@ export const registerUser = async (req,res)=>{
                email,
                password:hashedpassword,
                phoneNumber,
-               dateOfBirth,gender
-
+               dateOfBirth,gender,
+               profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1681119372/noProfilePicture_j1uj5g.jpg"
             })
             res.status(200).json({success:true,message:"success new user created",user:newUser})
          }
@@ -101,7 +101,7 @@ export const getUserProfileInfo = async (req,res)=>{
 
          const userData=await User.findById(personId);
          
-         const posts=await Posts.find({"postedUser._id":personId}).sort({ createdAt: -1 });
+         const posts=await Posts.find({$and:[{"postedUser._id":personId},{"reports.userId":{$ne:userId}}]}).sort({ createdAt: -1 });
          const isFollowing=await User.findOne({following:{$in:personId}});
          if(isFollowing) return res.status(200).json({userData,posts,isFollowing:true})
 

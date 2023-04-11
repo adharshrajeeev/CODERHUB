@@ -72,14 +72,36 @@ export const changeUserStatus = async (req,res)=>{
 
 export const getAlluserPosts =  async(req,res)=>{
      try{
-          if(!req.admin) return res.status(401).json({message:"No Authentication"})
+         
           const posts=await Posts.find();
-          res.status(200).json({success:true,posts})
+          res.status(200).json(posts)
 
      }catch(err){
           
           res.status(500).json({success:false,error:err})
      }
+}
+
+
+export const changePostStatus= async(req,res)=>{
+     const {postId,postStatus}=req.query;
+     console.log(postId,postStatus)
+     try{
+          if(postStatus==='block'){
+               const post=  await Posts.findOneAndUpdate({_id:postId},{
+                      isBlocked:true
+                 })
+                 return res.status(200).json({message:"Post blocked successfully"})
+            }else{
+                 const post=  await Posts.findOneAndUpdate({_id:postId},{
+                      isBlocked:false
+                 })
+                 return res.status(200).json({message:"Post UnBlocked successfully"})
+            }
+     }catch(err){
+          res.status(400).json({error: err.message})
+     }
+    
 }
 
 

@@ -24,7 +24,7 @@ router.get('/userProfileDetails',verifyToken,getUserProfileInfo)
 
 
 router.get('/posts/:id',verifyToken,getAllPosts);
-router.get('/explore',verifyToken,exploreAllPosts)
+router.get('/explore/:id',verifyToken,exploreAllPosts)
 router.get('/editPost/:id',verifyToken,getEditPost)
 router.put('/updatePost',verifyToken,upload.single('image'),updateUserPost)
 router.delete('/deletePost/:id',verifyToken,deleteUserPost)
