@@ -198,6 +198,7 @@ function Profile() {
                           <input accept="image/*" type="file" name="file" onChange={handleChangeImg} />
                           <input type="submit" />
                         </form>
+                          <img src={profilePicture} style={{width:"50px",height:"50px"}} alt="profilePictyre" />
                       </Typography>
                     </Box>
                   </Fade>
@@ -223,8 +224,10 @@ function Profile() {
                       <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                         <form onSubmit={handleCoverSubmit}>
                           <label htmlFor="myfile">Select a file: </label>
-                          <input accept="image/*" type="file" name="file" onChange={handleCoverChange} />
+                          <input accept="image/*" type="file" name="file"   onChange={handleCoverChange} />
+                         
                           {
+                            
                             coverLoading ? (<LoadingButton loading variant="outlined">
                               Submit
                             </LoadingButton>) :

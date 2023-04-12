@@ -9,8 +9,8 @@ import Explore from './pages/user/explore/Explore';
 import AdminLogin from './pages/admin/adminLogin/Login';
 import AdminHome from './pages/admin/adminHome/Home'
 import AdminUserList from './pages/admin/adminUserList/AdminUserList';
-import AuthorizeUser from './protected/AuthUser';
-import AuthorizeAdmin from './protected/AuthAdmin';
+import { AuthorizeUser, ProtectUser } from './protected/AuthUser';
+import { AuthorizeAdmin, ProtectAdmin } from './protected/AuthAdmin';
 import Connections from './pages/user/network/Connections';
 import Followings from './pages/user/network/Followings';
 import Followers from './pages/user/network/Followers';
@@ -29,8 +29,16 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* USER ROUTES */}
-          <Route path='/' element={<Login />} />
-          <Route path='/signUp' element={<Register />} />
+          <Route path='/' element={
+            <ProtectUser>
+              <Login />
+            </ProtectUser>
+          } />
+          <Route path='/signUp' element={
+            <ProtectUser>
+              <Register />
+            </ProtectUser>
+          } />
 
           <Route path='/home' element={
             <AuthorizeUser>
@@ -44,7 +52,7 @@ function App() {
             </AuthorizeUser>
           }
           />
-           <Route path='/user-profile/:id' element={
+          <Route path='/user-profile/:id' element={
             <AuthorizeUser>
               <UserProfiles />
             </AuthorizeUser>
@@ -57,7 +65,7 @@ function App() {
             </AuthorizeUser>
           } />
 
-           <Route path='/connections' element={
+          <Route path='/connections' element={
             <AuthorizeUser>
               <Connections />
             </AuthorizeUser>
@@ -74,10 +82,15 @@ function App() {
             </AuthorizeUser>
           } />
 
-{/* ========================================ADMIN ROUTESS============================================================= */}
+          {/* ========================================ADMIN ROUTESS============================================================= */}
 
 
-          <Route path='/admin' element={<AdminLogin />} />
+          <Route path='/admin' element={
+            <ProtectAdmin>
+              <AdminLogin />
+            </ProtectAdmin>
+          }
+          />
 
           <Route path='/admin/dashboard' element={
             <AuthorizeAdmin>
@@ -95,7 +108,7 @@ function App() {
             <AuthorizeAdmin>
               <AdminPostList />
             </AuthorizeAdmin>
-          } /> 
+          } />
           {/* <Route path='*' element={<PageNotFound />} /> */}
         </Routes>
       </BrowserRouter>
