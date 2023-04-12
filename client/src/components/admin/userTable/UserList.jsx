@@ -11,6 +11,7 @@ import Button from '@mui/material/Button';
 import toast,{Toaster} from 'react-hot-toast'
 import './userTable.css'
 import { CHANGE_USER_STATUS, GET_ALL_USERS } from '../../../utils/ConstUrls';
+import { adminConfig } from '../../../utils/Services';
 
 
 
@@ -29,7 +30,7 @@ function UserList() {
 
   const getUserDetails = async()=>{
     try{
-      axios.get(GET_ALL_USERS,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+      axios.get(GET_ALL_USERS,adminConfig).then((response)=>{
         setUsers(response.data);  
         
       }).catch((err)=>{
@@ -41,16 +42,18 @@ function UserList() {
     
   }
 
+  
+
   const handleBlocknUnBlock = async(userId,status)=>{
       if(status){
-        axios.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=unBlock`,status,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+        axios.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=unBlock`,status,adminConfig).then((response)=>{
           toast.success(response.data.message);
           getUserDetails();
         }).catch((err)=>{
           toast.error("Oops Something went wrong")
         })
       }else{
-        axios.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=block`,status,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+        axios.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=block`,status,adminConfig).then((response)=>{
           toast.success(response.data.message);
           getUserDetails();
         }).catch((err)=>{

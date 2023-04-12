@@ -3,6 +3,7 @@ import AdminNavbar from '../../../components/admin/navbar/Navbar'
 import AdminSidebar from '../../../components/admin/sidebar/Sidebar'
 import AdminWidget from '../../../components/admin/widgets/Widget'
 import axios from '../../../utils/axios'
+import {adminConfig} from '../../../utils/Services'
 import { GET_ALL_USERS } from '../../../utils/ConstUrls';
 import { useSelector } from "react-redux";
 
@@ -14,14 +15,14 @@ function Home() {
 
   const [userCount,setUserCount]=useState(0);
   const adminToken=useSelector((state)=>state.admin.adminToken);
-  var totalUsers=null
+
   
 
   const getTotalUsers = async()=>{
     
     try{
       
-      const {data}=await axios.get(GET_ALL_USERS,{ headers: { 'Authorization': `Bearer ${adminToken}`,"Content-Type": "application/json" } }); 
+      const {data}=await axios.get(GET_ALL_USERS,adminConfig); 
       setUserCount(data.length)
     }catch(err){
       console.log("user details get error",err)

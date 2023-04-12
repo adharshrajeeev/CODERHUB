@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import axios from '../../../utils/axios';
 import { CHANGE_POST_STATUS, GET_ALL_POSTS } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast'
+import { adminConfig } from '../../../utils/Services';
 
 
 
@@ -24,7 +25,7 @@ function PostList() {
 
   const getAllPostsList = async () => {
     try {
-      axios.get(GET_ALL_POSTS, { headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response) => {
+      axios.get(GET_ALL_POSTS,adminConfig).then((response) => {
         setPostLists(response.data);
       }).catch((err) => {
         toast.error("Oops Somethign went wrong")
@@ -37,14 +38,14 @@ function PostList() {
 
   const handleBlockAndUnBlock = async(postId,status)=>{
     if(status){
-      axios.put(`${CHANGE_POST_STATUS}?postId=${postId}&postStatus=unBlock`,status,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+      axios.put(`${CHANGE_POST_STATUS}?postId=${postId}&postStatus=unBlock`,status,adminConfig).then((response)=>{
         toast.success(response.data.message);
         getAllPostsList();
       }).catch((err)=>{
         toast.error("Oops Something went wrong")
       })
     }else{
-      axios.put(`${CHANGE_POST_STATUS}?postId=${postId}&postStatus=block`,status,{ headers: { 'Authorization': `Bearer ${adminToken}` } }).then((response)=>{
+      axios.put(`${CHANGE_POST_STATUS}?postId=${postId}&postStatus=block`,status,adminConfig).then((response)=>{
         toast.success(response.data.message);
         getAllPostsList();
       }).catch((err)=>{

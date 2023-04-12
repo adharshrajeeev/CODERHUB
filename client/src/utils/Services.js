@@ -1,6 +1,7 @@
 import jwtDecode from "jwt-decode";
 
 
+
 export default function decodeToken(){
     try{
         const token=localStorage.getItem('token');
@@ -13,3 +14,14 @@ export default function decodeToken(){
     }
 }
 
+
+const adminToken=localStorage.getItem('adminToken');
+
+
+
+
+export const adminConfig={
+    headers:{
+        Authorization:`Bearer ${adminToken}`,
+    }
+}
