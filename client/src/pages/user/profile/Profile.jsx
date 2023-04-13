@@ -11,6 +11,9 @@ import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
+import CreateIcon from '@mui/icons-material/Create';
 import Typography from '@mui/material/Typography';
 import { setCoverPic, setProfilepic } from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
@@ -45,12 +48,14 @@ function Profile() {
   const profilePic = useSelector((state) => state.user?.user?.profilePic);
   const userName = useSelector((state) => state.user?.user?.userName)
   const coverPic = useSelector((state) => state.user?.user?.coverPic)
-
+  const userdetails=useSelector((state)=>state.user?.user)
+  
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => { setOpen(false); setPreview(null) }
   const [coverLoading, setCoverLoading] = useState(false)
   const [profilePicture, setProfilePicture] = useState("");
+  const [previewPro, setPreview] = useState(null);
 
   const [openCover, setOpenCover] = useState(false);
   const handleOpenCover = () => setOpenCover(true);
@@ -106,7 +111,8 @@ function Profile() {
   }
 
   const handleChangeImg = (e) => {
-    setProfilePicture(e.target.files[0])
+    setProfilePicture(e.target.files[0]);
+    setPreview(e.target.files[0])
   }
 
   const handleImageSumbit = async (e) => {
@@ -150,7 +156,7 @@ function Profile() {
       <Navbar />
       <div style={{ display: "flex" }}>
         <LeftBar />
-        <div style={{ flex: 6 }}>
+        <div style={{ flex: 8 }}>
           <div className="home">
             <div className="profile">
               <div className="images">
@@ -196,9 +202,9 @@ function Profile() {
                         <form onSubmit={handleImageSumbit}>
                           <label htmlFor="myfile">Select a file:</label>
                           <input accept="image/*" type="file" name="file" onChange={handleChangeImg} />
-                          <input type="submit" />
+                          {previewPro && <input className='profileButtonSubmit' type="submit" />}
                         </form>
-                          <img src={profilePicture} style={{width:"50px",height:"50px"}} alt="profilePictyre" />
+                        {previewPro && <img src={previewPro && URL.createObjectURL(previewPro)} style={{ width: "50px", height: "50px" }} alt="profilePicture" />}
                       </Typography>
                     </Box>
                   </Fade>
@@ -224,10 +230,10 @@ function Profile() {
                       <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                         <form onSubmit={handleCoverSubmit}>
                           <label htmlFor="myfile">Select a file: </label>
-                          <input accept="image/*" type="file" name="file"   onChange={handleCoverChange} />
-                         
+                          <input accept="image/*" type="file" name="file" onChange={handleCoverChange} />
+
                           {
-                            
+
                             coverLoading ? (<LoadingButton loading variant="outlined">
                               Submit
                             </LoadingButton>) :
@@ -244,21 +250,34 @@ function Profile() {
               </div>
               <div className="profileContainer">
                 <div className="uInfo">
+                  <CreateIcon fontSize='small' className='editIcon'/>
                   <div className="center">
-                    <span>{userName}</span>
+                 
+                    <span style={{marginTop:"50px"}}>{userName}</span>
+                    {userdetails?.gender==='Male' ? <MaleIcon/> : <FemaleIcon/>}
+                      <p>{userdetails?.bio}</p>
+                    <div className='details'>
+                      <div className='ofUser'>
+                        <span className='userTexts'>{posts.length}</span>
+                        <button className='userButons' >Posts</button>
+                      </div>
+                      <div className='ofUser'>
+                        <span className='userTexts'>{userdetails.followers?.length}</span>
+                        <button className='userButons'>Followers</button>
+                      </div>
+                      <div className='ofUser'>
+                        <span className='userTexts'>{userdetails.following?.length}</span>
+                        <button className='userButons'>Following</button>
+                      </div>
+                    </div>
                   </div>
-                  {/* <div className='details'>
-                  <button>follow</button>
-                    <button>follow</button>
-                    <button>follow</button>
-                  </div> */}
                 </div>
-                <div className='userPosts'>
+                  <div className='userPosts'>
 
-                  {posts.map(post => (
-                    <Post post={post} key={post._id} />
-                  ))}
-                </div>
+                    {posts.map(post => (
+                      <Post post={post} key={post._id} />
+                    ))}
+                  </div>
               </div>
             </div>
 
@@ -268,7 +287,7 @@ function Profile() {
           position="top-center"
           reverseOrder={false}
         />
-        <RightBar />
+        {/* <RightBar /> */}
       </div>
     </div>
 

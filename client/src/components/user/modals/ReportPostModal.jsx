@@ -11,6 +11,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import axios from '../../../utils/axios'
 import { REPORT_POST } from '../../../utils/ConstUrls';
+import MaleIcon from '@mui/icons-material/Male';
+import FemaleIcon from '@mui/icons-material/Female';
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
 import { setPosts } from '../../../redux/userSlice';

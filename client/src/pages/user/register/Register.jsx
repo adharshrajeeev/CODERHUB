@@ -10,7 +10,7 @@ import Container from '@mui/material/Container';
 import { Link,useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
 import axios from '../../../utils/axios'
-import profilePhoto from '../../../assets/noProfilePicture.jpg'
+import MenuItem from '@mui/material/MenuItem';
 import { SIGNUP } from "../../../utils/ConstUrls";
 
 
@@ -112,7 +112,7 @@ export default  function Register() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
+                {/* <TextField
                  
                   fullWidth
                   id="gender"
@@ -121,7 +121,27 @@ export default  function Register() {
                   autoComplete="gender"
                   value={gender}
                   onChange={(e)=>setGender(e.target.value)}
-                />
+                /> */}
+                  <TextField
+           id="gender"
+           label="Gender"
+          select
+          defaultValue="Male"
+          helperText="Please select Gender"
+          value={gender}
+          onChange={(e)=>setGender(e.target.value)}
+        >
+            <MenuItem  value="Male">
+             Male
+            </MenuItem>
+            <MenuItem  value="Female">
+             Female
+            </MenuItem>
+            <MenuItem  value="Other">
+             Other
+            </MenuItem>
+        </TextField>
+                    
               </Grid>
               <Grid item xs={12}>
                 <TextField

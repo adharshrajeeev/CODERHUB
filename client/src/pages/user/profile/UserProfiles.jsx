@@ -21,7 +21,8 @@ function UserProfiles() {
         const userId=decodeToken();
         const token = localStorage.getItem('token');
         axios.get(`${GET_PROFILE_DETAILS}?personId=${params.id}&userId=${userId}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } }).then((response)=>{
-            setUserDetails(response.data.userData);
+          console.log(response.data.userData) 
+          setUserDetails(response.data.userData);
             setPosts(response.data.posts)
             setFollowing(response.data.isFollowing)
         }).catch((err)=>{

@@ -22,7 +22,6 @@ import { adminConfig } from '../../../utils/Services';
 function UserList() {
 
   const [usersList,setUsers]=useState([]);
-  const adminToken=localStorage.getItem("adminToken");
 
   useEffect(()=>{
     getUserDetails();
