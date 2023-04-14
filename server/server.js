@@ -6,12 +6,25 @@ import dotenv from 'dotenv'
 import dbConnection from './config/db.js'
 import userRoutes from './routes/userRoutes.js'
 import adminRoutes from  './routes/adminRoutes.js'
+import http from 'http';
+import { Server } from 'socket.io'
 
 
 
 
 
 const app=express();
+const appServer=http.createServer(app);
+
+const io = new Server(appServer,{
+    cors:{
+        origin:'http://localhost:7000',
+        methods:["GET","POST"]
+    } 
+}) 
+
+
+ 
 dotenv.config();
 app.use(cors({
     origin: 'http://localhost:3000',
@@ -28,7 +41,16 @@ app.get('*',(req,res)=>{
     res.status(404).send("PAGE NOT FOUND")
 })
 
+io.on("connection",(socket)=>{
+    console.log("User Connected",socket.id)
+    io.emit("firstEvent","Hellow this is test")
+ 
+    socket.on('disconnect',()=>{
+        console.log("user disconnected")
+    })
+})
+
 
 dbConnection().then(()=>{
-    app.listen(process.env.PORT,()=>console.log(`SERVER STARTED AT PORT:${process.env.PORT}`))
+    appServer.listen(process.env.PORT,()=>console.log(`SERVER STARTED AT PORT:${process.env.PORT}`))
 })

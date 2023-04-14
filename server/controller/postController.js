@@ -255,3 +255,4 @@ export const reportPostByUser =  async(req,res)=>{
   const posts=await Posts.find({"reports.userId":{$ne:userId}}).sort({ createdAt: -1 });
   res.status(200).json({success:true,message:"U have Reported post",posts})
 }
+

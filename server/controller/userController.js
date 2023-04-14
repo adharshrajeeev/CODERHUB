@@ -261,12 +261,12 @@ export const uptadeUserBio = async(req,res)=>{
 }
 
 export const addProfilePicture = async(req,res)=>{
-   try{
+   try{  
    
       const userId=req.params.id
      
       if(!req.file) return res.status(201).json({success:false,message:"no image found"})
-   
+
       const profilePic=await cloudinary.uploader.upload(req.file.path,{
          folder:"Profile"
       })
