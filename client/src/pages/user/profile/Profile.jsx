@@ -4,16 +4,12 @@ import { ADD_COVERPICTURE, ADD_PROFILEIMAGE, SHOW_USER_POST } from '../../../uti
 import { useDispatch, useSelector } from 'react-redux';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
-import RightBar from '../../../components/user/rightBar/RightBar';
 import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';
+import Box from '@mui/material/Box';     
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
-import MaleIcon from '@mui/icons-material/Male';
-import FemaleIcon from '@mui/icons-material/Female';
-import CreateIcon from '@mui/icons-material/Create';
 import Typography from '@mui/material/Typography';
 import { setCoverPic, setProfilepic } from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
@@ -21,6 +17,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import './profileStyle.scss';
 import { fetchUserDetails } from '../../../api/UserServices';
 import decodeToken from '../../../utils/Services';
+
 
 
 
@@ -43,13 +40,18 @@ function Profile() {
 
 
   const [posts, setPosts] = useState([]);
+  const [value, setValue] = React.useState('1');
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   const userId = decodeToken();
   const profilePic = useSelector((state) => state.user?.user?.profilePic);
   const userName = useSelector((state) => state.user?.user?.userName)
   const coverPic = useSelector((state) => state.user?.user?.coverPic)
-  const userdetails=useSelector((state)=>state.user?.user)
-  
+  const userdetails = useSelector((state) => state.user?.user)
+
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => { setOpen(false); setPreview(null) }
@@ -249,35 +251,24 @@ function Profile() {
                 </Modal>
               </div>
               <div className="profileContainer">
+                {/* <CreateIcon fontSize='small' className='editIcon'/> */}
                 <div className="uInfo">
-                  <CreateIcon fontSize='small' className='editIcon'/>
                   <div className="center">
-                 
-                    <span style={{marginTop:"50px"}}>{userName}</span>
-                    {userdetails?.gender==='Male' ? <MaleIcon/> : <FemaleIcon/>}
-                      <p>{userdetails?.bio}</p>
+
+                    <span style={{ marginTop: "50px" }}>{userName}</span>
+                    {/* {userdetails?.gender === 'Male' ? <MaleIcon /> : <FemaleIcon />}
+                    <p>{userdetails?.bio}</p> */}
                     <div className='details'>
-                      <div className='ofUser'>
-                        <span className='userTexts'>{posts.length}</span>
-                        <button className='userButons' >Posts</button>
-                      </div>
-                      <div className='ofUser'>
-                        <span className='userTexts'>{userdetails.followers?.length}</span>
-                        <button className='userButons'>Followers</button>
-                      </div>
-                      <div className='ofUser'>
-                        <span className='userTexts'>{userdetails.following?.length}</span>
-                        <button className='userButons'>Following</button>
-                      </div>
+                    
                     </div>
                   </div>
                 </div>
-                  <div className='userPosts'>
+                <div className='userPosts'>
 
-                    {posts.map(post => (
-                      <Post post={post} key={post._id} />
-                    ))}
-                  </div>
+                  {posts.map(post => (
+                    <Post post={post} key={post._id} />
+                  ))}
+                </div>
               </div>
             </div>
 

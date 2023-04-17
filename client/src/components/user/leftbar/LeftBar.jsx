@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   AccountBox,
   Home,
@@ -24,16 +24,28 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import './LeftBarStyle.scss'
 import { useNavigate } from 'react-router-dom';
 import AddPostModal from '../modals/AddPostModal';
-
+// import { io } from 'socket.io-client';
 
 
 
 
 function LeftBar() {
 
+ 
+
+  // useEffect(()=>{
+  //   try{
+  //   const socket=io('http://localhost:7000');
+  //     socket.on("firstEvent",(msg)=>{
+  //       console.log(msg,"from backed") 
+  //     })
+  //   }catch(err){
+  //     console.log("catch error in socket connection",err)
+  //   }
+  // },[])
+
+
   const navigate = useNavigate();
-
-
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -47,7 +59,7 @@ function LeftBar() {
 
   }
 
-  return (
+  return ( 
     <div className="leftBar">
       <div className="container">
         <div className="menu">
@@ -87,11 +99,11 @@ function LeftBar() {
             </ListItemButton>
           </ListItem> */}
               <ListItem disablePadding>
-                <ListItemButton component="a" href="#simple-list">
+                <ListItemButton component="a" >
                   <ListItemIcon>
                     <Message />
                   </ListItemIcon>
-                  <ListItemText primary="Messages" />
+                  <ListItemText primary="Messages" /> 
                 </ListItemButton>
               </ListItem>
               <ListItemButton onClick={handleClick}>

@@ -58,11 +58,13 @@
         box-shadow: 0px 0px 25px -10px rgba(0, 0, 0, 0.38);
         border-radius: 20px;
         background-color: themed("bg");
-        color: themed("textColor");
-        padding: 50px;
+        color: themed("textcolor");
+        // padding: 50px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        //new ADDED 
+      // padding-top: 150px;
         margin-bottom: 20px;
 
         @include mobile{
@@ -83,13 +85,14 @@
           }
 
           a{
-            color: themed("textColorSoft");
+            color: themed("textcolorSoft");
           }
         }
         .editIcon {
           position: absolute;
           top: 10;
           right: 0;
+          left: 50;
         }
 
         .details{
@@ -133,7 +136,7 @@
               display: flex;
               align-items: center;
               gap: 5px;
-              color: themed("textColorSoft");
+              color: themed("textcolorSoft");
 
               span {
                 font-size: 12px;

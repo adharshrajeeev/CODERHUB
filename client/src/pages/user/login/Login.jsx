@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, {  useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link } from "react-router-dom";
 import axios from '../../../utils/axios'
@@ -7,6 +7,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import "./login.scss";
 import { setLogin } from '../../../redux/userSlice';
 function Login() {
+
+
+
   const [email,setEmail]=useState('');
   const [password,setPassword]=useState("");
   const navigate=useNavigate();
@@ -14,7 +17,7 @@ function Login() {
   const handleSubmit =async (event) => {
     event.preventDefault();
     
-    if(email==="" || password === ""){
+    if(email === "" || password === ""){
         return toast.error("Please Fill the Components")
     }
     const body= JSON.stringify({

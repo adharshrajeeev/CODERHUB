@@ -16,6 +16,9 @@ import Followings from './pages/user/network/Followings';
 import Followers from './pages/user/network/Followers';
 import UserProfiles from './pages/user/profile/UserProfiles';
 import AdminPostList from './pages/admin/adminPosts/AdminPostList';
+import Messenger from './pages/user/messaging/Messenger';
+import Settings from './pages/user/settings/Settings';
+
 
 
 
@@ -79,6 +82,19 @@ function App() {
           <Route path='/people-followers' element={
             <AuthorizeUser>
               <Followers />
+            </AuthorizeUser>
+          } />
+
+            <Route path='/messenger' element={
+            <AuthorizeUser>
+              <Messenger />
+            </AuthorizeUser>
+          } />
+
+
+           <Route path='/settings' element={
+            <AuthorizeUser>
+              <Settings/>
             </AuthorizeUser>
           } />
 

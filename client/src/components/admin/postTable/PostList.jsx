@@ -25,7 +25,7 @@ function PostList() {
 
   const getAllPostsList = async () => {
     try {
-      axios.get(GET_ALL_POSTS,adminConfig).then((response) => {
+      axios.get(GET_ALL_POSTS,{ headers: { "Authorization":`Bearer ${adminToken}` } }).then((response) => {
         setPostLists(response.data);
       }).catch((err) => {
         toast.error("Oops Somethign went wrong")
