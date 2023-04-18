@@ -136,7 +136,7 @@ function LeftBar() {
                 </List>
               </Collapse>
               <ListItem disablePadding>
-                <ListItemButton component="a" href="#simple-list">
+                <ListItemButton disablePadding onClick={()=>navigate('/settings')}>
                   <ListItemIcon>
                     <Settings />
                   </ListItemIcon>
