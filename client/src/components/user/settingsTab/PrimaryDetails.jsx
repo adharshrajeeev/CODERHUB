@@ -9,74 +9,79 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Grid from '@mui/joy/Grid';
 import decodeToken from '../../../utils/Services';
+import { useDispatch } from 'react-redux';
+import { changeUserName } from '../../../redux/userSlice';
 
 function PrimaryDetails() {
 
-  const [userDetails, setUserDetails] = useState("");
-  const [userName,setUserName]=useState("");
-  const [userEmail,setUserEmail]=useState("");
-  const [userGender,setUserGender]=useState("");
-  const [userPhoneNumber,setPhoneNumber]=useState("");
+
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+  const [userGender, setUserGender] = useState("");
+  const [userPhoneNumber, setPhoneNumber] = useState("");
   const [loading, setLoading] = useState(false);
 
- 
- 
+  const dispatch = useDispatch();
+
   const getUserPrimaryData = async () => {
     const userId = decodeToken();
     const token = localStorage.getItem('token')
     axios.get(`${GET_USERDATA}?userId=${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
-  
+
       setUserName(response.data.userName);
-          setUserEmail(response.data.email);
-          setPhoneNumber(response.data.phoneNumber);
-          setUserGender(response.data.gender);
-          setUserEmail(response.data.email)
+      setUserEmail(response.data.email);
+      setPhoneNumber(response.data.phoneNumber);
+      setUserGender(response.data.gender);
+      setUserEmail(response.data.email)
     }).catch((err) => {
       toast.error("Oops Something went wrong")
     })
   }
 
-  const handleDetailsChange = (field,data)=>{
-    if(field==='userName'){
-    
+  const handleDetailsChange = (field, data) => {
+    if (field === 'userName') {
+
       setUserName(data)
-    }else if(field==='gender'){
-     setUserGender(data)
-      if(userGender.trim()===""){
+    } else if (field === 'gender') {
+      setUserGender(data)
+      if (userGender.trim() === "") {
         return toast.error("Gender is Mandatory")
       }
-    }else{
+    } else {
       setPhoneNumber(data)
     }
   }
 
-  function handleSaveDetails(){
-    if(userName==="" || userGender === "" || userPhoneNumber === ""){
+  function handleSaveDetails() {
+    if (userName === "" || userGender === "" || userPhoneNumber === "") {
       return toast.err("Please Fill the components")
     }
     setLoading(true)
-    const formData=new FormData();
-    formData.append("userName",userName);
-    formData.append("gender",userGender);
-    formData.append("phoneNumber",userPhoneNumber)
-    try{
-      const userId=decodeToken();
-      const token=localStorage.getItem('token')
-      axios.post(`${UPDATE_USER_DETAILS}/${userId}`,formData,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json" } }).then((response)=>{
-          setUserName(response.data.userName);
-          setUserEmail(response.data.email);
-          setPhoneNumber(response.data.phoneNumber);
-          setUserGender(response.data.gender);
-          toast.success("Save Success");
-          setLoading(false)
-      }).catch((err)=>{
+    const formData = new FormData();
+    formData.append("userName", userName);
+    formData.append("gender", userGender);
+    formData.append("phoneNumber", userPhoneNumber)
+    try {
+      const userId = decodeToken();
+      const token = localStorage.getItem('token')
+      axios.post(`${UPDATE_USER_DETAILS}/${userId}`, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } }).then((response) => {
+        setUserName(response.data.userName);
+        dispatch(changeUserName(response.data.userName))
+        setUserEmail(response.data.email);
+        setPhoneNumber(response.data.phoneNumber);
+        setUserGender(response.data.gender);
+        toast.success("Save Success");
+        setLoading(false)
+      }).catch((err) => {
+        setLoading(false)
         toast.error("Ops Something went wrong")
-      })    
+      })
 
-    }catch(err){
+    } catch (err) {
+      setLoading(false)
       toast.error("Ops Something went wrong")
     }
-    
+
   }
 
   useEffect(() => {
@@ -91,40 +96,40 @@ function PrimaryDetails() {
       }}
       noValidate
       autoComplete="off"
-    > 
+    >
 
-        <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-          <Grid xs={6}>
-            <FormLabel>Name</FormLabel>
-            <Input placeholder="Name" type='text' value={userName} onChange={(e)=>handleDetailsChange("userName",e.target.value)} />
-            {userName==="" && <p style={{color:"red"}}>Name Field is Required</p>}
-          </Grid>
-          <Grid xs={6}>
-            <FormLabel>Email</FormLabel>
-            <Input placeholder="Email" value={userEmail}   disabled/>
-          </Grid>
-          <Grid xs={4}>
-            <FormLabel>Gender</FormLabel>
-            <Input placeholder="Gender" type='text' value={userGender} onChange={(e)=>handleDetailsChange("gender",e.target.value)} />
-            {userGender==="" && <p style={{color:"red"}}>Gender Field is Required</p>}
-          </Grid>
-          <Grid xs={8}>
-            <FormLabel>Phone Number</FormLabel>
-            <Input placeholder="Phone Number" type='number'  value={userPhoneNumber} onChange={(e)=>handleDetailsChange("phoneNumber",e.target.value)}  />
-            {userPhoneNumber==="" && <p style={{color:"red"}}>Phone Field is Required</p>}
-          </Grid>
-          <Grid xs={12}>
-          <LoadingButton
-          color="primary"
-          loading={loading}
-          loadingPosition="start"
-          startIcon={<SaveIcon />}
-          variant="contained"
-        >
-          <span onClick={handleSaveDetails}>Save</span>
-        </LoadingButton>
-          </Grid>
+      <Grid container spacing={2} sx={{ flexGrow: 1 }}>
+        <Grid xs={6}>
+          <FormLabel>Name</FormLabel>
+          <Input placeholder="Name" type='text' value={userName} onChange={(e) => handleDetailsChange("userName", e.target.value)} />
+          {userName === "" && <p style={{ color: "red" }}>Name Field is Required</p>}
         </Grid>
+        <Grid xs={6}>
+          <FormLabel>Email</FormLabel>
+          <Input placeholder="Email" value={userEmail} disabled />
+        </Grid>
+        <Grid xs={4}>
+          <FormLabel>Gender</FormLabel>
+          <Input placeholder="Gender" type='text' value={userGender} onChange={(e) => handleDetailsChange("gender", e.target.value)} />
+          {userGender === "" && <p style={{ color: "red" }}>Gender Field is Required</p>}
+        </Grid>
+        <Grid xs={8}>
+          <FormLabel>Phone Number</FormLabel>
+          <Input placeholder="Phone Number" type='number' value={userPhoneNumber} onChange={(e) => handleDetailsChange("phoneNumber", e.target.value)} />
+          {userPhoneNumber === "" && <p style={{ color: "red" }}>Phone Field is Required</p>}
+        </Grid>
+        <Grid xs={12}>
+          <LoadingButton
+            color="primary"
+            loading={loading}
+            loadingPosition="start"
+            startIcon={<SaveIcon />}
+            variant="contained"
+          >
+            <span typeof='button' onClick={handleSaveDetails}>Save</span>
+          </LoadingButton>
+        </Grid>
+      </Grid>
 
       <Toaster />
     </Box>

@@ -5,6 +5,7 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import PrimaryDetails from './PrimaryDetails';
+import ChangePassword from './ChangePassword';
 
 
 function UserSettings() {
@@ -19,15 +20,17 @@ function UserSettings() {
     <TabContext value={value}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <TabList onChange={handleChange} aria-label="lab API tabs example">
-          <Tab label="Item One" value="1" />
-          <Tab label="Item Two" value="2" />
-          <Tab label="Item Three" value="3" />
+          <Tab label="Primary Details" value="1" />
+          <Tab label="Change Password" value="2" />
+          <Tab label="Block Users" value="3" />
         </TabList>
       </Box>
       <TabPanel value="1">
         <PrimaryDetails/>
       </TabPanel>
-      <TabPanel value="2">Item Two</TabPanel>
+      <TabPanel value="2">
+        <ChangePassword/>
+      </TabPanel>
       <TabPanel value="3">Item Three</TabPanel>
     </TabContext>
   </Box>

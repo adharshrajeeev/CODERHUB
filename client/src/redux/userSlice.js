@@ -49,15 +49,12 @@ const userSlice=createSlice({
         setCoverPic:(state,action)=>{
             state.user.coverPic=action.payload
         },
-        getPostDetails:(state,action)=>{
-            const postId=action.payload;
-            console.log(postId,"id post redux")
-            const post= state.posts.find((post)=>post._id===postId);
-            console.log(post,"after post redux")
+        changeUserName:(state,action)=>{
+            state.user.userName=action.payload
         }
     }
 })
 
-export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,getPostDetails,setCoverPic} = userSlice.actions;
+export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,setCoverPic,changeUserName} = userSlice.actions;
 
 export default userSlice.reducer;
