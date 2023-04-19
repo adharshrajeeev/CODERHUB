@@ -7,7 +7,7 @@ import nodemailer  from 'nodemailer'
 import User from '../model/users.js';
 import Posts from '../model/posts.js';
 import Mailgen from 'mailgen';
-
+import dotenv from 'dotenv'
 
 
 export const registerUser = async (req,res)=>{
@@ -472,7 +472,7 @@ export const sendOtpToMail = async (req,res)=>{
          service:'gmail',
          auth:{
             user:'adharshrajeeev2000@gmail.com',
-            pass:'dzvmmuwojcnlnawy'
+            pass:process.env.EMAILPASSWORD
          }
       }
 
