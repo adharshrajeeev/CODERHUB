@@ -2,9 +2,10 @@ import express from 'express'
 import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
         getLikedPostCount, getUserPost, likePost, reportPostByUser, unLikePost, updateUserPost } from '../controller/postController.js';
-import { addCoverPicture, addProfilePicture, addUserBio, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUserSuggestion, registerUser,
+import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUserSuggestion, registerUser,
         removeFollower,
-        unFollowUser,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
+        sendOtpToMail,
+        unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
 
 
@@ -20,8 +21,12 @@ router.get('/users',verifyToken,getAllUsers);
 router.get('/suggestionUsers/:id',getUserSuggestion) //need to rectify
 router.get('/userPosts/:id',verifyToken,getUserPost);
 
-router.get('/userProfileDetails',verifyToken,getUserProfileInfo)
+router.get('/getUserData',verifyToken,getUserAllData)
 
+router.get('/userProfileDetails',verifyToken,getUserProfileInfo)
+router.post('/updateUserDetails/:id',verifyToken,updateUserDetals)
+
+router.put('/changePassword',verifyToken,changeUserPassword)
 
 router.get('/posts/:id',verifyToken,getAllPosts);
 router.get('/explore/:id',verifyToken,exploreAllPosts)
@@ -32,7 +37,7 @@ router.put('/like',verifyToken, likePost)
 router.put('/unLike',verifyToken,unLikePost);
 
 router.get('/likeCount/:id',getLikedPostCount)
-
+ 
 router.post('/follow',verifyToken,followUser) 
 router.post('/unFollow',verifyToken,unFollowUser)
 router.post('/removeFollower',verifyToken,removeFollower)
@@ -59,4 +64,7 @@ router.get('/followers/:id',verifyToken,getAllFollowers)
 
 
 router.post('/reportPost',verifyToken,reportPostByUser)
+
+router.post('/sendOtp',verifyToken,sendOtpToMail)
+
 export default router

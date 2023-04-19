@@ -3,9 +3,10 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken'
 import cloudinary from '../config/cloudinary.js';
 import { signupValidate, userLoginValidate } from '../middlewares/validation.js';
-
+import nodemailer  from 'nodemailer'
 import User from '../model/users.js';
 import Posts from '../model/posts.js';
+import Mailgen from 'mailgen';
 
 
 
@@ -75,15 +76,15 @@ export const getAllUsers = async(req,res)=>{
 
       }catch(err){
          res.status(400).json({error:err})
-      } 
+      }  
 }
 
 
 export const getUserDetails = async (req,res)=>{
    try{  
          
-         const userdetails=await User.findById(req.params.id);
-         
+         const userdetails= await User.findOne({_id:req.params.id});
+      
          res.status(200).json({userdetails})
    }catch(err){
      
@@ -92,6 +93,33 @@ export const getUserDetails = async (req,res)=>{
 }
 
 
+export const getUserAllData = (req,res)=>{ 
+   return new Promise(async(resolve,reject)=>{
+      const userData=await User.findOne({_id:req.query.userId});
+      res.status(200).json(userData)
+   }).catch((err)=>{
+      res.status(400).json({error:err,message:"oops suggestion user server error"})
+   })
+}
+
+
+export const updateUserDetals =async(req,res)=>{
+ 
+      try{
+    
+         const newData=await User.findOneAndUpdate({_id:req.params.id},{
+            $set:{
+               userName:req.body.userName,
+               gender:req.body.gender,
+               phoneNumber:req.body.phoneNumber
+            }
+         },{new:true}); 
+   res.status(200).json(newData)
+      }catch(err){
+         res.status(401).json({message:"Ops Something went wrong"})
+      }
+
+}
 
 export const getUserProfileInfo = async (req,res)=>{
    try{
@@ -374,5 +402,117 @@ export const getAllFollowers = async (req,res)=>{
          res.status(200).json(followersList)
    }catch(err){
       res.status(500).json({success:false,error:"oops somethig went wrong in follwing"})
+   }
+}
+
+
+export const changeUserPassword = async (req,res)=>{
+   try{
+      const {userId,currentPassword, newPassword,
+         confirmPassoword} = req.body;
+         const userData=await User.findOne({_id:userId})
+         if(userData){
+
+            const passMatch=await bcrypt.compare(currentPassword,userData.password)
+            if(!passMatch) return res.status(401).json({message:"Current Password Not Matched"})
+            
+            const hashedPassword=await bcrypt.hash(newPassword,10)
+            User.findOneAndUpdate({_id:userId},{
+               $set:{
+                  password:hashedPassword
+               }
+            }).then((response)=>{
+               return res.status(200).json({message:"Password changed Successfully"})
+            }).catch((err)=>{
+              return res.status(401).json({message:"user Not Find"})
+            })
+         }else{
+
+            res.status(400).json({message:"Ops User Not found"})  
+         }
+      
+   }catch(err){
+      res.status(500).json({success:false,error:"oops somethig went wrong in follwing"})
+
+   }
+}
+
+export const sendOtpToMail = async (req,res)=>{
+   try{
+      // let testAccount = await nodemailer.createTestAccount();
+
+      // let transporter = nodemailer.createTransport({
+      //    host: "smtp.ethereal.email",
+      //    port: 587,
+      //    secure: false, // true for 465, false for other ports
+      //    auth: {
+      //      user: testAccount.user, // generated ethereal user
+      //      pass: testAccount.pass, // generated ethereal password
+      //    },
+      //  });
+
+      //  let message={
+      //    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+      //    to: "bar@example.com, baz@example.com", // list of receivers
+      //    subject: "Hello ✔", // Subject line
+      //    text: "Hello world?", // plain text body
+      //    html: "<b>Hello world?</b>", // html body
+      //  }
+
+      //  transporter.sendMail(message).then(()=>{
+      //    return res.status(200).json({message:"You sould receive an otp"})
+      //  }).catch((err)=>{
+      //    return res.status(401).json({message:err})
+      //  })
+      const {userEmail,userId}=req.body
+      // console.log(req.body);
+      // res.status(200).json({message:`Otp has send to mail ${userEmail}`})
+
+      let config={
+         service:'gmail',
+         auth:{
+            user:'adharshrajeeev2000@gmail.com',
+            pass:'dzvmmuwojcnlnawy'
+         }
+      }
+
+      let transporter=nodemailer.createTransport(config)
+
+      let mailGenerator=new Mailgen({
+         theme:"default",
+         product:{
+            name:"CODERHUB",
+            link:"https://mailgen.js/"
+         }
+      })
+
+      let response={
+         body:{
+            name:userEmail,
+            intro:"We received a request to reset the password on your CODERHUB Account.",
+            outro:`Enter ${12345} to complete the reset.`
+         }
+      }
+
+      let mail=mailGenerator.generate(response);
+
+      let message={ 
+         from:'adharshrajeeev2000@gmail.com',
+         to:"adharshrajeeev2000@gmail.com",
+         subject:"Reset Password",
+         html:mail
+      }
+
+      transporter.sendMail(message).then(()=>{
+         return res.status(200).json({
+            message:"U have received a mail"
+         })
+      }).catch((err)=>{
+         console.log(err)
+         return res.status(400).json({message:"error in sending mail"})
+      })
+   }catch(err){
+      res.status(500).json({message:"Ops Something Went wrong in otp"})
+
    }
 }
