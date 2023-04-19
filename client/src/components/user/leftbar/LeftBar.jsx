@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import {
   AccountBox,
   Home,
   Article,
-  ModeNight,
+  // ModeNight,
   Person,
   Settings,
   Message,
@@ -15,7 +15,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
-  Switch,
+  // Switch,
 } from "@mui/material";
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import Collapse from '@mui/material/Collapse';
@@ -31,18 +31,7 @@ import AddPostModal from '../modals/AddPostModal';
 
 function LeftBar() {
 
- 
 
-  // useEffect(()=>{
-  //   try{
-  //   const socket=io('http://localhost:7000');
-  //     socket.on("firstEvent",(msg)=>{
-  //       console.log(msg,"from backed") 
-  //     })
-  //   }catch(err){
-  //     console.log("catch error in socket connection",err)
-  //   }
-  // },[])
 
 
   const navigate = useNavigate();
@@ -163,14 +152,14 @@ function LeftBar() {
                 </ListItemButton>
 
               </ListItem>
-              <ListItem disablePadding>
+              {/* <ListItem disablePadding>
                 <ListItemButton component="a" href="#simple-list">
                   <ListItemIcon>
                     <ModeNight />
                   </ListItemIcon>
                   <Switch />
                 </ListItemButton>
-              </ListItem>
+              </ListItem> */}
               
             </List>
           </div>

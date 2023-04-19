@@ -109,7 +109,7 @@ function UserList() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {usersList.map((user, index) => (
+          {usersList?.map((user, index) => (
             <TableRow
               key={user._id}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
