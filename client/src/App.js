@@ -18,6 +18,7 @@ import UserProfiles from './pages/user/profile/UserProfiles';
 import AdminPostList from './pages/admin/adminPosts/AdminPostList';
 import Messenger from './pages/user/messaging/Messenger';
 import Settings from './pages/user/settings/Settings';
+import ForgotPassword from './pages/user/forgotPassword/ForgotPassword';
 
 
 
@@ -97,6 +98,13 @@ function App() {
               <Settings/>
             </AuthorizeUser>
           } />
+
+           <Route path='/forgetPassword' element={
+            <AuthorizeUser>
+              <ForgotPassword/>
+            </AuthorizeUser>
+          } />
+
 
           {/* ========================================ADMIN ROUTESS============================================================= */}
 

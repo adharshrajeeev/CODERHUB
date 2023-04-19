@@ -12,10 +12,12 @@ import Stack from '@mui/material/Stack';
 import toast,{Toaster} from 'react-hot-toast'
 import axios from '../../../utils/axios'
 import { CHANGE_USER_PASSWORD } from '../../../utils/ConstUrls';
+import {useNavigate} from 'react-router-dom'
 import decodeToken from '../../../utils/Services'
 
 function ChangePassword() {
 
+    const navigate=useNavigate();
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const [showNewPassword,setShowNewPassword]=useState(false);
@@ -151,7 +153,7 @@ function ChangePassword() {
                     (currentPassword?.trim().length > 4 && newPassword?.trim().length > 4 && confirmPassoword?.trim().length > 4 && newPassword===confirmPassoword) &&
                 <Button sx={{width:'23ch'}} onClick={handleSavePassword}  variant="contained">Save</Button>
                 }
-                <Button sx={{width:'23ch'}} mt={1}  size='small' variant="outlined">Forgot Password</Button>
+                <Button sx={{width:'23ch'}} mt={1}  size='small' variant="outlined" onClick={()=>navigate('/forgetPassword')}>Forgot password</Button>
             </Stack>
             <Toaster/>
         </Box>

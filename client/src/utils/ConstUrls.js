@@ -35,6 +35,7 @@ export const DELETE_COMMENT='/deleteComment'
 export const GET_USERDATA='/getUserData'
 export const UPDATE_USER_DETAILS='/updateUserDetails'
 export const CHANGE_USER_PASSWORD='/changePassword'
+export const SEND_OTP_REQUEST='/sendOtp'
 
 
 
