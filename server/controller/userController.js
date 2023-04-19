@@ -6,9 +6,9 @@ import { signupValidate, userLoginValidate } from '../middlewares/validation.js'
 import nodemailer  from 'nodemailer'
 import User from '../model/users.js';
 import Posts from '../model/posts.js';
-import Mailgen from 'mailgen';
+import Mailgen from 'mailgen'; 
 import dotenv from 'dotenv'
-
+dotenv.config();
 
 export const registerUser = async (req,res)=>{
    try{
@@ -472,7 +472,7 @@ export const sendOtpToMail = async (req,res)=>{
          service:'gmail',
          auth:{
             user:'adharshrajeeev2000@gmail.com',
-            pass:process.env.EMAILPASSWORD
+            pass:process.env.NODEMAILERPASS
          }
       }
 
