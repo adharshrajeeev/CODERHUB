@@ -437,37 +437,12 @@ export const changeUserPassword = async (req,res)=>{
    }
 }
 
+
+
 export const sendOtpToMail = async (req,res)=>{
    try{
-      // let testAccount = await nodemailer.createTestAccount();
-
-      // let transporter = nodemailer.createTransport({
-      //    host: "smtp.ethereal.email",
-      //    port: 587,
-      //    secure: false, // true for 465, false for other ports
-      //    auth: {
-      //      user: testAccount.user, // generated ethereal user
-      //      pass: testAccount.pass, // generated ethereal password
-      //    },
-      //  });
-
-      //  let message={
-      //    from: '"Fred Foo 👻" <foo@example.com>', // sender address
-      //    to: "bar@example.com, baz@example.com", // list of receivers
-      //    subject: "Hello ✔", // Subject line
-      //    text: "Hello world?", // plain text body
-      //    html: "<b>Hello world?</b>", // html body
-      //  }
-
-      //  transporter.sendMail(message).then(()=>{
-      //    return res.status(200).json({message:"You sould receive an otp"})
-      //  }).catch((err)=>{
-      //    return res.status(401).json({message:err})
-      //  })
       const {userEmail,userId}=req.body
-      // console.log(req.body);
-      // res.status(200).json({message:`Otp has send to mail ${userEmail}`})
-
+      let randomOtp= Math.floor(Math.random() * 90000) + 10000
       let config={
          service:'gmail',
          auth:{
@@ -490,7 +465,7 @@ export const sendOtpToMail = async (req,res)=>{
          body:{
             name:userEmail,
             intro:"We received a request to reset the password on your CODERHUB Account.",
-            outro:`Enter ${12345} to complete the reset.`
+            outro:`Enter ${randomOtp} to complete the reset.`
          }
       }
 
@@ -504,15 +479,51 @@ export const sendOtpToMail = async (req,res)=>{
       }
 
       transporter.sendMail(message).then(()=>{
+         User.findByIdAndUpdate({_id:userId},{
+            $set:{
+               mailOtp:randomOtp
+            }
+         }).then((response)=>{
+
          return res.status(200).json({
             message:"U have received a mail"
          })
+         }).catch((err)=>{
+            return res.status(400).json({message:"Ops errir in database"})
+         })
+
       }).catch((err)=>{
          console.log(err)
          return res.status(400).json({message:"error in sending mail"})
       })
    }catch(err){
       res.status(500).json({message:"Ops Something Went wrong in otp"})
+
+   }
+}
+
+export const resetAndConfrimOtp = async(req,res)=>{
+   try{
+      const {userId,OTP,newPassword}=req.body;
+
+      const hashedPassword=await bcrypt.hash(newPassword,10)
+      User.findOne({_id:userId}).then((response)=>{
+         if(response.mailOtp==OTP){
+            User.updateOne({_id:response._id},{
+               password:hashedPassword
+            }).then((response)=>{
+               
+               return  res.status(200).json({message:"Password reset Successfully"})
+            }).catch((err)=>{
+               return res.status(400).json({message:err})
+            })
+         }else{
+            res.status(401).json({message:"Otp not matched"})
+         }
+      })
+      
+   }catch(err){
+      res.status(500).json({message:"Ops Server Error "})
 
    }
 }

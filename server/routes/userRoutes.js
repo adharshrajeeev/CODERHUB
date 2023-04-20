@@ -4,6 +4,7 @@ import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, explo
         getLikedPostCount, getUserPost, likePost, reportPostByUser, unLikePost, updateUserPost } from '../controller/postController.js';
 import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUserSuggestion, registerUser,
         removeFollower,
+        resetAndConfrimOtp,
         sendOtpToMail,
         unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
@@ -66,5 +67,6 @@ router.get('/followers/:id',verifyToken,getAllFollowers)
 router.post('/reportPost',verifyToken,reportPostByUser)
 
 router.post('/sendOtp',verifyToken,sendOtpToMail)
+router.post('/resetPassword',verifyToken,resetAndConfrimOtp)
 
 export default router

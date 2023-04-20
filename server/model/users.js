@@ -56,6 +56,9 @@ const UserSchema=mongoose.Schema({
     isBlocked:{
         type:Boolean,
         default:false
+    },
+    mailOtp:{
+        type:String
     }
 
 })
