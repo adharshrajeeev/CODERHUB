@@ -63,7 +63,7 @@ function LeftBar() {
                 <AddPostModal />
 
               </ListItem>
-              <ListItem disablePadding>
+              <ListItem >
                 <ListItemButton component="a" onClick={() => navigate('/home')}>
                   <ListItemIcon>
                     <Home />
@@ -71,7 +71,7 @@ function LeftBar() {
                   <ListItemText primary="Homepage" />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding>
+              <ListItem >
                 <ListItemButton component="a" onClick={() => navigate('/explore')}>
                   <ListItemIcon>
                     <Article />
@@ -79,7 +79,7 @@ function LeftBar() {
                   <ListItemText primary="Explore" />
                 </ListItemButton>
               </ListItem>
-              {/* <ListItem disablePadding>
+              {/* <ListItem >
             <ListItemButton component="a" href="#simple-list">
               <ListItemIcon>
                 <Group />
@@ -87,7 +87,7 @@ function LeftBar() {
               <ListItemText primary="Groups" />
             </ListItemButton>
           </ListItem> */}
-              <ListItem disablePadding>
+              <ListItem >
                 <ListItemButton component="a" >
                   <ListItemIcon>
                     <Message />
@@ -103,7 +103,7 @@ function LeftBar() {
                 {open ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse in={open} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
+                <List component="div" >
                   <ListItemButton sx={{ pl: 4 }} onClick={()=>navigate('/connections')}>
                     <ListItemIcon>
                       <Person />
@@ -124,15 +124,15 @@ function LeftBar() {
                   </ListItemButton>
                 </List>
               </Collapse>
-              <ListItem disablePadding>
-                <ListItemButton disablePadding onClick={()=>navigate('/settings')}>
+              <ListItem >
+                <ListItemButton  onClick={()=>navigate('/settings')}>
                   <ListItemIcon>
                     <Settings />
                   </ListItemIcon>
                   <ListItemText primary="Settings" />
                 </ListItemButton>
               </ListItem>
-              <ListItem disablePadding onClick={() => navigate('/profile')}>
+              <ListItem  onClick={() => navigate('/profile')}>
 
                 <ListItemButton component="a">
                   <ListItemIcon>
@@ -142,7 +142,7 @@ function LeftBar() {
                 </ListItemButton>
 
               </ListItem>
-              <ListItem disablePadding onClick={handleLogout}>
+              <ListItem  onClick={handleLogout}>
 
                 <ListItemButton component="a">
                   <ListItemIcon>
@@ -152,7 +152,7 @@ function LeftBar() {
                 </ListItemButton>
 
               </ListItem>
-              {/* <ListItem disablePadding>
+              {/* <ListItem >
                 <ListItemButton component="a" href="#simple-list">
                   <ListItemIcon>
                     <ModeNight />

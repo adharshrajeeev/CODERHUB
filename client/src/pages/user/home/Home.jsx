@@ -1,12 +1,12 @@
 import React,{useEffect} from 'react'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
-import Posts from "../../../components/user/posts/Posts"
+// import Posts from "../../../components/user/posts/Posts"
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
-
-
 import "./home.scss"
+import CircularLoading from '../../../components/user/Loading/CircularLoading';
+const LazyPosts = React.lazy(()=>import('../../../components/user/posts/Posts'))
 function Home() {
 
   useEffect(()=>{
@@ -22,7 +22,9 @@ function Home() {
         <LeftBar/>
         <div style={{ flex: 6 }}>
       <div className="home">
-        <Posts/>
+      <React.Suspense fallback={<CircularLoading/>}>
+      <LazyPosts/>
+        </React.Suspense>  
   
       </div>
         </div>

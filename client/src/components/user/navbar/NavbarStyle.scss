@@ -30,11 +30,12 @@
         align-items: center;
         gap: 10px;
         border: 1px solid themed("border");
-        border-radius: 5px;
+        border-radius: 7px;
         padding: 5px;
 
         input {
-          border: none;
+          border: none; 
+          // height: 30px;
           width: 500px;
           background-color: transparent;
           color: themed("textColor");

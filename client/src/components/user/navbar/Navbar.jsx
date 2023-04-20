@@ -10,6 +10,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import './NavbarStyle.scss'
 import { useSelector } from 'react-redux';
+import SearchBar from '../search/SearchBar';
 
 
 
@@ -28,16 +29,17 @@ function Navbar() {
       <Link to="/home" style={{ textDecoration: "none" }}>
         <span>CODERHUB</span>
       </Link>
-      <HomeOutlinedIcon />
+      {/* <HomeOutlinedIcon /> */}
       {/* {darkMode ? (
         <WbSunnyOutlinedIcon onClick={toggle} />
       ) : (
         <DarkModeOutlinedIcon onClick={toggle} />
       )} */}
-      <GridViewOutlinedIcon />
+      {/* <GridViewOutlinedIcon /> */}
       <div className="search">
         <SearchOutlinedIcon />
-        <input type="text" placeholder="Search..." />
+        {/* <input type="text" placeholder="Search..." /> */}
+        <SearchBar/>
       </div>
     </div>
     <div className="right">

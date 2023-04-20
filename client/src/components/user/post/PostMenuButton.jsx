@@ -106,7 +106,7 @@ function PostMenuButton({postId,postedUserId,userId,content,postImage}) {
   aria-controls={open ? 'basic-menu' : undefined}
   aria-haspopup="true"
   aria-expanded={open ? 'true' : undefined}
-  disableBackdropClick
+  // disablebackdropclick 
   onClick={handleClick}/>
   
 
