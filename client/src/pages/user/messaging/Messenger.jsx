@@ -19,13 +19,12 @@ function Messenger() {
     <Navbar/>
     <div style={{ display: "flex" }}>
       <LeftBar/>
-      <div style={{ flex: 8 }}>
-    <div className="chatapp">
+      <div style={{ flex: 9 }}>
+    {/* <div className="chatapap"> */}
     
       <Chat/>
-    </div>
+    {/* </div> */}
       </div>
-      {/* <RightBar /> */}
     </div>
   </div>
   )
