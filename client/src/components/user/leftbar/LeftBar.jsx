@@ -24,7 +24,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import './LeftBarStyle.scss'
 import { useNavigate } from 'react-router-dom';
 import AddPostModal from '../modals/AddPostModal';
-// import { io } from 'socket.io-client';
+
 
 
 
@@ -88,7 +88,7 @@ function LeftBar() {
             </ListItemButton>
           </ListItem> */}
               <ListItem >
-                <ListItemButton component="a" >
+                <ListItemButton component="a" onClick={()=>navigate('/messenger')}>
                   <ListItemIcon>
                     <Message />
                   </ListItemIcon>

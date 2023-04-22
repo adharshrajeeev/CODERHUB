@@ -6,15 +6,43 @@ import axios from '../../../utils/axios'
 import { GET_ALL_CONVERSATIONS, GET_USER_MESSAGES, SEND_NEW_MESSAGE } from '../../../utils/ConstUrls'
 import  decodeToken from '../../../utils/Services'
 import ChatFooter from './ChatFooter';
+import {io} from 'socket.io-client'
 
 function Chat() {
   const [conversations,setConversations]=useState([]) 
   const [currentChat,setCurrentChat]=useState(null);
   const [messages,setMessages]=useState([])
   const [newMessage,setNewMessage]=useState("");
+  const [arrivalMessage,setArrivalMessage]=useState(null);
+  const socket=useRef();
   const scrollRef=useRef()
   const userId=decodeToken();
   const token=localStorage.getItem('token');
+
+
+useEffect(()=>{
+  socket.current=io("ws://localhost:7000")
+  socket.current.on("getMessage",(data)=>{
+     setArrivalMessage({
+      sender:data.senderId,
+      text:data.text
+     }) 
+  })
+},[]);
+
+
+useEffect(()=>{
+  arrivalMessage && currentChat?.members.includes(arrivalMessage.sender) &&
+  setMessages((prev)=>[...prev,arrivalMessage])
+},[arrivalMessage,currentChat])
+
+ useEffect(()=>{
+  socket.current.emit("addUser",userId)
+  socket.current.on("getUsers",(users)=>{
+    console.log(users)
+  })
+ },[userId])
+  
 
   const getConversations = async()=>{
       try{
@@ -50,7 +78,17 @@ function Chat() {
       text:newMessage,
       conversationId:currentChat._id
     }
+
+    const receiverId=currentChat.members.find((member)=>member!== userId)
+
     try{
+      socket.current.emit("sendMessage",{
+        senderId:userId,
+        receiverId,
+        text:newMessage
+      });
+
+
       const res=await axios.post(SEND_NEW_MESSAGE,message,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
       setMessages([...messages,res.data])
       setNewMessage("")
@@ -58,6 +96,8 @@ function Chat() {
       console.log(err)
     }
   }
+
+
 
   useEffect(()=>{
     scrollRef.current?.scrollIntoView({behavior:"smooth"})

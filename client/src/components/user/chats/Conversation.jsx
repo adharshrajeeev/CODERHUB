@@ -6,7 +6,7 @@ import Messages from './Messages';
 
 
 function Conversation({ messages, own }) {
-    console.log(messages)
+
     return (
         <>
             {/* <Stack height={"100%"} maxHeight={"100vh"} width={"auto"} overflowY={"hidden"}> */}
