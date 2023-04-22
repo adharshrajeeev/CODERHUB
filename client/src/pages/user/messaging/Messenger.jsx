@@ -19,7 +19,7 @@ function Messenger() {
     <Navbar/>
     <div style={{ display: "flex" }}>
       <LeftBar/>
-      <div style={{ flex: 9 }}>
+      <div style={{ flex: 10,overflow:'-moz-hidden-unscrollable' }}>
     {/* <div className="chatapap"> */}
     
       <Chat/>

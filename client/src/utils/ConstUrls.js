@@ -38,11 +38,12 @@ export const CHANGE_USER_PASSWORD='/changePassword'
 export const SEND_OTP_REQUEST='/sendOtp'
 export const OTP_AND_RESET_PASS='/resetPassword'
 
+export const GET_USER='/user'
 
+export const GET_ALL_CONVERSATIONS='/allConversation'
+export const GET_USER_MESSAGES='/allMessages'
 
-
-
-
+export const SEND_NEW_MESSAGE='/messages'
 //ADMIN SIDE URLS===>>>>>>
 
 export const ADMINLOGIN='/admin/login'
