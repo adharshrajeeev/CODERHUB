@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
 import Backdrop from '@mui/material/Backdrop';
-import Box from '@mui/material/Box';     
+import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
@@ -17,6 +17,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import './profileStyle.scss';
 import { fetchUserDetails } from '../../../api/UserServices';
 import decodeToken from '../../../utils/Services';
+import PeopleIcon from '@mui/icons-material/People';
+import { Stack } from '@mui/material';
+import ProfileEditButton from '../../../components/user/modals/ProfileEditButton';
 
 
 
@@ -66,10 +69,10 @@ function Profile() {
   const dispatch = useDispatch();
 
 
+  const token = localStorage.getItem('token')
 
   const getUserPosts = async () => {
     try {
-      const token = localStorage.getItem('token')
       const response = await axios.get(`${SHOW_USER_POST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
       setPosts(response.data.posts.filter((post) => post.postedUser._id === userId))
 
@@ -161,6 +164,7 @@ function Profile() {
         <div style={{ flex: 8 }}>
           <div className="home">
             <div className="profile">
+
               <div className="images">
                 {
                   coverPic ? <img
@@ -253,13 +257,33 @@ function Profile() {
               <div className="profileContainer">
                 {/* <CreateIcon fontSize='small' className='editIcon'/> */}
                 <div className="uInfo">
-                  <div className="center">
 
-                    <span style={{ marginTop: "50px" }}>{userName}</span>
-                    {/* {userdetails?.gender === 'Male' ? <MaleIcon /> : <FemaleIcon />}
-                    <p>{userdetails?.bio}</p> */}
+                  <div className="center">
+                    <Box>
+                      <Stack direction={"column"} alignItems={"center"}>
+                        <span style={{ marginTop: "50px" }} >{userName}</span>
+
+                      </Stack>
+
+                    </Box>
+                    <Box>
+                      {userdetails?.gender} / {userdetails?.userBio}
+                    </Box> 
+
+                    <Box >
+                      <Stack direction={"row"} spacing={2}>
+                        <Button variant="outlined" startIcon={<PeopleIcon />}>
+                          {userdetails?.followers?.length} Followers
+                        </Button>
+                        <Button variant="outlined" startIcon={<PeopleIcon />}>
+                          {userdetails?.following?.length !== 0 ? userdetails?.following?.length : 0} Followings
+                        </Button>
+                      </Stack>
+                    </Box>
+                    <Stack direction="row" justifyContent="end">
+                      <ProfileEditButton userId={userId} userBio={userdetails?.userBio} token={token} />
+                    </Stack>
                     <div className='details'>
-                    
                     </div>
                   </div>
                 </div>

@@ -40,10 +40,17 @@ export const OTP_AND_RESET_PASS='/resetPassword'
 
 export const GET_USER='/user'
 
+export const ADD_NEW_CONVERSATION='/conversation'
 export const GET_ALL_CONVERSATIONS='/allConversation'
 export const GET_USER_MESSAGES='/allMessages'
 
 export const SEND_NEW_MESSAGE='/messages'
+
+
+
+
+
+
 //ADMIN SIDE URLS===>>>>>>
 
 export const ADMINLOGIN='/admin/login'

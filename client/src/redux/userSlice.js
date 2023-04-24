@@ -51,10 +51,13 @@ const userSlice=createSlice({
         },
         changeUserName:(state,action)=>{
             state.user.userName=action.payload
+        },
+        addUserBio:(state,action)=>{
+            state.user.userBio=action.payload
         }
     }
 })
 
-export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,setCoverPic,changeUserName} = userSlice.actions;
+export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,setCoverPic,changeUserName,addUserBio} = userSlice.actions;
 
 export default userSlice.reducer;
