@@ -4,7 +4,7 @@ import Navbar from '../../../components/user/navbar/Navbar'
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
 import { useSelector } from 'react-redux';
-import CircularLoading from '../../../components/user/Loading/CircularLoading';
+import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading';
 const LazyExplore = React.lazy(()=>import('../../../components/user/explore/ExplorePosts'))
 
 function Explore() {
@@ -21,7 +21,7 @@ function Explore() {
         <LeftBar/>
         <div style={{ flex: 6 }}>
       <div className="home">
-        <React.Suspense fallback={<CircularLoading/>}>
+        <React.Suspense fallback={<SkeletonLoading/>}>
         <LazyExplore/>
         </React.Suspense>
       </div>

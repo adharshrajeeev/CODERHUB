@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
-import RightBar from '../../../components/user/rightBar/RightBar';
 import Post from '../../../components/user/post/Post';
 import './profileStyle.scss';
 import axios from '../../../utils/axios'
@@ -10,6 +9,8 @@ import { useParams } from 'react-router-dom';
 import { FOLLOW_USER, GET_PROFILE_DETAILS, UNFOLLOW_USER } from '../../../utils/ConstUrls';
 import noProfilePicture from '../../../assets/noProfilePicture.jpg'
 import decodeToken from '../../../utils/Services';
+import { Box, Button, Stack } from '@mui/material';
+import PeopleIcon from '@mui/icons-material/People';
 
 function UserProfiles() {
 
@@ -92,13 +93,13 @@ function UserProfiles() {
       <Navbar />
       <div style={{ display: "flex" }}>
         <LeftBar />
-        <div style={{ flex: 6 }}>
+        <div style={{ flex: 8 }}>
           <div className="home">
             <div className="profile">
               <div className="images">
-                {/* {
-                  coverPic ? <img
-                    src={coverPic}
+                {
+                  userDetails.coverPic ? <img
+                    src={userDetails.coverPic}
                     alt="Coverpicture"
                     className="cover"
                   /> : <img
@@ -106,7 +107,7 @@ function UserProfiles() {
                     alt="Coverpicture"
                     className="cover"
                   />
-                } */}
+                }
                 {
                     userDetails.profilePic ?  <img
                     src={userDetails.profilePic}
@@ -124,10 +125,34 @@ function UserProfiles() {
               <div className="profileContainer">
                 <div className="uInfo">
                   <div className="center">
-                    <span>{userDetails.userName}</span>
-                    {
+                    <Box>
+                      <Stack direction={"column"} alignItems={"center"}>
+                    <span style={{ marginTop: "50px" }}>{userDetails.userName}</span>
+
+                      </Stack>
+                    </Box>
+                    <Box>
+                      {userDetails?.gender} / {userDetails?.userBio}
+                    </Box> 
+                    <Box >
+                      <Stack direction={"row"} spacing={2}>
+                        <Button variant="outlined" startIcon={<PeopleIcon />}>
+                          {userDetails?.followers?.length} Followers
+                        </Button>
+                        {
+                           isFollowing ? <button style={{backgroundColor:"#ff5a5a"}} onClick={handleUnfollow}>Unfollow</button> : <button onClick={handleFollowUser} >Follow</button>
+                        }
+                        <Button variant="outlined" startIcon={<PeopleIcon />}>
+                          {userDetails?.following?.length !== 0 ? userDetails?.following?.length : 0} Followings
+                        </Button>
+                        {/* <Button variant="outlined" startIcon={<PeopleIcon />}>
+                          {userDetails?.following?.length !== 0 ? userDetails?.following?.length : 0} Followings
+                        </Button> */}
+                      </Stack>
+                    </Box>
+                    {/* {
                         isFollowing ? <button onClick={handleUnfollow}>Remove Follower</button> : <button onClick={handleFollowUser} >Follow</button>
-                    }
+                    } */}
                   </div>
                 </div>
                 <div className='userPosts'>
@@ -142,7 +167,7 @@ function UserProfiles() {
           </div>
         </div>
        
-        <RightBar />
+        {/* <RightBar /> */}
       </div>  
       <Toaster/>
     </div>

@@ -77,6 +77,7 @@ function ProfileEditButton({userId,userBio,token}) {
           const res =await  axios.post(ADD_USER_BIO,body,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } });
           dispatch(addUserBio(Bio)) 
           handleModalClose();
+          setAnchorEl(null); 
           toast.success(res.data.message)
         }catch(err){
             toast.error("Ops Somethng went wrong")

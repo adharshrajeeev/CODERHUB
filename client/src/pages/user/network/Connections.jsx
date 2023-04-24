@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react'
 import './FriendStyle.scss'
 import Navbar from '../../../components/user/navbar/Navbar'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import FollowignLists from '../../../components/user/friendslist/ConnectionsList';
 import decodeToken from '../../../utils/Services';
 import axios from '../../../utils/axios'
 import { GET_CONNECTIONS } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-
+import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading'
+const LazyFriendsLists=React.lazy(()=>import('../../../components/user/friendslist/ConnectionsList'))
 
 function Connections() {
   const userId = decodeToken();
@@ -41,7 +41,9 @@ function Connections() {
                 {
                   connections.map(users=>(
                 <Grid item xs={4}>
-                   <FollowignLists users={users} key={users._id} listAllUsers={listAllUsers}/>
+                  <React.Suspense fallback={<SkeletonLoading/>}>
+                    <LazyFriendsLists users={users} key={users._id} listAllUsers={listAllUsers}/>
+                  </React.Suspense>
                 </Grid>
 
                   ))

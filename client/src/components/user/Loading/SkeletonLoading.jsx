@@ -10,6 +10,6 @@ function CircularLoading() {
           <Skeleton animation={false} />
         </Box>
       );
-}
+} 
 
-export default CircularLoading
+export default CircularLoading 

@@ -2,7 +2,6 @@ import React from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import "./style.scss";
 import Login from './pages/user/login/Login';
-import Home from './pages/user/home/Home';
 import Profile from './pages/user/profile/Profile'
 import Register from './pages/user/register/Register';
 import Explore from './pages/user/explore/Explore';
@@ -19,6 +18,8 @@ import AdminPostList from './pages/admin/adminPosts/AdminPostList';
 import Messenger from './pages/user/messaging/Messenger';
 import Settings from './pages/user/settings/Settings';
 import ForgotPassword from './pages/user/forgotPassword/ForgotPassword';
+import LazyLoading from './components/user/Loading/LazyLoading';
+const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
 
@@ -47,7 +48,9 @@ function App() {
 
           <Route path='/home' element={
             <AuthorizeUser>
-              <Home />
+              <React.Suspense fallback={<LazyLoading/>}>
+                <LazyHomePage/>
+              </React.Suspense>
             </AuthorizeUser>
           }
           />

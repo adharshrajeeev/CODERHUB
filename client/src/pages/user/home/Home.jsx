@@ -5,7 +5,7 @@ import Navbar from '../../../components/user/navbar/Navbar'
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
 import "./home.scss"
-import CircularLoading from '../../../components/user/Loading/CircularLoading';
+import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading';
 const LazyPosts = React.lazy(()=>import('../../../components/user/posts/Posts'))
 function Home() {
 
@@ -22,7 +22,7 @@ function Home() {
         <LeftBar/>
         <div style={{ flex: 6 }}>
       <div className="home">
-      <React.Suspense fallback={<CircularLoading/>}>
+      <React.Suspense fallback={<SkeletonLoading/>}>
       <LazyPosts/>
         </React.Suspense>  
   

@@ -4,9 +4,9 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import PrimaryDetails from './PrimaryDetails';
 import ChangePassword from './ChangePassword';
-
+import SkeletonLoading from '../Loading/SkeletonLoading'
+const LazyPrimaryDetails = React.lazy(()=>import('./PrimaryDetails'))
 
 function UserSettings() {
   const [value, setValue] = React.useState('1');
@@ -26,7 +26,10 @@ function UserSettings() {
         </TabList>
       </Box>
       <TabPanel value="1">
-        <PrimaryDetails/>
+        <React.Suspense fallback={<SkeletonLoading/>} >
+
+        <LazyPrimaryDetails/>
+        </React.Suspense>
       </TabPanel>
       <TabPanel value="2">
         <ChangePassword/>
