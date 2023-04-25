@@ -6,6 +6,7 @@ import axios from '../../../utils/axios'
 import { ADD_NEW_CONVERSATION, GET_ALL_CONVERSATIONS, GET_USER_MESSAGES, SEND_NEW_MESSAGE } from '../../../utils/ConstUrls'
 import  decodeToken from '../../../utils/Services'
 import ChatFooter from './ChatFooter';
+import ChatHeader from './ChatHeader'
 import {io} from 'socket.io-client'
 import { GET_FOLLOWING_LIST } from '../../../utils/ConstUrls';
 
@@ -36,7 +37,7 @@ useEffect(()=>{
 
 
 useEffect(()=>{
-  arrivalMessage && currentChat?.members.includes(arrivalMessage?.sender) &&
+  arrivalMessage && currentChat?.members?.includes(arrivalMessage?.sender) &&
   setMessages((prev)=>[...prev,arrivalMessage])
 },[arrivalMessage,currentChat])
 
@@ -123,7 +124,7 @@ useEffect(()=>{
         });
    
   
-        const res=await axios.post(SEND_NEW_MESSAGE,message,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
+        const res=await axios.post(SEND_NEW_MESSAGE,message,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } })
         setMessages([...messages,res.data])
         setNewMessage("")
       }catch(err){
@@ -179,12 +180,12 @@ useEffect(()=>{
             currentChat ? 
            
             <>
-              {/* <ChatHeader/> */}
+              <ChatHeader currentChat={currentChat} userId={userId} token={token}/>
             {
               messages?.map((m,index)=>
               (
                   <div ref={scrollRef}>
-
+                     
                     <Conversation  messages={m} key={`${index}+${uid}`} own={m.sender===userId}/>
                   </div>
                 )

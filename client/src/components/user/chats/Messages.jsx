@@ -8,7 +8,7 @@ function Messages({messages,own}) {
       <Box > 
     <Stack >
         <Stack direction={"row"} justifyContent={ own ? "end" : "start" }>
-            <Box p={1.5}  sx={{backgroundColor: own ? "blue" : "red",borderRadius:1.5,width:"max-content"}}>
+            <Box p={1.5}  sx={{backgroundColor: own ? "#5491ff" : "#d8d8d8",borderRadius:1.5,width:"max-content",color:own ? "white" : "black"}}>
                 <Typography>{messages.text}</Typography>
             </Box> 
         </Stack>

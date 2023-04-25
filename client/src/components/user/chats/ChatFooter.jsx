@@ -12,7 +12,7 @@ const StyledInput = styled(TextField)(({ theme }) => ({
 
 function ChatFooter({newMessage,setNewMessage,handleMessageSend}) {
   return (
-    <Box sx={{  width: "auto", backgroundColor: "#d8e3ff", boxShadow: "0px 0px 2px rgba(0,0,0,0.25)" }}>
+    <Box sx={{  width: "142vh", backgroundColor: "#d8e3ff", boxShadow: "0px 0px 2px rgba(0,0,0,0.25)",position: "absolute", bottom: 0  }}>
     <Stack direction={"row"} alignItems={"center"}  >
        <StyledInput 
        fullWidth 

@@ -1,9 +1,10 @@
-import React from 'react'
-import { Box, IconButton, InputAdornment, Stack, TextField, Typography } from '@mui/material'
-import { styled,useTheme } from '@mui/material/styles';
+import React, { useEffect, useState } from 'react'
+import { Box,  Stack, Typography } from '@mui/material'
+import { styled } from '@mui/material/styles';
 import Badge from '@mui/material/Badge';
 import Avatar from '@mui/material/Avatar';
-
+import axios from '../../../utils/axios'
+import { GET_USER } from '../../../utils/ConstUrls';
 
 const StyledBadge = styled(Badge)(({ theme }) => ({
     '& .MuiBadge-badge': {
@@ -35,7 +36,31 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 }));
 
 
-function ChatHeader() { 
+function ChatHeader({currentChat,userId,token}) { 
+   
+    const [userDetails,setUserDetails]=useState({})
+    var receiverId;
+  if(currentChat.members){
+
+       receiverId=currentChat?.members?.find((member)=>{
+         return member !== userId}
+          );
+  }else{
+    receiverId=currentChat._id
+  }
+
+   useEffect(()=>{
+        try{
+            axios.get(`${GET_USER}/${receiverId}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } }).then((res)=>{
+               setUserDetails(res.data)
+               console.log(res.data)
+            }).catch((Err)=>{
+                console.log(Err)
+            })
+        }catch(err){    
+            console.log(err)
+        }
+   },[currentChat])
   return (
     <Box p={2} sx={{ height: 50, width: "100%", backgroundColor: "#d8e3ff", boxShadow: "0px 0px 2px rgba(0,0,0,0.25)",position:"fixed" }}>
 
@@ -47,11 +72,11 @@ function ChatHeader() {
                     anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                     variant="dot"
                 >
-                    <Avatar alt="Remy Sharp" src="https://static.vecteezy.com/system/resources/previews/002/002/403/original/man-with-beard-avatar-character-isolated-icon-free-vector.jpg" />
+                    <Avatar alt="Remy Sharp" src={userDetails.profilePic} />
                 </StyledBadge>
             </Box>
                 <Stack spacing={0.2}>
-                    <Typography variant='subtitle2'>Adharsh</Typography>
+                    <Typography variant='subtitle2'>{userDetails.userName}</Typography>
                     <Typography variant='caption'>Online</Typography>
                 </Stack>
         </Stack>
