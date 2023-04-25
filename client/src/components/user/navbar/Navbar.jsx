@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React  from 'react'
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -10,7 +10,7 @@ import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useNavigate } from "react-router-dom";
 import './NavbarStyle.scss'
 import { useSelector } from 'react-redux';
-import SearchBar from '../search/SearchBar';
+import SearchResults from '../searchedList/SearchResults';
 
 
 
@@ -37,9 +37,8 @@ function Navbar() {
       )} */}
       {/* <GridViewOutlinedIcon /> */}
       <div className="search">
+      <SearchResults/>
         <SearchOutlinedIcon />
-        {/* <input type="text" placeholder="Search..." /> */}
-        <SearchBar/>
       </div>
     </div>
     <div className="right">

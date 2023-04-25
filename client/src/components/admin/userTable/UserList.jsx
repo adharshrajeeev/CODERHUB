@@ -7,12 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from '../../../utils/axios';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+
 
 import { alpha, styled } from '@mui/material/styles';
 import { pink } from '@mui/material/colors';
@@ -20,6 +15,7 @@ import Switch from '@mui/material/Switch'
 import toast, { Toaster } from 'react-hot-toast'
 import './userTable.css'
 import { CHANGE_USER_STATUS, GET_ALL_USERS } from '../../../utils/ConstUrls';
+import BlockPostModal from '../modals/BlockPostModal';
 
 
 const PinkSwitch = styled(Switch)(({ theme }) => ({
@@ -40,17 +36,7 @@ const label = { inputProps: { 'aria-label': 'Color switch demo' } };
 function UserList() {
 
   const [usersList, setUsers] = useState([]);
-  const [open, setOpen] = React.useState(false);
-
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+  
 
   useEffect(() => {
     getUserDetails();
@@ -126,9 +112,9 @@ function UserList() {
               <TableCell align="right">
                 {/* <Button variant="outlined" size="small"  onClick={()=>handleBlocknUnBlock(user._id,user.isBlocked)}> */}
 
-                <PinkSwitch checked={user.isBlocked} onChange={() => handleBlocknUnBlock(user._id, user.isBlocked)} label="End"
-                  labelPlacement="end" />
-
+                {/* <PinkSwitch checked={user.isBlocked} onChange={() => handleBlocknUnBlock(user._id, user.isBlocked)} label="End"
+                  labelPlacement="end" /> */}
+                  <BlockPostModal isBlocked={user.isBlocked} handleBlockAndUnBlock={handleBlocknUnBlock} postId={user._id} data={"User"}/>
                 {/* </Button>  */}
               </TableCell>
             </TableRow>
@@ -137,28 +123,7 @@ function UserList() {
       </Table>
       <Toaster />
     </TableContainer>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Use Google's location service?"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let Google help apps determine location. This means sending anonymous
-            location data to Google, even when no apps are running.
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Disagree</Button>
-          <Button onClick={handleClose} autoFocus>
-            Agree
-          </Button>
-        </DialogActions>
-      </Dialog>
+
     </>
 
   );

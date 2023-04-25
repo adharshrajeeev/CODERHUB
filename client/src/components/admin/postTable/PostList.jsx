@@ -11,6 +11,7 @@ import axios from '../../../utils/axios';
 import { CHANGE_POST_STATUS, GET_ALL_POSTS } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast'
 import { adminConfig } from '../../../utils/Services';
+import BlockPostModal from '../modals/BlockPostModal';
 
 
 
@@ -84,9 +85,10 @@ function PostList() {
                 <TableCell align="right">{post.postedUser.userName}</TableCell>
                 <TableCell align="right">{post.reports.length}</TableCell>
                 <TableCell align="right">
-                  <Button variant="contained" size="small" onClick={()=>handleBlockAndUnBlock(post._id,post.isBlocked)}>
+                  {/* <Button variant="contained" size="small" onClick={()=>handleBlockAndUnBlock(post._id,post.isBlocked)}>
                     {post.isBlocked ? "UnBlock" : "Block"}
-                  </Button>
+                  </Button> */}
+                  <BlockPostModal isBlocked={post.isBlocked} handleBlockAndUnBlock={handleBlockAndUnBlock} postId={post._id} data={"Post"}/>
                 </TableCell>
               </TableRow>
             ))}

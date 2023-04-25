@@ -14,7 +14,7 @@ import './home.scss';
 function Home() {
 
   const [userCount,setUserCount]=useState(0);
-  const adminToken=useSelector((state)=>state.admin.adminToken);
+  const adminToken=localStorage.getItem('adminToken')
 
   
 

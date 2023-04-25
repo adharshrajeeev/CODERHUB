@@ -12,6 +12,7 @@ import moment from 'moment'
 import {  LIKE_POST, UNLIKE_POST } from "../../../utils/ConstUrls";
 import toast,{Toaster} from 'react-hot-toast'
 import PostMenuButton from "./PostMenuButton";
+import { RWebShare } from "react-web-share";
 
 
 
@@ -110,7 +111,14 @@ const Post = ({ post }) => {
             {post.comments.length}
           </div>
           <div className="item">
+            <RWebShare data={{
+          text: `User Post`,
+          url: `http://localhost:3000/user-profile/${post?.postedUser?._id}`,
+          title: `${post.postedUser?.userName}s Post`,
+        }}
+        onClick={() => console.log("shared successfully!")}>
             <ShareOutlinedIcon />
+            </RWebShare>
             Share
           </div>  
         </div>
