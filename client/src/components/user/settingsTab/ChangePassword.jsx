@@ -153,7 +153,7 @@ function ChangePassword() {
                     (currentPassword?.trim().length > 4 && newPassword?.trim().length > 4 && confirmPassoword?.trim().length > 4 && newPassword===confirmPassoword) &&
                 <Button sx={{width:'23ch'}} onClick={handleSavePassword}  variant="contained">Save</Button>
                 }
-                <Button sx={{width:'23ch'}} mt={1}  size='small' variant="outlined" onClick={()=>navigate('/forgetPassword')}>Forgot password</Button>
+               
             </Stack>
             <Toaster/>
         </Box>

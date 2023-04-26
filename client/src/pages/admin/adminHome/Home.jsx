@@ -4,16 +4,17 @@ import AdminSidebar from '../../../components/admin/sidebar/Sidebar'
 import AdminWidget from '../../../components/admin/widgets/Widget'
 import axios from '../../../utils/axios'
 import {adminConfig} from '../../../utils/Services'
-import { GET_ALL_USERS } from '../../../utils/ConstUrls';
-import { useSelector } from "react-redux";
+import { GET_ALL_POSTS, GET_ALL_USERS } from '../../../utils/ConstUrls';
 
-import './home.scss';
+
+import './home.scss'; 
 
 
 
 function Home() {
 
   const [userCount,setUserCount]=useState(0);
+  const [postCount,setPostsCount]=useState(0)
   const adminToken=localStorage.getItem('adminToken')
 
   
@@ -29,8 +30,18 @@ function Home() {
     }
 
   }
+
+  const getAllPosts= async()=>{
+    axios.get(GET_ALL_POSTS,adminConfig).then((res)=>{
+      setPostsCount(res.data.length)
+    }).catch((err)=>{
+      console.log(err)
+    })
+  }
+
   useEffect(()=>{
     getTotalUsers();
+    getAllPosts();
   },[])
 
   return (
@@ -39,8 +50,8 @@ function Home() {
     <div className="homeContainer">
       <AdminNavbar />
       <div className="widgets">
-      <AdminWidget title="TOTAL USERS" userCount={userCount}  />
-      <AdminWidget/>
+      <AdminWidget title="TOTAL USERS" count={userCount}  />
+      <AdminWidget title="TOTAL POSTS" count={postCount}/>
         <AdminWidget/>
         {/* <Widget type="user" />
         <Widget type="order" />

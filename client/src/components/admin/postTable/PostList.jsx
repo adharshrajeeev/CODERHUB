@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import axios from '../../../utils/axios';
-import { CHANGE_POST_STATUS, GET_ALL_POSTS } from '../../../utils/ConstUrls';
+import { CHANGE_POST_STATUS, GET_REPORTED_POSTS } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast'
 import { adminConfig } from '../../../utils/Services';
 import BlockPostModal from '../modals/BlockPostModal';
@@ -26,7 +26,7 @@ function PostList() {
 
   const getAllPostsList = async () => {
     try {
-      axios.get(GET_ALL_POSTS,{ headers: { "Authorization":`Bearer ${adminToken}` } }).then((response) => {
+      axios.get(GET_REPORTED_POSTS,{ headers: { "Authorization":`Bearer ${adminToken}` } }).then((response) => {
         setPostLists(response.data);
       }).catch((err) => {
         toast.error("Oops Somethign went wrong")

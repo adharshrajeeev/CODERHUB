@@ -107,7 +107,7 @@ function SubmitOtp({setComponent}) {
         {otpError && <span style={{color:"red"}}>Minimum five character Required</span>}
         </FormControl>
         <FormControl variant="outlined">
-          <FormLabel>Type your current password</FormLabel>
+          <FormLabel>Type your New password</FormLabel>
           <OutlinedInput
             id="outlined-adornment-password"
             type={showPassword ? 'text' : 'password'}

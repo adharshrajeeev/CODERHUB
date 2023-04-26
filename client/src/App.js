@@ -17,8 +17,8 @@ import UserProfiles from './pages/user/profile/UserProfiles';
 import AdminPostList from './pages/admin/adminPosts/AdminPostList';
 import Messenger from './pages/user/messaging/Messenger';
 import Settings from './pages/user/settings/Settings';
-import ForgotPassword from './pages/user/forgotPassword/ForgotPassword';
 import LazyLoading from './components/user/Loading/LazyLoading';
+import PasswordForget from './pages/user/forget/PasswordForget';
 const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
@@ -104,9 +104,9 @@ function App() {
           } />
 
            <Route path='/forgetPassword' element={
-            <AuthorizeUser>
-              <ForgotPassword/>
-            </AuthorizeUser>
+            // <AuthorizeUser>
+              <PasswordForget/>
+            // </AuthorizeUser>
           } />
 
 

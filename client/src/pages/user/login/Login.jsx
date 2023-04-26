@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import CodeIcon from '@mui/icons-material/Code';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useDispatch } from 'react-redux'
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Route, useLocation } from "react-router-dom";
 import axios from '../../../utils/axios'
 import { USER_LOGIN } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast';
@@ -17,11 +17,31 @@ import { setLogin } from '../../../redux/userSlice';
 function Login() {
 
 
-
+  const location=useLocation();
+  const resetMessage=location.state?.message
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(()=>{
+    // setMessage(resetMessage)
+    if(resetMessage) {
+     toast(resetMessage,
+  {
+    icon: '👏',
+    style: {
+      borderRadius: '10px',
+      background: '#333',
+      color: '#fff',
+    },
+  }
+);
+      window.history.replaceState(null,"")
+    }
+  },[resetMessage])
+
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -111,7 +131,15 @@ function Login() {
           >
             LOGIN
           </Button>
-          <Grid container justifyContent="center" alignItems="center">
+          <Box display={"flex"} justifyContent="center" alignItems="center" sx={{cursor:"pointer",textDecoration:"none"}} >
+          <Link to={'/forgetPassword'} style={{textDecoration:"none"}}>
+           <Typography>
+           Forgot Password ?
+
+           </Typography>
+          </Link>
+          </Box>
+          <Grid mt={1} container justifyContent="center" alignItems="center">
             <Grid item xs={4} sm={4}>
               <Divider />
             </Grid>
@@ -129,8 +157,8 @@ function Login() {
                   type="submit"
                   fullWidth
                   variant="contained"
-                  sx={{ mt: 3, mb: 2, color: "white", background: "#7b7b7b" }}
-                >            Sign Up
+                  sx={{ mt: 3, mb: 2, color: "white", background: "#7b7b7b" }}>
+                    Sign Up
                 </Button>
 
               </Link>

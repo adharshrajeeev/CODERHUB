@@ -1,19 +1,19 @@
 import React from 'react'
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+
 
 
 import './widgetStyle.scss'
 
-function Widget({title,userCount}) {
+function Widget({title,count}) {
  
   return (
     <div className="widget"> 
     <div className="left">
       <span className="title">{title}</span>
       <span className="counter">
-        {userCount}
+        {count}
       </span>
-      <span className="link">user details</span>
+      <span className="link">{title} details</span>
     </div>
   </div>
   )
