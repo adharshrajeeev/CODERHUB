@@ -37,7 +37,7 @@ export const adminLogin = async(req,res)=>{
 
 export const getAllUsers = async (req,res)=>{
      try{
-               console.log("admin here")
+            
           // if(!req.admin) return res.status(401).json({message:"No Authentication"})
           const users= await User.find();
           // if(!users){
@@ -74,6 +74,19 @@ export const getAlluserPosts =  async(req,res)=>{
      try{
          
           const posts=await Posts.find();
+          res.status(200).json(posts)
+
+     }catch(err){
+          
+          res.status(500).json({success:false,error:err})
+     }
+}
+
+
+export const getAllReportedPost = async(req,res)=>{
+     try{
+         
+          const posts=await Posts.find({ reports: { $exists: true, $not: { $size: 0 } } });
           res.status(200).json(posts)
 
      }catch(err){

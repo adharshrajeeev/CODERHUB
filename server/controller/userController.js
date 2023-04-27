@@ -42,26 +42,126 @@ export const registerUser = async (req,res)=>{
 };
 
 
+
+export const verificationAndSignup= async(req,res)=>{
+   try{
+      const {email,password,userName,phoneNumber,dateOfBirth,gender}=req.body;
+      console.log(req.body);
+
+      let randomOtp= Math.floor(Math.random() * 90000) + 10000
+      let config={
+         service:'gmail',
+         auth:{
+            user:'adharshrajeeev2000@gmail.com',
+            pass:process.env.NODEMAILERPASS
+         }
+      }
+
+      let transporter=nodemailer.createTransport(config)
+
+      let mailGenerator=new Mailgen({
+         theme:"default",
+         product:{
+            name:"CODERHUB",
+            link:"https://mailgen.js/"
+         }
+      })
+
+      let response={
+         body:{
+            name:email,
+            intro:"We received a request to verifiy mail for  your CODERHUB Account.",
+            outro:`Enter ${randomOtp} to complete the reset.`
+         }
+      }
+
+      let mail=mailGenerator.generate(response);
+
+      let message={ 
+         from:'adharshrajeeev2000@gmail.com',
+         to:"adharshrajeeev2000@gmail.com",
+         subject:"Email Verification",
+         html:mail
+      }
+      const userdetails=await User.findOne({ email});
+      if(userdetails){
+         res.status(200).json({success:false,message:"User already Registered"})
+      }else{
+         const hashedpassword=await bcrypt.hash(password,10);
+         const newUser= await User.create({
+            userName,
+            email,
+            password:hashedpassword,
+            phoneNumber,
+            dateOfBirth,gender,
+            profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1681119372/noProfilePicture_j1uj5g.jpg",
+            mailOtp:randomOtp
+            })
+            console.log(newUser,"new User created")
+            transporter.sendMail(message).then((response)=>{
+             return  res.status(200).json({
+                  message:"U have received a mail",
+                  userId:newUser._id
+               })
+            }).catch((err)=>{
+               console.log(err)
+               return res.status(400).json({message:"Error in Database"})
+            }) 
+        
+      }
+
+
+
+   }catch(err){
+      console.log(err)
+      res.status(500).json({message:"Ops Something Went wrong in otp"})
+   }
+}
+
+
+export const otpSignupVerification = async(req,res)=>{
+   try{
+      const {OTP,userId}=req.body;
+      console.log(req.body)
+      const user=await User.findOne({_id:userId})
+      console.log(user)
+      if(user){
+         if(OTP==user.mailOtp){
+            return res.status(200).json({message:"Signup Sucess"})
+         }else{
+
+            return res.status(400).json({message:"Otp not matched"})
+         }
+      }else{
+         res.status(401).json({message:"mail is not valid"})
+      }
+   }catch(Err){
+      console.log(Err)
+      res.status(400).json({message:"Ops Server error"})
+   }
+}
+
 export const userLogin = async(req,res)=>{
    try{
       const {error}=userLoginValidate(req.body);
       if(error){
-         res.status(201).json({success:false,message:error.details[0].message})
+         res.status(400).json({success:false,message:error.details[0].message})
       }else{
          const {email,password}=req.body;
          const userdetails=await User.findOne({email});
-         if(userdetails.isBlocked) return res.status(403).json({message:" Sorry, your account has been blocked."})
          if(userdetails){
+            if(userdetails.isBlocked) return res.status(403).json({message:" Sorry, your account has been blocked."})
             const passMatch=await bcrypt.compare(password,userdetails.password);
-            if(!passMatch) return res.status(200).json({success:false,message:"User Password is Invalid"})
+            if(!passMatch) return res.status(400).json({success:false,message:"User Password is Invalid"})
             
             const token=jwt.sign({id:userdetails._id},process.env.JWT_SECETKEY);
-            res.status(200).json({success:true,token,userdetails})
+            res.status(200).json({success:true,message:"Login success",token,userdetails})
          }else{
-            res.status(200).json({success:false,message:"User not found"})
+            res.status(400).json({success:false,message:"User not found"})
          }
       }
    }catch(err){
+      console.log(err)
       res.status(400).json({error:err})
    }
 
@@ -71,12 +171,22 @@ export const userLogin = async(req,res)=>{
 export const getAllUsers = async(req,res)=>{
       try{
 
-         const users = await User.find().limit(5)
+         const users = await User.find().select('-password')
          res.status(200).json(users)
 
       }catch(err){
-         res.status(400).json({error:err})
+         res.status(400).json({error:err}) 
       }  
+}
+
+
+export const getUsers=async(req,res)=>{
+   try{
+      const user=await User.findOne({_id:req.params.userId}).select('-password');
+      res.status(200).json(user)
+   }catch(Err){
+      res.status(500).json(Err)
+   }
 }
 
 
@@ -106,12 +216,13 @@ export const getUserAllData = (req,res)=>{
 export const updateUserDetals =async(req,res)=>{
  
       try{
-    
+         
          const newData=await User.findOneAndUpdate({_id:req.params.id},{
             $set:{
                userName:req.body.userName,
                gender:req.body.gender,
-               phoneNumber:req.body.phoneNumber
+               phoneNumber:req.body.phoneNumber,
+               userBio:req.body.userBio
             }
          },{new:true}); 
    res.status(200).json(newData)
@@ -245,18 +356,21 @@ export const addUserBio=async(req,res)=>{
    //    const {error}=userBioValidation(req.body.bio)
    // if(error) return res.status(500).json({error:error.details[0].message})
 
-   const {userId,bio}= req.body;
+   const {userId,Bio}= req.body;
+      
+ User.findOneAndUpdate({_id:userId},
+      { $set:{
+         userBio:Bio
+      }
+      }).then((response)=>{
 
-   const user=await User.findOneAndUpdate({_id:userId},
-      {
-         userBio:bio
-      });
+         res.status(200).json({message:"bio updated sucessfully"})
+      })
 
-      res.status(200).json({message:"bio updated sucessfully"})
 
    
    }catch(err){
-      res.status(400).json({error:err})
+      res.status(400).json({message:err})
    }
    
 }
@@ -441,7 +555,7 @@ export const changeUserPassword = async (req,res)=>{
 
 export const sendOtpToMail = async (req,res)=>{
    try{
-      const {userEmail,userId}=req.body
+      const {email}=req.body
       let randomOtp= Math.floor(Math.random() * 90000) + 10000
       let config={
          service:'gmail',
@@ -463,7 +577,7 @@ export const sendOtpToMail = async (req,res)=>{
 
       let response={
          body:{
-            name:userEmail,
+            name:email,
             intro:"We received a request to reset the password on your CODERHUB Account.",
             outro:`Enter ${randomOtp} to complete the reset.`
          }
@@ -477,26 +591,33 @@ export const sendOtpToMail = async (req,res)=>{
          subject:"Reset Password",
          html:mail
       }
+     const user=await User.findOne({email})
+     if(user){
 
-      transporter.sendMail(message).then(()=>{
-         User.findByIdAndUpdate({_id:userId},{
-            $set:{
-               mailOtp:randomOtp
-            }
-         }).then((response)=>{
-
-         return res.status(200).json({
-            message:"U have received a mail"
-         })
-         }).catch((err)=>{
-            return res.status(400).json({message:"Ops errir in database"})
-         })
-
-      }).catch((err)=>{
-         console.log(err)
-         return res.status(400).json({message:"error in sending mail"})
-      })
+        transporter.sendMail(message).then(()=>{
+           User.findOneAndUpdate({email:email},{
+              $set:{
+                 mailOtp:randomOtp
+              }
+           }).then((response)=>{
+           return res.status(200).json({
+              message:"U have received a mail",
+              userId:user._id
+           })
+           }).catch((err)=>{
+              console.log(err)
+              return res.status(400).json({message:"Ops errir in database"})
+           })
+  
+        }).catch((err)=>{
+           console.log(err)
+           return res.status(400).json({message:"error in sending mail"})
+        })
+     }else{
+     return res.status(401).json({message:"User Not Registered"})
+     }
    }catch(err){
+      console.log(err)
       res.status(500).json({message:"Ops Something Went wrong in otp"})
 
    }
@@ -505,7 +626,7 @@ export const sendOtpToMail = async (req,res)=>{
 export const resetAndConfrimOtp = async(req,res)=>{
    try{
       const {userId,OTP,newPassword}=req.body;
-
+      console.log(req.body)
       const hashedPassword=await bcrypt.hash(newPassword,10)
       User.findOne({_id:userId}).then((response)=>{
          if(response.mailOtp==OTP){
@@ -521,7 +642,7 @@ export const resetAndConfrimOtp = async(req,res)=>{
             res.status(401).json({message:"Otp not matched"})
          }
       })
-      
+         
    }catch(err){
       res.status(500).json({message:"Ops Server Error "})
 

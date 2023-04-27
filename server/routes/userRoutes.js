@@ -2,20 +2,26 @@ import express from 'express'
 import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
         getLikedPostCount, getUserPost, likePost, reportPostByUser, unLikePost, updateUserPost } from '../controller/postController.js';
-import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUserSuggestion, registerUser,
+import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUsers, getUserSuggestion, otpSignupVerification, registerUser,
         removeFollower,
         resetAndConfrimOtp,
         sendOtpToMail,
-        unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin } from '../controller/userController.js';
+        unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin, verificationAndSignup } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
+import { addConversation, getAllConversation } from '../controller/conversationController.js';
+import { getAllMessgaes, postMessage } from '../controller/messageController.js';
 
 
-const router=express.Router();
+const router=express.Router(); 
 
 
 router.post('/signup',registerUser);
+router.post('/signupVerification',verificationAndSignup);
+router.post('/otpVerification',otpSignupVerification)
 router.post('/login',userLogin)
 router.post('/addPosts',verifyToken,upload.single('image'),addUserPosts);
+
+router.get('/user/:userId',verifyToken,getUsers)
 
 router.get('/userDetails/:id',verifyToken,getUserDetails)
 router.get('/users',verifyToken,getAllUsers);
@@ -66,7 +72,19 @@ router.get('/followers/:id',verifyToken,getAllFollowers)
 
 router.post('/reportPost',verifyToken,reportPostByUser)
 
-router.post('/sendOtp',verifyToken,sendOtpToMail)
-router.post('/resetPassword',verifyToken,resetAndConfrimOtp)
+router.post('/sendOtp',sendOtpToMail)
+router.post('/resetPassword',resetAndConfrimOtp)
+
+
+
+//CONVERSATION ROUTES
+router.post('/conversation',verifyToken,addConversation)
+
+router.get('/allConversation/:userId',verifyToken,getAllConversation)
+
+
+//MESSAGES ROUTES
+router.post('/messages',verifyToken,postMessage)
+router.get('/allMessages/:conversationId',verifyToken,getAllMessgaes)
 
 export default router
