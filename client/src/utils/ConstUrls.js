@@ -37,6 +37,8 @@ export const UPDATE_USER_DETAILS='/updateUserDetails'
 export const CHANGE_USER_PASSWORD='/changePassword'
 export const SEND_OTP_REQUEST='/sendOtp'
 export const OTP_AND_RESET_PASS='/resetPassword'
+export const EMAIL_VERIFICATION_SIGNUP='/signupVerification'
+export const OTP_SIGNUP='/otpVerification'
 
 export const GET_USER='/user'
 

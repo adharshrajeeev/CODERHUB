@@ -11,7 +11,9 @@ import { Link,useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
 import axios from '../../../utils/axios'
 import MenuItem from '@mui/material/MenuItem';
-import { SIGNUP } from "../../../utils/ConstUrls";
+import LoadingButton from '@mui/lab/LoadingButton';
+import { EMAIL_VERIFICATION_SIGNUP, SIGNUP } from "../../../utils/ConstUrls";
+import OtpVerification from '../../../components/user/signup/OtpVerification';
 
 
 
@@ -26,6 +28,9 @@ export default  function Register() {
   const [dateOfBirth,setDateOfBirth]=useState("");
   const [phoneNumber,setPhoneNumber]=useState("");
   const [gender,setGender]=useState("");
+  const [otpComponent,setOtpComponent]=useState(false);
+  const [userId,setUserId]=useState("")
+  const [loading,setLoading]=useState(false)
   const navigate = useNavigate();
 
   const handleSubmit = async(event) => {
@@ -44,26 +49,42 @@ export default  function Register() {
      return toast.error("Please fill the components")
     }
     try{
-      let response=await axios.post(SIGNUP,body,{ headers: { "Content-Type": "application/json" } })
-      if(response.data.success){
-           navigate('/')
-      }else{
-       toast.error(response.data.message)
-      }
+      // let response=await axios.post(SIGNUP,body,{ headers: { "Content-Type": "application/json" } })
+      // if(response.data.success){
+      //      navigate('/')
+      // }else{
+      //  toast.error(response.data.message)
+      // }
+      setLoading(true)
+      axios.post(EMAIL_VERIFICATION_SIGNUP,body,{headers:{"Content-Type":"application/json"}}).then((response)=>{
+        setUserId(response.data?.userId)
+        setLoading(false)
+        toast.success(response.data.message)
+        setOtpComponent(true)
+      }).catch((Err)=>{
+     setLoading(false)
+        console.log(Err);
+        toast.error(Err.response.data.message)
+      })
     }catch(err){
-     
+     setLoading(false)
       toast.error("Oops Something went Wrong")
     }
    
   };
 
   return (
+    <>
+   {
+    otpComponent ?
+    <OtpVerification userId={userId}/>
+    :
 
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            marginTop: 5,
             display: 'flex',     
             flexDirection: 'column',
             alignItems: 'center',
@@ -73,7 +94,7 @@ export default  function Register() {
           <Typography component="h1" variant="h5">
            SIGNUP
           </Typography>
-          <Box component="form"  onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box component="form"  onSubmit={handleSubmit} sx={{ mt: 2 }}>
             <Grid container spacing={2}>
             <Grid item xs={12}>
                 <TextField
@@ -112,18 +133,9 @@ export default  function Register() {
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                {/* <TextField
-                 
-                  fullWidth
-                  id="gender"
-                  label="Gender"
-                  name="gender"
-                  autoComplete="gender"
-                  value={gender}
-                  onChange={(e)=>setGender(e.target.value)}
-                /> */}
                   <TextField
            id="gender"
+           fullWidth
            label="Gender"
           select
           defaultValue="Male"
@@ -170,6 +182,11 @@ export default  function Register() {
                 />
               </Grid>
             </Grid>
+            {
+              loading ?  <LoadingButton loading fullWidth variant="contained" sx={{ mt: 3, mb: 2,color:"white",background:"black" }}>
+              Signup
+            </LoadingButton> :
+
             <Button
               type="submit"
               fullWidth
@@ -178,9 +195,10 @@ export default  function Register() {
             >
               Sign Up
             </Button>
+            }
             <Grid container justifyContent="flex-end">
               <Grid item>
-                <Link to={'/'} variant="body2">
+                <Link to={'/'} variant="body2" style={{textDecoration:"none"}}>
                   Already have an account? Sign in
                 </Link>
               </Grid>
@@ -190,6 +208,7 @@ export default  function Register() {
         <Toaster  position="top-center"
   reverseOrder={false} />
       </Container>
- 
+   }
+ </>
   );
 }        

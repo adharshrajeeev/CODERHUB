@@ -46,6 +46,12 @@ function App() {
             </ProtectUser>
           } />
 
+<         Route path='/signupVerification' element={
+            <ProtectUser>
+              <Register />
+            </ProtectUser>
+          } />
+
           <Route path='/home' element={
             <AuthorizeUser>
               <React.Suspense fallback={<LazyLoading/>}>
@@ -104,9 +110,11 @@ function App() {
           } />
 
            <Route path='/forgetPassword' element={
-            // <AuthorizeUser>
+       
+            <ProtectUser>
               <PasswordForget/>
-            // </AuthorizeUser>
+            </ProtectUser>
+         
           } />
 
 

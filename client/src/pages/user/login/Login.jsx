@@ -54,27 +54,21 @@ function Login() {
     })
     try {
 
-      await axios.post(USER_LOGIN, body, { headers: { "Content-Type": "application/json" } }).then(({ data }) => {
-        if (data.success) {
+      await axios.post(USER_LOGIN, body, { headers: { "Content-Type": "application/json" } }).then((response) => {
+      
 
           dispatch(setLogin({
-            user: data.userdetails,
-            token: data.token
+            user: response.data.userdetails,
+            token: response.data.token
           }));
-          localStorage.setItem("token", data.token)
+          localStorage.setItem("token", response.data.token)
           return navigate("/home");
-
-        } else {
-
-          toast.error(data.message)
-        }
-
       }).catch((err) => {
-
+        console.log(err)
         toast.error(err.response.data.message)
       })
     } catch (err) {
-
+      console.log(err)
       toast.error("Oops Something went wrong")
     }
   };
