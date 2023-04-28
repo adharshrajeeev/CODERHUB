@@ -66,7 +66,7 @@ function AddPostModal() {
   
     const handleSubmit = async(e)=>{
       try{
-        if(post.trim()===""){
+        if(post.trim()==="" && isImage){
           return toast.error("Please fill the component")
         }
         

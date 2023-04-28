@@ -30,6 +30,9 @@ function ChangePassword() {
     const [newPassword,setNewPassword]=useState("");
     const [confirmPassoword,setConfirmPassword]=useState("");
 
+
+    const [showButton,setShow]=useState(true)
+
     // const [passMatchError,setPassMatchError]=useState(false);
     const [minNewPassError,setMinNewPassError]=useState(false)
     const [minRePassError,setRePassError]=useState(false)
@@ -37,14 +40,18 @@ function ChangePassword() {
     const comparePassword = (data)=>{
         if(data?.trim()==="" || data?.trim().length < 5){
             setRePassError(true)
+            setShow(true)
         }else{
             setRePassError(false)
+            setShow(false)
         }
+     
         setConfirmPassword(data)
     }
     const newPasswordset = (data)=>{
         if(data?.trim()==="" || data?.trim().length < 5){
             setMinNewPassError(true)
+            setShow(true)
         }else{
             setMinNewPassError(false)
         }
@@ -149,11 +156,8 @@ function ChangePassword() {
                     {minRePassError && <span style={{color:"red"}}>Min five character Required</span>}
                     {/* {passMatchError && <span style={{color:"red"}}>Password not Matched</span>} */}
                 </FormControl>
-                {
-                    (currentPassword?.trim().length > 4 && newPassword?.trim().length > 4 && confirmPassoword?.trim().length > 4 && newPassword===confirmPassoword) &&
-                <Button sx={{width:'23ch'}} onClick={handleSavePassword}  variant="contained">Save</Button>
-                }
                
+                <Button sx={{width:'23ch'}} onClick={handleSavePassword} disabled={showButton} variant="contained">Save</Button>
             </Stack>
             <Toaster/>
         </Box>

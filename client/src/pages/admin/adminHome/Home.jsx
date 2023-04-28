@@ -8,6 +8,8 @@ import { GET_ALL_POSTS, GET_ALL_USERS } from '../../../utils/ConstUrls';
 
 
 import './home.scss'; 
+import UserChart from '../../../components/admin/charts/UserChart'
+import { Box, Grid } from '@mui/material'
 
 
 
@@ -59,7 +61,21 @@ function Home() {
         <Widget type="balance" /> */}
       </div>
       <div className="charts">
+        <Box>
+          <Grid container spacing={2}>
+        <Grid xs={6} md={6}>
+
+      <UserChart/>
+        </Grid>
+        <Grid xs={6}  md={6}>
+      <UserChart/>
+
+        </Grid>
+          </Grid>
+        </Box>
+        {/* <UserChart/> */}
         {/* <Featured />
+        
         <Chart title="Last 6 Months (Revenue)" aspect={2 / 1} /> */}
       </div>
       <div className="listContainer">
