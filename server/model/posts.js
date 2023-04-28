@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const PostSchema=mongoose.Schema({
     content:{
         type:String,
-        required:true
     },
     likes:[{
         type:mongoose.Types.ObjectId,

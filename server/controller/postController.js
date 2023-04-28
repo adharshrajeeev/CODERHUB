@@ -8,10 +8,11 @@ import User from '../model/users.js';
 export const addUserPosts = async (req, res) => {
    
     try{
+       
         const {content,userId,userName,profilePic}=req.body
         // console.log("heree")
         // console.log(userName)
-        if(req.file){
+        if(req.file && content){
             const cloudImage=await cloudinary.uploader.upload(req.file.path,{
                 folder:"Posts"
             });
@@ -31,17 +32,38 @@ export const addUserPosts = async (req, res) => {
             })
             const posts=await Posts.find().sort({ createdAt: -1 });
             return res.status(200).json({success:true,message:"post added sucess",posts})
+        }else if(content){
+
+            await Posts.create({
+                content,
+                postedUser:{
+                    _id:userId,
+                    userName:userName,
+                    profilePic:profilePic
+                },  
+            })
+            const posts=await Posts.find().sort({ createdAt: -1 });
+            res.status(200).json({success:true,message:"sucess post added",posts})
+        }else{
+            const cloudImage=await cloudinary.uploader.upload(req.file.path,{
+                folder:"Posts"
+            });
+           
+           await Posts.create({
+                postedUser:{
+                    _id:userId,
+                    userName,
+                    profilePic
+                },
+                image:{
+                    PublicId:cloudImage.public_id,
+                    url:cloudImage.url
+                },
+                userName:userName
+            })
+            const posts=await Posts.find().sort({ createdAt: -1 });
+            return res.status(200).json({success:true,message:"post added sucess",posts})
         }
-        await Posts.create({
-            content,
-            postedUser:{
-                _id:userId,
-                userName:userName,
-                profilePic:profilePic
-            },  
-        })
-        const posts=await Posts.find().sort({ createdAt: -1 });
-        res.status(200).json({success:true,message:"sucess post added",posts})
     }catch(err){
         console.log(err)
         res.status(400).json({success:false,error:err,message:"somehting went wrong"})

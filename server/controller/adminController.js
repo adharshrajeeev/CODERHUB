@@ -136,3 +136,59 @@ export const deleteUserPosts = async(req,res)=>{
           res.status(500).json({success:false,error:err})
      }
 }
+
+export const getMonthWiseUserGrowth = async(req,res)=>{
+     try{
+          const users=await User.aggregate([
+               {
+                    $group: {
+                      _id: {
+                        month: { $month: "$createdAt" },
+                        year: { $year: "$createdAt" }
+                      },
+                      count: { $sum: 1 }
+                    }
+                  },
+                  {
+                    $sort: { "_id.month": 1 }
+                  },
+                  {
+                    $project: {
+                      _id: 0,
+                      month: {
+                        $let: {
+                          vars: {
+                            monthsInYear: [
+                              "January",
+                              "February",
+                              "March",
+                              "April",
+                              "May",
+                              "June",
+                              "July",
+                              "August",
+                              "September",
+                              "October",
+                              "November",
+                              "December"
+                            ]
+                          },
+                          in: {
+                            $arrayElemAt: [
+                              "$$monthsInYear",
+                              { $subtract: [ "$_id.month", 1 ] }
+                            ]
+                          }
+                        }
+                      },
+                      count: 1
+                    }
+                  }
+          ])
+          console.log(users,"users")
+          res.status(200).json(users)
+     }catch(err){
+          console.log(err)
+          res.status(200).json({message:err})
+     }
+}
