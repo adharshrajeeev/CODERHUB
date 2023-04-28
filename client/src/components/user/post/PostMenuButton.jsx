@@ -45,7 +45,7 @@ function PostMenuButton({postId,postedUserId,userId,content,postImage}) {
     const handleDeletePost = async ()=>{
         try{
           const token =localStorage.getItem('token')
-         const response=await axios.delete(`${DELETE_POSTS}/${postId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
+         const response=await axios.delete(`${DELETE_POSTS}?postId=${postId}&userId=${userId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
           dispatch(setPosts(response.data.posts))
          handleClickClose();
          handleClose();

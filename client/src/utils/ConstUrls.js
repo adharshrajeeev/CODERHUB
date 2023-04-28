@@ -30,6 +30,7 @@ export const GET_FOLLOWING_LIST='/followings'
 export const GET_FOLLOWERS_LIST='/followers'
 export const GET_USER_SUGGESTIONS='/suggestionUsers';
 export const REPORT_POST='/reportPost'
+export const REPORT_POST_HOME='/reportPostHome'
 export const UPDATE_USER_POST='/updatePost'
 export const DELETE_COMMENT='/deleteComment'
 export const GET_USERDATA='/getUserData'

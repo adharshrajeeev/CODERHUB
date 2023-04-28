@@ -10,12 +10,13 @@ import FormControl from '@mui/material/FormControl';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import axios from '../../../utils/axios'
-import { REPORT_POST } from '../../../utils/ConstUrls';
+import { REPORT_POST, REPORT_POST_HOME } from '../../../utils/ConstUrls';
 import MaleIcon from '@mui/icons-material/Male';
 import FemaleIcon from '@mui/icons-material/Female';
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
-import { setPosts } from '../../../redux/userSlice';
+import { setExplorePosts, setHomePosts, setPosts } from '../../../redux/userSlice';
+import { useLocation } from 'react-router-dom';
 
 
 const style = {
@@ -34,6 +35,7 @@ const style = {
 function PostReportModal({ postId, postedUserId, userId }) {
 
     const [open, setOpen] = useState(false);
+    const location=useLocation();
     const [selectedValue, setSelectedValue] = useState('Spam');
     const dispatch=useDispatch();
     const handleOpen = () => setOpen(true);
@@ -54,27 +56,53 @@ function PostReportModal({ postId, postedUserId, userId }) {
             userId:userId,
             postId:postId
         })
-        const token=localStorage.getItem('token')
-        axios.post(REPORT_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
-            setLoading(false)
-            if(response.data.success) {
-                setOpen(false)
-                dispatch(setPosts(response.data.posts))
-                toast.success(response.data.message);
-
-            }else{
+        const token=localStorage.getItem('token');
+        if(location.pathname==='/home'){
+            axios.post(REPORT_POST_HOME,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
+                setLoading(false)
+                if(response.data.success) {
+                    setOpen(false)
+                   
+                        dispatch(setHomePosts(response.data.posts))
+                        toast.success(response.data.message);
+                
+    
+                }else{
+                    setOpen(false);
+                    toast.error(response.data.message);
+                } 
+            }).catch((err)=>{   
+                setLoading(false)
                 setOpen(false);
-                toast.error(response.data.message);
-            } 
-            
-        }).catch((err)=>{   
-            setLoading(false)
-            setOpen(false);
-            toast.error("Oops Something went wrong")
-        })
+                toast.error("Oops Something went wrong")
+            })
+        }else{
+
+            axios.post(REPORT_POST,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", } }).then((response)=>{
+                setLoading(false)
+                if(response.data.success) {
+                    setOpen(false)
+                   
+                        dispatch(setExplorePosts(response.data.posts))
+                        toast.success(response.data.message);
+                
+    
+                }else{
+                    setOpen(false);
+                    toast.error(response.data.message);
+                } 
+                
+            }).catch((err)=>{   
+                setLoading(false)
+                setOpen(false);
+                toast.error("Oops Something went wrong")
+            })
+        }
        
     }
 
+    
+   
     return (
         <>
             <MenuItem onClick={handleOpen}>Report</MenuItem>
@@ -88,7 +116,7 @@ function PostReportModal({ postId, postedUserId, userId }) {
                     <Typography id="modal-modal-title" color={"red"} variant="h6" component="h2">
                         Report Post
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}> */}
                         <FormControl>
                             <RadioGroup
                                 aria-labelledby="demo-radio-buttons-group-label"
@@ -110,7 +138,7 @@ function PostReportModal({ postId, postedUserId, userId }) {
                                 </LoadingButton>
                             </RadioGroup>
                         </FormControl>
-                    </Typography>
+                    {/* </Typography> */}
                 </Box>
             </Modal>
         </>

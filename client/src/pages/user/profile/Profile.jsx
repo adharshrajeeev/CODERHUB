@@ -11,7 +11,7 @@ import Fade from '@mui/material/Fade';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
-import { setCoverPic, setProfilepic } from '../../../redux/userSlice'
+import { setCoverPic, setPosts, setProfilepic } from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
 import toast, { Toaster } from 'react-hot-toast';
 import './profileStyle.scss';
@@ -42,7 +42,7 @@ function Profile() {
 
 
 
-  const [posts, setPosts] = useState([]);
+  // const [posts, setPosts] = useState([]);
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event, newValue) => {
@@ -54,6 +54,7 @@ function Profile() {
   const userName = useSelector((state) => state.user?.user?.userName)
   const coverPic = useSelector((state) => state.user?.user?.coverPic)
   const userdetails = useSelector((state) => state.user?.user)
+  const userPosts=useSelector((state)=>state.user?.posts)
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -74,9 +75,11 @@ function Profile() {
   const getUserPosts = async () => {
     try {
       const response = await axios.get(`${SHOW_USER_POST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
-      setPosts(response.data.posts.filter((post) => post.postedUser._id === userId))
-
+      // setPosts(response.data.posts.filter((post) => post.postedUser._id === userId))
+      console.log(response.data.posts,"userposts")
+      dispatch(setPosts(response.data.posts))
     } catch (err) {
+      console.log(err)
       console.log("error is getting user posts profile")
     }
   }
@@ -154,7 +157,7 @@ function Profile() {
 
   }, [])
 
-
+  console.log(userPosts,"userposts")
   return (
 
     <div>
@@ -289,7 +292,7 @@ function Profile() {
                 </div>
                 <div className='userPosts'>
 
-                  {posts.map(post => (
+                  {userPosts.map(post => (
                     <Post post={post} key={post._id} />
                   ))}
                 </div>

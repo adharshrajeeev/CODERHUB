@@ -22,8 +22,9 @@ import toast, { Toaster } from "react-hot-toast";
 import axios from '../../../utils/axios'
 import { ADD_POST } from "../../../utils/ConstUrls";
 import CircularProgress from '@mui/material/CircularProgress';
-import { setPosts } from '../../../redux/userSlice';
+import { setExplorePosts, setHomePosts, setPosts } from '../../../redux/userSlice';
 import noProfilePicture from '../../../assets/noProfilePicture.jpg'
+import { useLocation } from "react-router-dom";
 // import { fetchUserDetails } from "../../../api/UserServices";
 
 
@@ -54,6 +55,7 @@ function AddPostModal() {
     const [post,setPost]=useState("")
     const _id=useSelector((state)=>state.user?.user?._id)
     // const token=useSelector((state)=>state.token);
+    const location=useLocation();
     const userName=useSelector((state)=>state.user?.user?.userName);
     const profilePic=useSelector((state)=>state.user?.user?.profilePic);
     const userImage=useSelector((state)=>state.user?.user?.profilePic)
@@ -90,7 +92,16 @@ function AddPostModal() {
       const response=await axios.post(ADD_POST,formData,{ headers: {'Authorization':`Bearer ${token}` } });
       if(response.data.success){
         setLoading(false);
-        dispatch(setPosts(response.data.posts));
+        if(location.pathname=='/home'){
+          dispatch(setHomePosts(response.data.posts))
+          console.log("home")
+        }else if(location.pathname=='/explore'){
+          dispatch(setExplorePosts(response.data.posts))
+          console.log("explroe")
+        }else{  
+          console.log("profile")
+          dispatch(setPosts(response.data.posts));
+        }
         setIsImage("")
         setPost("")
         setOpen(false)

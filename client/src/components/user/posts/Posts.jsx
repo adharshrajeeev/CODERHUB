@@ -5,7 +5,7 @@ import "./posts.scss";
 import { ALL_POSTS } from "../../../utils/ConstUrls";
 import decodeToken from '../../../utils/Services';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPosts } from '../../../redux/userSlice';
+import { setHomePosts, setPosts } from '../../../redux/userSlice';
 
 const Posts = () => {
 
@@ -14,7 +14,7 @@ const Posts = () => {
     getAllPosts();
   },[])
  
-  const posts = useSelector((state) => state.user?.posts);
+  const homePosts = useSelector((state) => state.user?.homePosts);
   const dispatch = useDispatch();
   const userId=decodeToken();
 
@@ -22,7 +22,7 @@ const Posts = () => {
     try{
       const token = localStorage.getItem('token');
       const {data}=await axios.get(`${ALL_POSTS}/${userId}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } });
-      dispatch(setPosts(data))
+      dispatch(setHomePosts(data))
     }catch(err){
         console.log("home user posts error",err)
     }
@@ -30,7 +30,7 @@ const Posts = () => {
 
 
   return <div className="posts">
-    {posts.map((post,index)=>(
+    {homePosts.map((post,index)=>(
       <Post post={post} key={index}/>
     ))}
   </div>;
