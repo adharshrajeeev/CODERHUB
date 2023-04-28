@@ -5,7 +5,9 @@ const initialState ={
     mode:"light",
     user:null,
     token:null,
-    posts:[]
+    posts:[],
+    homePosts:[],
+    explorePosts:[]
 }
 
 const userSlice=createSlice({
@@ -43,6 +45,30 @@ const userSlice=createSlice({
             state.posts=updatedPost
            
         },
+        setHomePosts:(state,action)=>{
+            state.homePosts=action.payload
+        },
+        updateHomePosts:(state,action)=>{
+            const updatedPost =  state.homePosts.map((post)=>{
+               
+                if(post._id ===  action.payload._id) return action.payload;
+                return post;
+            })
+           
+            state.homePosts=updatedPost
+        },
+        setExplorePosts:(state,action)=>{
+            state.explorePosts=action.payload
+        },
+        updateExplorePosts:(state,action)=>{
+            const updatedPost =  state.explorePosts.map((post)=>{
+               
+                if(post._id ===  action.payload._id) return action.payload;
+                return post;
+            })
+           
+            state.explorePosts=updatedPost
+        },
         setProfilepic:(state,action)=>{
             state.user.profilePic=action.payload
         },
@@ -58,6 +84,7 @@ const userSlice=createSlice({
     }
 })
 
-export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,setProfilepic,setCoverPic,changeUserName,addUserBio} = userSlice.actions;
+export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,
+            setProfilepic,setCoverPic,changeUserName,addUserBio,setHomePosts,setExplorePosts,updateExplorePosts,updateHomePosts} = userSlice.actions;
 
 export default userSlice.reducer;

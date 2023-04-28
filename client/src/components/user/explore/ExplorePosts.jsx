@@ -5,7 +5,8 @@ import axios from '../../../utils/axios'
 import { EXPLORE_ALLPOST } from '../../../utils/ConstUrls'
 import './ExploreStyle.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPosts } from '../../../redux/userSlice';
+import { setHomePosts } from '../../../redux/userSlice';
+
 
 function ExplorePosts() {
 
@@ -13,7 +14,7 @@ function ExplorePosts() {
 
 
   
-  const posts = useSelector((state) => state.user?.posts);
+  const homePosts = useSelector((state) => state.user?.homePosts);
   const dispatch = useDispatch();
   const userId=useSelector((state)=>state.user?.user?._id)
   const exploreAllPosts = async () => {
@@ -21,7 +22,7 @@ function ExplorePosts() {
       const token = localStorage.getItem('token')
       const response = await axios.get(`${EXPLORE_ALLPOST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
 
-      dispatch(setPosts(response.data))
+      dispatch(setHomePosts(response.data))
     } catch (err) {
       console.log("explore post error", err) 
     }
@@ -34,7 +35,7 @@ function ExplorePosts() {
 
   return (
     <div className='explore'>
-      {posts.map(post => (
+      {homePosts.map(post => (
         <Post post={post} key={post._id} />
       ))}
     </div>
