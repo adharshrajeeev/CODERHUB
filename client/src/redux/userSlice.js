@@ -58,7 +58,12 @@ const userSlice=createSlice({
             state.homePosts=updatedPost
         },
         setExplorePosts:(state,action)=>{
-            state.explorePosts=action.payload
+            const newPosts=action.payload;
+            const updatedPost=[
+                ...state.explorePosts,
+                ...newPosts
+            ]
+            state.explorePosts=updatedPost
         },
         updateExplorePosts:(state,action)=>{
             const updatedPost =  state.explorePosts.map((post)=>{
