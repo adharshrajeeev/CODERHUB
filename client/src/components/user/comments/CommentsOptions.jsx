@@ -6,7 +6,8 @@ import axios from '../../../utils/axios'
 import toast from 'react-hot-toast'
 import { DELETE_COMMENT } from '../../../utils/ConstUrls';
 import { useDispatch } from 'react-redux';
-import { setPost } from '../../../redux/userSlice';
+import { setPost, updateExplorePosts, updateHomePosts } from '../../../redux/userSlice';
+import { useLocation } from 'react-router-dom';
 
 
 
@@ -15,6 +16,7 @@ function CommentsOptions({ postId, commentId, userId, commentedUserId }) {
 
     const [anchorEl, setAnchorEl] = React.useState(null);
     const dispatch = useDispatch();
+    const location=useLocation();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -30,7 +32,14 @@ function CommentsOptions({ postId, commentId, userId, commentedUserId }) {
         formData.append("postId", postId);
         formData.append("commentId", commentId)
         axios.put(DELETE_COMMENT, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } }).then((response) => {
-            dispatch(setPost(response.data))
+            if(location.pathname==='/home'){
+                dispatch(updateHomePosts(response.data))
+            }else if(location.pathname==='/explore'){
+                dispatch(updateExplorePosts(response.data))
+            }else{
+
+                dispatch(setPost(response.data))
+            }
             toast.success("Comment Deleted")
         }).catch((err) => {
 

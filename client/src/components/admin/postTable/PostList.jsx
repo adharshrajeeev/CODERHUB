@@ -12,11 +12,17 @@ import { CHANGE_POST_STATUS, GET_REPORTED_POSTS } from '../../../utils/ConstUrls
 import toast, { Toaster } from 'react-hot-toast'
 import { adminConfig } from '../../../utils/Services';
 import BlockPostModal from '../modals/BlockPostModal';
+import { DataGrid } from '@mui/x-data-grid';
 
-
-
-const rows = [
-
+const columns = [
+  { field: 'id', headerName: 'ID', width: 70 },
+  { field: 'postedUserName', headerName: 'Posted User', width: 90 },
+  { field: 'imageUrl', headerName: 'Image URL', width: 130 },
+  { field: 'content', headerName: 'Content', width: 300 },
+  { field: 'likes', headerName: 'Likes', width: 90 },
+  { field: 'comments', headerName: 'Comments', width: 90 },
+  { field: 'reports', headerName: 'Reports', width: 90 },
+  
 ];
 function PostList() {
 
@@ -28,6 +34,16 @@ function PostList() {
     try {
       axios.get(GET_REPORTED_POSTS,{ headers: { "Authorization":`Bearer ${adminToken}` } }).then((response) => {
         setPostLists(response.data);
+      //  response.data?.map((item,index)=>({
+      //     id: index + 1,
+      //     postedUserName:item.postedUser.userName,
+      //     imageUrl: item.image.url,
+      //     content: item.content,
+      //     likes: [item.likes].length,
+      //     comments: item.comments.length,
+      //     reports: item.reports.length,
+      //   }))
+        
       }).catch((err) => {
         toast.error("Oops Somethign went wrong")
       })
@@ -54,6 +70,7 @@ function PostList() {
       })
     }
   }
+  const getRowId = (row) => row._id;
 
   useEffect(() => {
     getAllPostsList();
@@ -97,6 +114,16 @@ function PostList() {
       </TableContainer>
       <Toaster />
     </div>
+  //   <div style={{ height: 600, width: '100%' }}>
+  //   <DataGrid
+  //     rows={postsLists}
+  //     columns={columns}
+  //     getRowId={getRowId}
+  //     paginationModel={{ page: 0, pageSize: 10 }}
+  //     checkboxSelection
+  //   />
+  // </div>
+  
   )
 }
 

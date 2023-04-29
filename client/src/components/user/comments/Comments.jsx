@@ -3,9 +3,10 @@ import axios from '../../../utils/axios'
 import { ADD_COMMENTS } from '../../../utils/ConstUrls';
 import moment from 'moment';
 import { useDispatch } from 'react-redux'
-import { setPost } from '../../../redux/userSlice';
+import { setPost, updateExplorePosts, updateHomePosts } from '../../../redux/userSlice';
 import {Toaster, toast} from 'react-hot-toast'
 import './comments.scss'
+import { useLocation } from "react-router-dom";
 import CommentsOptions from './CommentsOptions';
 
 
@@ -15,6 +16,7 @@ const Comments = ({ postId, userId, comments }) => {
 
   const [postComments, setPostComments] = useState('')
   const dispatch = useDispatch();
+  const location=useLocation()
   const handleSubmitComment = async () => {
     if(postComments.trim()===""){
       return toast.error("Please Fill Comment!!")
@@ -29,8 +31,14 @@ const Comments = ({ postId, userId, comments }) => {
       formData.append("userId", userId);
       const token = localStorage.getItem('token')
       const response = await axios.post(ADD_COMMENTS, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } });
+      if(location.pathname==='/home'){
+        dispatch(updateHomePosts(response.data))
+      }else if(location.pathname==='/explore'){
+        dispatch(updateExplorePosts(response.data))
+      }else{
 
-      dispatch(setPost(response.data))
+        dispatch(setPost(response.data))
+      }
     } catch (err) {
       console.log("comment added error", err)
     }
