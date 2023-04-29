@@ -1,7 +1,7 @@
 import express from 'express'
 import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
-        getLikedPostCount, getUserPost, likePost, reportPostByUser, unLikePost, updateUserPost } from '../controller/postController.js';
+        getLikedPostCount, getUserPost, likePost, reportPostByUser, reportPostUserHome, unLikePost, updateUserPost } from '../controller/postController.js';
 import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUsers, getUserSuggestion, otpSignupVerification, registerUser,
         removeFollower,
         resetAndConfrimOtp,
@@ -36,10 +36,10 @@ router.post('/updateUserDetails/:id',verifyToken,updateUserDetals)
 router.put('/changePassword',verifyToken,changeUserPassword)
 
 router.get('/posts/:id',verifyToken,getAllPosts);
-router.get('/explore/:id',verifyToken,exploreAllPosts)
+router.get('/explore',verifyToken,exploreAllPosts)
 router.get('/editPost/:id',verifyToken,getEditPost)
 router.put('/updatePost',verifyToken,upload.single('image'),updateUserPost)
-router.delete('/deletePost/:id',verifyToken,deleteUserPost)
+router.delete('/deletePost',verifyToken,deleteUserPost)
 router.put('/like',verifyToken, likePost)
 router.put('/unLike',verifyToken,unLikePost);
 
@@ -71,6 +71,8 @@ router.get('/followers/:id',verifyToken,getAllFollowers)
 
 
 router.post('/reportPost',verifyToken,reportPostByUser)
+router.post('/reportPostHome',verifyToken,reportPostUserHome)
+
 
 router.post('/sendOtp',sendOtpToMail)
 router.post('/resetPassword',resetAndConfrimOtp)

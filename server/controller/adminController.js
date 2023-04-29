@@ -86,8 +86,9 @@ export const getAlluserPosts =  async(req,res)=>{
 export const getAllReportedPost = async(req,res)=>{
      try{
          
-          const posts=await Posts.find({ reports: { $exists: true, $not: { $size: 0 } } });
+          const posts=await Posts.find().sort({'reports.length':1});
           res.status(200).json(posts)
+        
 
      }catch(err){
           
@@ -185,7 +186,7 @@ export const getMonthWiseUserGrowth = async(req,res)=>{
                     }
                   }
           ])
-          console.log(users,"users")
+         
           res.status(200).json(users)
      }catch(err){
           console.log(err)

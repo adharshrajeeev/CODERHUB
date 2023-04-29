@@ -75,6 +75,7 @@ export const getUserPost = async(req,res)=>{
     try{
         const userId=req.params.id;
         const posts = await Posts.find({"postedUser._id":userId}).sort({ createdAt: -1 });
+  
         res.status(200).json({success:true,posts})
     }catch(err){
         res.status(400).json({success:false,error:err})
@@ -141,10 +142,11 @@ export const getAllPosts = async(req,res)=>{
 export const deleteUserPost = async(req,res)=>{
     try{
        
-        const postId=req.params.id;
+        const {userId,postId}=req.query;
+        
      
         Posts.findByIdAndDelete(postId).then(async()=>{
-            const posts=await Posts.find().sort({ createdAt: -1 });
+            const posts=await Posts.find({"postedUser._id":userId}).sort({ createdAt: -1 });
             return res.status(200).json({success:true,message:"Post Deleted Success Fully",posts});
 
         }).catch((err)=>{
@@ -159,9 +161,8 @@ export const deleteUserPost = async(req,res)=>{
 export const exploreAllPosts = async(req,res)=>{
     try{
        
-
-        const userId=req.params.id
-        const posts=await Posts.find({"reports.userId":{$ne:userId}}).sort({ createdAt: -1 });
+        const {page=1,limit=10,userId}=req.query
+        const posts=await Posts.find({$and:[{"reports.userId":{$ne:userId}},{"postedUser._id":{$ne:userId}}]}).sort({ createdAt: -1 }).limit(limit *1).skip((page-1)*limit);
         res.status(200).json(posts)
     }catch(err){
         
@@ -274,7 +275,25 @@ export const reportPostByUser =  async(req,res)=>{
              reports:newReport
         }
     },{new:true})
-  const posts=await Posts.find({"reports.userId":{$ne:userId}}).sort({ createdAt: -1 });
+  const posts=await Posts.find({$and:[{"reports.userId":{$ne:userId}},{"postedUser._id":{$ne:userId}}]}).sort({ createdAt: -1 });
+  res.status(200).json({success:true,message:"U have Reported post",posts})
+}
+
+export const reportPostUserHome =  async(req,res)=>{
+    const {userId,postId,content}=req.body;
+    const newReport={
+        content:content,
+        userId:userId
+    }
+  const post =  await Posts.findOneAndUpdate({_id:postId},{
+        $addToSet:{
+             reports:newReport
+        }
+    },{new:true})
+    const user=await User.findOne({_id:userId})
+    const followingIds= user.following.map(follower =>follower._id );
+    const posts=await Posts.find({$and:[{"postedUser._id":{$in:followingIds}},{"reports.userId":{$ne:userId}}]}).sort({ createdAt: -1 });
+//   const posts=await Posts.find({$and:[{"reports.userId":{$ne:userId}},{"postedUser._id":{$ne:userId}}]}).sort({ createdAt: -1 });
   res.status(200).json({success:true,message:"U have Reported post",posts})
 }
 
