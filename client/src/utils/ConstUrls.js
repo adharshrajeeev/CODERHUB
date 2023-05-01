@@ -50,6 +50,9 @@ export const GET_USER_MESSAGES='/allMessages'
 export const SEND_NEW_MESSAGE='/messages'
 
 
+export const SEARCH_USER_FOLLOWINGS='/searchUsers'
+
+
 
 
 
