@@ -21,3 +21,4 @@ export const verifyToken = (req,res,next)=>{
         res.status(500).json({error:err})
     }
 }
+

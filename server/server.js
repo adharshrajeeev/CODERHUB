@@ -50,15 +50,14 @@ const removeUser=(socketId)=>{
     users=users.filter((user)=>user.socketId !== socketId)
 }
 
-const getUser =  (userId)=>{
-  
-    return users?.find((user)=>user.userId === userId)
+const getUser = (usersId)=>{   
+    return users?.find((user)=>user.userId === usersId)
 }
 
 
-const addOnlineUser=(userId)=>{
-    OnlineUsers.push(userId)
-}
+// const addOnlineUser=(userId)=>{
+//     OnlineUsers.push(userId)
+// }
 
 io.on("connection",(socket)=>{
     //when connect
@@ -72,14 +71,17 @@ io.on("connection",(socket)=>{
 
   //When Online 
 
-  socket.on("OnlineUser",(userId)=>{
+//   socket.on("OnlineUser",(userId)=>{
     
-  })
+//   })
 
   //send and get message
 
   socket.on("sendMessage",({senderId,receiverId,text})=>{
+    console.log(senderId,receiverId,text,"alldata")
      const user=getUser(receiverId);
+    users.map(user=>console.log(user))
+     console.log(user,"sendmesage")
      io.to(user?.socketId).emit("getMessage",{
         senderId,
         text  

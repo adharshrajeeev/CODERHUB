@@ -5,11 +5,13 @@ import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, explo
 import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUsers, getUserSuggestion, otpSignupVerification, registerUser,
         removeFollower,
         resetAndConfrimOtp,
+        searchUserFollowing,
         sendOtpToMail,
         unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin, verificationAndSignup } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
 import { addConversation, getAllConversation } from '../controller/conversationController.js';
 import { getAllMessgaes, postMessage } from '../controller/messageController.js';
+import { isBlocked } from '../middlewares/authorize.js';
 
 
 const router=express.Router(); 
@@ -19,63 +21,65 @@ router.post('/signup',registerUser);
 router.post('/signupVerification',verificationAndSignup);
 router.post('/otpVerification',otpSignupVerification)
 router.post('/login',userLogin)
-router.post('/addPosts',verifyToken,upload.single('image'),addUserPosts);
+router.post('/addPosts',verifyToken,upload.single('image'),isBlocked,addUserPosts);
 
-router.get('/user/:userId',verifyToken,getUsers)
+router.get('/user/:userId',verifyToken,isBlocked,getUsers)
 
-router.get('/userDetails/:id',verifyToken,getUserDetails)
-router.get('/users',verifyToken,getAllUsers);
+router.get('/userDetails/:id',verifyToken,isBlocked,getUserDetails)
+router.get('/users',verifyToken,isBlocked,getAllUsers);
 router.get('/suggestionUsers/:id',getUserSuggestion) //need to rectify
-router.get('/userPosts/:id',verifyToken,getUserPost);
+router.get('/userPosts/:id',verifyToken,isBlocked,getUserPost);
 
-router.get('/getUserData',verifyToken,getUserAllData)
+router.get('/getUserData',verifyToken,isBlocked,getUserAllData)
 
-router.get('/userProfileDetails',verifyToken,getUserProfileInfo)
-router.post('/updateUserDetails/:id',verifyToken,updateUserDetals)
+router.get('/userProfileDetails',verifyToken,isBlocked,getUserProfileInfo)
+router.post('/updateUserDetails/:id',verifyToken,isBlocked,updateUserDetals)
 
-router.put('/changePassword',verifyToken,changeUserPassword)
+router.put('/changePassword',verifyToken,isBlocked,changeUserPassword)
 
-router.get('/posts/:id',verifyToken,getAllPosts);
-router.get('/explore',verifyToken,exploreAllPosts)
-router.get('/editPost/:id',verifyToken,getEditPost)
-router.put('/updatePost',verifyToken,upload.single('image'),updateUserPost)
-router.delete('/deletePost',verifyToken,deleteUserPost)
-router.put('/like',verifyToken, likePost)
-router.put('/unLike',verifyToken,unLikePost);
+router.get('/posts/:id',verifyToken,isBlocked,getAllPosts);
+router.get('/explore',verifyToken,isBlocked,exploreAllPosts)
+router.get('/editPost/:id',verifyToken,isBlocked,getEditPost)
+router.put('/updatePost',verifyToken,upload.single('image'),isBlocked,updateUserPost)
+router.delete('/deletePost',verifyToken,isBlocked,deleteUserPost)
+router.put('/like',verifyToken, isBlocked,likePost)
+router.put('/unLike',verifyToken,isBlocked,unLikePost);
 
-router.get('/likeCount/:id',getLikedPostCount)
+router.get('/likeCount/:id',verifyToken,isBlocked,getLikedPostCount)
  
-router.post('/follow',verifyToken,followUser) 
-router.post('/unFollow',verifyToken,unFollowUser)
-router.post('/removeFollower',verifyToken,removeFollower)
+router.post('/follow',verifyToken,isBlocked,followUser) 
+router.post('/unFollow',verifyToken,isBlocked,unFollowUser)
+router.post('/removeFollower',verifyToken,isBlocked,removeFollower)
 
-router.post('/addBio',verifyToken,addUserBio)
-router.get('/bio/:id',verifyToken,getUserBio)
-router.put('/updatebio/:id',verifyToken,uptadeUserBio)
-
-
-router.post('/profilePicture/:id',verifyToken,upload.single('image'),addProfilePicture);
-router.post('/coverPicture/:id',verifyToken,upload.single('image'),addCoverPicture)
+router.post('/addBio',verifyToken,isBlocked,addUserBio)
+router.get('/bio/:id',verifyToken,isBlocked,getUserBio)
+router.put('/updatebio/:id',verifyToken,isBlocked,uptadeUserBio)
 
 
-router.get('/profilePic/:id',verifyToken,getUserProfilePic)
-router.put('/updateProPic/:id',verifyToken,upload.single('image'),UpdateUserPicture);
+router.post('/profilePicture/:id',verifyToken,upload.single('image'),isBlocked,addProfilePicture);
+router.post('/coverPicture/:id',verifyToken,upload.single('image'),isBlocked,addCoverPicture)
 
 
-router.post('/addComment',verifyToken,addPostComment);
-router.put('/deleteComment',verifyToken,deletePostComment)
-
-router.get('/connections/:id',verifyToken,getAllConnections);
-router.get('/followings/:id',verifyToken,getAllFollowings)
-router.get('/followers/:id',verifyToken,getAllFollowers)
+router.get('/profilePic/:id',verifyToken,isBlocked,getUserProfilePic)
+router.put('/updateProPic/:id',verifyToken,upload.single('image'),isBlocked,UpdateUserPicture);
 
 
-router.post('/reportPost',verifyToken,reportPostByUser)
-router.post('/reportPostHome',verifyToken,reportPostUserHome)
+router.post('/addComment',verifyToken,isBlocked,addPostComment);
+router.put('/deleteComment',verifyToken,isBlocked,deletePostComment)
+
+router.get('/connections/:id',verifyToken,isBlocked,getAllConnections);
+router.get('/followings/:id',verifyToken,isBlocked,getAllFollowings)
+router.get('/followers/:id',verifyToken,isBlocked,getAllFollowers)
+
+
+router.post('/reportPost',verifyToken,isBlocked,reportPostByUser)
+router.post('/reportPostHome',verifyToken,isBlocked,reportPostUserHome)
 
 
 router.post('/sendOtp',sendOtpToMail)
 router.post('/resetPassword',resetAndConfrimOtp)
+
+router.get('/searchUsers',verifyToken,isBlocked,searchUserFollowing)
 
 
 

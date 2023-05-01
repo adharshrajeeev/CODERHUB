@@ -494,7 +494,7 @@ export const getAllConnections=async(req,res)=>{
       res.status(500).json({success:false,error:"oops somethig went wrong in connections"})
    }
 }
-
+ 
 export const getAllFollowings = async(req,res)=>{
    try{
       const user=await User.findById(req.params.id);
@@ -646,5 +646,29 @@ export const resetAndConfrimOtp = async(req,res)=>{
    }catch(err){
       res.status(500).json({message:"Ops Server Error "})
 
+   }
+}
+
+
+export const searchUserFollowing = async(req,res)=>{
+   try{
+      const {userId,userName}=req.query;
+      console.log(userName,"usernamek daa")
+      const user=await User.findById(userId);
+      const following = await user.following.map(following=>following._id);
+      const users=await User.find({
+         "$or": [
+             {
+                 userName: { $regex: userName }
+             }, 
+             {
+                 email: { $regex: userName }
+             } 
+         ]
+     })
+     const searchedUsers=users.map((user)=>user._id)
+     res.status(200).json(users)
+   }catch(err){
+      res.status(400).json({message:"Search Folowing error",error:err})
    }
 }
