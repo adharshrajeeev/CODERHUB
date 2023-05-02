@@ -86,6 +86,7 @@ function PostList() {
               <TableCell align="right">postId</TableCell>
               <TableCell align="right">Posted User</TableCell>
               <TableCell align="right">Total Reports</TableCell>
+              <TableCell align="right"> Reason</TableCell>
               <TableCell align="right">Option</TableCell>
             </TableRow>
           </TableHead>
@@ -100,7 +101,8 @@ function PostList() {
                 </TableCell>
                 <TableCell align="right">{post._id}</TableCell>
                 <TableCell align="right">{post.postedUser.userName}</TableCell>
-                <TableCell align="right">{post.reports.length}</TableCell>
+                <TableCell align="right">{post.numReports}</TableCell>
+                <TableCell align="right">{post.reportsContent}</TableCell>
                 <TableCell align="right">
                   {/* <Button variant="contained" size="small" onClick={()=>handleBlockAndUnBlock(post._id,post.isBlocked)}>
                     {post.isBlocked ? "UnBlock" : "Block"}
