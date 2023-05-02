@@ -12,20 +12,27 @@ import { verifyToken } from '../middlewares/authentication.js';
 import { addConversation, getAllConversation } from '../controller/conversationController.js';
 import { getAllMessgaes, postMessage } from '../controller/messageController.js';
 import { isBlocked } from '../middlewares/authorize.js';
+// import { imageUpload, videoUpload } from '../config/multer.js';
 
 
 const router=express.Router(); 
 
-
+``
 router.post('/signup',registerUser);
 router.post('/signupVerification',verificationAndSignup);
 router.post('/otpVerification',otpSignupVerification)
-router.post('/login',userLogin)
-router.post('/addPosts',verifyToken,upload.single('image'),isBlocked,addUserPosts);
+router.post('/login',userLogin) 
+// router.post('/addPosts',verifyToken,upload.single('image'),isBlocked,addUserPosts);
+// router.post('/addPosts',verifyToken,upload.single('image'),upload.single('my-video'),addUserPosts);
+
+ router.post('/addPosts',verifyToken,isBlocked,upload.fields([
+        { name: 'image', maxCount: 1 },
+        { name: 'my-video', maxCount: 1 }
+      ]),addUserPosts);
 
 router.get('/user/:userId',verifyToken,isBlocked,getUsers)
 
-router.get('/userDetails/:id',verifyToken,isBlocked,getUserDetails)
+router.get('/userDetails/:id',verifyToken,isBlocked,getUserDetails)  
 router.get('/users',verifyToken,isBlocked,getAllUsers);
 router.get('/suggestionUsers/:id',getUserSuggestion) //need to rectify
 router.get('/userPosts/:id',verifyToken,isBlocked,getUserPost);
@@ -40,7 +47,7 @@ router.put('/changePassword',verifyToken,isBlocked,changeUserPassword)
 router.get('/posts/:id',verifyToken,isBlocked,getAllPosts);
 router.get('/explore',verifyToken,isBlocked,exploreAllPosts)
 router.get('/editPost/:id',verifyToken,isBlocked,getEditPost)
-router.put('/updatePost',verifyToken,upload.single('image'),isBlocked,updateUserPost)
+// router.put('/updatePost',verifyToken,upload.single('image'),isBlocked,updateUserPost) //should be solved
 router.delete('/deletePost',verifyToken,isBlocked,deleteUserPost)
 router.put('/like',verifyToken, isBlocked,likePost)
 router.put('/unLike',verifyToken,isBlocked,unLikePost);
@@ -56,12 +63,12 @@ router.get('/bio/:id',verifyToken,isBlocked,getUserBio)
 router.put('/updatebio/:id',verifyToken,isBlocked,uptadeUserBio)
 
 
-router.post('/profilePicture/:id',verifyToken,upload.single('image'),isBlocked,addProfilePicture);
+router.post('/profilePicture/:id',verifyToken,upload.single('image'),isBlocked,addProfilePicture); 
 router.post('/coverPicture/:id',verifyToken,upload.single('image'),isBlocked,addCoverPicture)
 
 
 router.get('/profilePic/:id',verifyToken,isBlocked,getUserProfilePic)
-router.put('/updateProPic/:id',verifyToken,upload.single('image'),isBlocked,UpdateUserPicture);
+router.put('/updateProPic/:id',verifyToken,upload.single('image'),isBlocked,UpdateUserPicture);  
 
 
 router.post('/addComment',verifyToken,isBlocked,addPostComment);

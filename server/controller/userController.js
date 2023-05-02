@@ -653,9 +653,9 @@ export const resetAndConfrimOtp = async(req,res)=>{
 export const searchUserFollowing = async(req,res)=>{
    try{
       const {userId,userName}=req.query;
-      console.log(userName,"usernamek daa")
+ 
       const user=await User.findById(userId);
-      const following = await user.following.map(following=>following._id);
+      // const following = await user.following.map(following=>following._id);
       const users=await User.find({
          "$or": [
              {
@@ -664,10 +664,11 @@ export const searchUserFollowing = async(req,res)=>{
              {
                  email: { $regex: userName }
              } 
-         ]
+         ] 
      })
-     const searchedUsers=users.map((user)=>user._id)
-     res.status(200).json(users)
+   //   const searchedUsers=users.map((user)=>user._id)
+     if(users.length==0) {return res.status(400).json({messasge:"No Users"})}
+     else return  res.status(200).json(users)
    }catch(err){
       res.status(400).json({message:"Search Folowing error",error:err})
    }

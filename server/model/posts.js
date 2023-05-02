@@ -26,6 +26,9 @@ const PostSchema=mongoose.Schema({
     image:{
         url:String
     },
+    videoUrl:{
+        type:String
+    },
     comments:[{
         content:{
             type:String

@@ -4,7 +4,7 @@ import User from '../model/users.js';
 
 export const addConversation=async(req,res)=>{
     try{
-        console.log(req.body)
+       
         const newConversation=new Conversation({
             members:[req.body.senderId,req.body.receiverId]
         })
