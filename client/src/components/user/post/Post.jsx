@@ -103,7 +103,15 @@ const Post = ({ post, loading }) => {
             </div>
             <div className="content">
               <p>{post.content}</p>
+              { post.videoUrl && 
+                <video controls width="100%" >
+                  <source  src={post.videoUrl} type="video/mp4" />
+                </video>
+              }
+              {
+                post?.image && 
               <img src={post?.image?.url} alt="" />
+              }
             </div>
             <div className="info">
               <div className="item" >

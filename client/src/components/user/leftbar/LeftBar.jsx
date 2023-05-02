@@ -24,6 +24,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import './LeftBarStyle.scss'
 import { useNavigate } from 'react-router-dom';
 import AddPostModal from '../modals/AddPostModal';
+import AddPostAndVideo from '../modals/AddPostAndVideo';
 
 
 
@@ -60,8 +61,8 @@ function LeftBar() {
             <List sx={{ width: '100%', maxWidth: 360, color: "black" }}>
               <ListItem >
 
-                <AddPostModal />
-
+                {/* <AddPostModal /> */}
+              <AddPostAndVideo/>
               </ListItem>
               <ListItem >
                 <ListItemButton component="a" onClick={() => navigate('/home')}>
