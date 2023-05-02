@@ -6,12 +6,24 @@
   .chatMenu {
     flex: 3.5;
   }
+  .search-container {
+    display: flex;
+    align-items: center;
+  }
   
   .chatMenuInput {
     width: 90%;
     padding: 10px 0;
     border: none;
     border-bottom: 1px solid gray;
+  }
+  .searchButton{
+    display: inline-block;
+  padding: 10px;
+  background-color: #4eb8ff;
+  border-radius: 15px;
+  border: #4eb8ff;
+  cursor: pointer;
   }
   
   .chatBox {

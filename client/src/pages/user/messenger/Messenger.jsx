@@ -9,6 +9,7 @@ import decodeToken from '../../../utils/Services'
 import axios from '../../../utils/axios'
 import { ADD_NEW_CONVERSATION, GET_ALL_CONVERSATIONS, GET_USER_MESSAGES, SEARCH_USER_FOLLOWINGS, SEND_NEW_MESSAGE } from '../../../utils/ConstUrls'
 import {io} from 'socket.io-client'
+import { Divider } from '@mui/material'
 
 function Messenger() {
 
@@ -23,6 +24,7 @@ function Messenger() {
     const [newMessage,setNewMessage]=useState("")
     const [searchUserName,setSearchName]=useState("")
     const [searchedUser,setSearchedUser]=useState(null)
+    const [messageErrors,setMessageError]=useState({searchErr:false})
     const socket=useRef();
 
     const scrollRef=useRef()
@@ -120,10 +122,17 @@ function Messenger() {
 
     const handleSearch =  async()=>{
         try{
-            const res=await axios.get(`${SEARCH_USER_FOLLOWINGS}?userId=${userId}&userName=${searchUserName}`,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }})
-           console.log(res,"search res")
+           
+           axios.get(`${SEARCH_USER_FOLLOWINGS}?userId=${userId}&userName=${searchUserName}`,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
+               setSearchName("")
+               setSearchedUser(response?.data[0])
+           }).catch((Err)=>{
+            console.log(Err)
             setSearchName("")
-             setSearchedUser(res.data[0])
+               if(Err.response?.data?.message){
+                   setMessageError({searchErr:true})
+               }
+           })
         }catch(Err){
             console.log(Err)
         }
@@ -155,16 +164,28 @@ function Messenger() {
                     <div className="messenger">
                           <div className="chatMenu">
                             <div className="chatMenuWrapper">
+                                    <div className="search-container">
+
                                     <input type="text" className='chatMenuInput' value={searchUserName} onChange={(e)=>setSearchName(e.target.value)} placeholder='Search for friends' />
-                                    <button onClick={handleSearch}>Search</button>
+                                    {
+                                        searchUserName?.trim()!=="" && 
+                                    <button className='searchButton' onClick={handleSearch}>Search</button>
+                                    }
+                                    </div>
                                     {
                                         searchedUser && <>
+                                      {
+                                        messageErrors.searchErr && <h6>No Users</h6> 
+                                      }  <h6>Searched Results</h6>
                                         <div className='conversation' onClick={()=>addConversation(searchedUser._id)}>
                                         <img src={searchedUser?.profilePic} className='conversationImg' alt="" />
                                         <span className="conversationName">{searchedUser?.userName}</span>
                                         </div>
                                         </>
                                     }
+                                    <Divider></Divider>
+                                    <span style={{marginTop:"4px"}}>Recent Conversations</span>
+                                    <Divider></Divider>
                                     {
                                         conversations?.map((c,index)=>(
                                             <div key={index+1} onClick={()=>setCurrentChat(c)}>
