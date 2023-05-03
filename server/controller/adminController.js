@@ -4,6 +4,7 @@ import { adminLoginValidate } from "../middlewares/validation.js"
 import Admin from "../model/admin.js";
 import User from '../model/users.js';
 import Posts from '../model/posts.js'
+import { fetchAllUsers } from '../repositories/userRepository.js';
 
 export const adminLogin = async(req,res)=>{
 
@@ -37,15 +38,9 @@ export const adminLogin = async(req,res)=>{
 
 export const getAllUsers = async (req,res)=>{
      try{
-            
-          // if(!req.admin) return res.status(401).json({message:"No Authentication"})
-          const users= await User.find();
-          // if(!users){
-          //      return   res.status(200).json({message:"no users found"}) 
-          // }
-          res.status(200).json(users)
-          
-
+          const {data}= await fetchAllUsers()
+          res.status(200).json(data)
+     
      }catch(err){
           res.status(400).json({error:err})
      }
