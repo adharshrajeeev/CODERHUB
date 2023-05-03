@@ -10,6 +10,7 @@ import { GET_ALL_POSTS, GET_ALL_USERS } from '../../../utils/ConstUrls';
 import './home.scss'; 
 import UserChart from '../../../components/admin/charts/UserChart'
 import { Box, Grid } from '@mui/material'
+import PostChat from '../../../components/admin/charts/PostChat'
 
 
 
@@ -54,7 +55,7 @@ function Home() {
       <div className="widgets">
       <AdminWidget title="TOTAL USERS" count={userCount}  />
       <AdminWidget title="TOTAL POSTS" count={postCount}/>
-        <AdminWidget/>
+        {/* <AdminWidget/> */}
         {/* <Widget type="user" />
         <Widget type="order" />
         <Widget type="earning" />
@@ -68,7 +69,7 @@ function Home() {
       <UserChart/>
         </Grid>
         <Grid xs={6}  md={6}>
-      <UserChart/>
+      <PostChat/>
 
         </Grid>
           </Grid>

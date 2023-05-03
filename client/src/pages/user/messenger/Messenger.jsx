@@ -9,6 +9,7 @@ import decodeToken from '../../../utils/Services'
 import axios from '../../../utils/axios'
 import { ADD_NEW_CONVERSATION, GET_ALL_CONVERSATIONS, GET_USER_MESSAGES, SEARCH_USER_FOLLOWINGS, SEND_NEW_MESSAGE } from '../../../utils/ConstUrls'
 import {io} from 'socket.io-client'
+import { fetchUserDetails } from "../../../api/UserServices";
 import { Divider } from '@mui/material'
 
 function Messenger() {
@@ -31,8 +32,10 @@ function Messenger() {
 
 
 
-
-
+    useEffect(()=>{
+        fetchUserDetails();
+      },[])
+      
     useEffect(()=>{
         socket.current=io("ws://localhost:7000")
         socket.current.on("getMessage",(data)=>{
