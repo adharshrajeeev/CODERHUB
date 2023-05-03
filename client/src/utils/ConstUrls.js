@@ -51,6 +51,7 @@ export const SEND_NEW_MESSAGE='/messages'
 
 
 export const SEARCH_USER_FOLLOWINGS='/searchUsers'
+export const SEARCH_ALL_USERS='/searchAll'
 
 
 

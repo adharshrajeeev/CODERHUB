@@ -21,6 +21,7 @@ import LazyLoading from './components/user/Loading/LazyLoading';
 import PasswordForget from './pages/user/forget/PasswordForget';
 import MessagePage from './pages/user/referenceChat/MessagePage';
 import Messenger from './pages/user/messenger/Messenger';
+import SearchedResults from './pages/user/searchResults/SearchedResults';
 const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
@@ -120,6 +121,14 @@ function App() {
             </ProtectUser>
          
           } />
+
+        <Route path='/searchResults' element={
+       
+       <AuthorizeUser>
+         <SearchedResults/>
+         </AuthorizeUser>
+    
+     } />
 
 
           {/* ========================================ADMIN ROUTESS============================================================= */}

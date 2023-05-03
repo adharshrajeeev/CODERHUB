@@ -11,6 +11,7 @@ import { Link, useNavigate } from "react-router-dom";
 import './NavbarStyle.scss'
 import { useSelector } from 'react-redux';
 import SearchResults from '../searchedList/SearchResults';
+import Searches from '../searchedList/Searches';
 
 
 
@@ -37,8 +38,9 @@ function Navbar() {
       )} */}
       {/* <GridViewOutlinedIcon /> */}
       <div className="search">
-      <SearchResults/>
-        <SearchOutlinedIcon />
+      {/* <SearchResults/> */}
+      <Searches/>
+      
       </div>
     </div>
     <div className="right">
