@@ -26,7 +26,7 @@ function AddPostAndVideo() {
     const userName=useSelector((state)=>state.user?.user?.userName);
     const profilePic=useSelector((state)=>state.user?.user?.profilePic);
 
-    const [formError,setFormError]=useState({contentError:false,postDataError:false});
+    const [formError,setFormError]=useState({contentError:true,postDataError:true});
     const [postFile,setPostFile]=useState({image:null,video:null})
     const [content,setPostContent]=useState("");
 

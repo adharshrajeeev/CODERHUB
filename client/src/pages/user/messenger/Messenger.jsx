@@ -11,6 +11,7 @@ import { ADD_NEW_CONVERSATION, GET_ALL_CONVERSATIONS, GET_USER_MESSAGES, SEARCH_
 import {io} from 'socket.io-client'
 import { fetchUserDetails } from "../../../api/UserServices";
 import { Divider } from '@mui/material'
+import toast,{Toaster} from 'react-hot-toast'
 
 function Messenger() {
 
@@ -94,23 +95,28 @@ function Messenger() {
 
    const handleMessageSend = async(e)=>{
     e.preventDefault();
-    const message={
-        sender:userId,
-        conversationId:currentChat._id,
-        text:newMessage
-    }
-    try{
-        const receiverId=currentChat?.members?.find((member)=>member !== userId);
-        socket.current.emit("sendMessage",{
-            senderId:userId,
-            receiverId:receiverId,
+    if(newMessage.trim()===""){
+        toast.error("Please fill message")
+    }else{
+
+        const message={
+            sender:userId,
+            conversationId:currentChat._id,
             text:newMessage
-          });
-        const res=await axios.post(SEND_NEW_MESSAGE,message,{ headers: { 'Authorization': `Bearer ${token}` } });
-        setMessages([...messages,res.data])
-        setNewMessage("")
-    }catch(err){
-        console.log(err)
+        }
+        try{
+            const receiverId=currentChat?.members?.find((member)=>member !== userId);
+            socket.current.emit("sendMessage",{
+                senderId:userId,
+                receiverId:receiverId,
+                text:newMessage
+              });
+            const res=await axios.post(SEND_NEW_MESSAGE,message,{ headers: { 'Authorization': `Bearer ${token}` } });
+            setMessages([...messages,res.data])
+            setNewMessage("")
+        }catch(err){
+            console.log(err)
+        }
     }
    }
 
@@ -128,7 +134,8 @@ function Messenger() {
            
            axios.get(`${SEARCH_USER_FOLLOWINGS}?userId=${userId}&userName=${searchUserName}`,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
                setSearchName("")
-               setSearchedUser(response?.data[0])
+               setSearchedUser(response?.data[0]);
+               getConversations();
            }).catch((Err)=>{
             console.log(Err)
             setSearchName("")
@@ -205,7 +212,7 @@ function Messenger() {
                                 <div className="chatBoxTop">
                                     {
                                         messages?.map((m,index)=>(
-                                            <div ref={scrollRef}>
+                                            <div ref={scrollRef} key={index}>
                                             <Message message={m} key={index+1} currentChat={currentChat} own={m.sender===userId} userId={userId}/>
 
                                             </div>
@@ -233,6 +240,7 @@ function Messenger() {
                     </div>
                 </div>
             </div>
+            <Toaster/>
         </div>
     )
 }

@@ -15,10 +15,12 @@ instance.interceptors.response.use((response)=>{
     
     if(error?.response?.data?.userBlocked){
         localStorage.removeItem('token')
-    }
-
+    }else 
     if(error.message === 'Network Error' && !error.response){
       return  toast.error("NETWORK ERROR - Make Sure Api is Running")
+    }
+    else{
+        return Promise.reject(error)
     }
    
   

@@ -52,7 +52,7 @@ function Login() {
       email,
       password
     })
-    try {
+    // try {
 
       await axios.post(USER_LOGIN, body, { headers: { "Content-Type": "application/json" } }).then((response) => {
       
@@ -64,13 +64,13 @@ function Login() {
           localStorage.setItem("token", response.data.token)
           return navigate("/home");
       }).catch((err) => {
-        console.log(err)
+        console.log(err,"eroro")
         toast.error(err.response.data.message)
       })
-    } catch (err) {
-      console.log(err)
-      toast.error("Oops Something went wrong")
-    }
+    // } catch (err) {
+    //   console.log(err,"catcg rr")
+    //   toast.error("Oops Something went wrong")
+    // }
   };
   return (
     <Container component="main" maxWidth="xs">
