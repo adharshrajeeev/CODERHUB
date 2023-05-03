@@ -2,9 +2,8 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt'
 import { adminLoginValidate } from "../middlewares/validation.js"
 import Admin from "../model/admin.js";
-import User from '../model/users.js';
-import Posts from '../model/posts.js'
-import { fetchAllUsers } from '../repositories/userRepository.js';
+import { blockUser, fetchAllUsers, fetchMonthWiseUserGrowth, unBlockUser } from '../repositories/userRepository.js';
+import { blockPosts, fetchAllPosts, fetchMonthWisePostGrowth, fetchTotalPostReports, unBlockPosts } from '../repositories/postRepository.js';
 
 export const adminLogin = async(req,res)=>{
 
@@ -42,6 +41,7 @@ export const getAllUsers = async (req,res)=>{
           res.status(200).json(data)
      
      }catch(err){
+          console.error(err);
           res.status(400).json({error:err})
      }
 }
@@ -51,16 +51,15 @@ export const changeUserStatus = async (req,res)=>{
      try{
           const {userId,userStatus}=req.query;
           if(userStatus==='block'){
-               
-             const updatedUser = await User.findOneAndUpdate({_id:userId}, {isBlocked:true}, {new:true})
-               res.status(200).json({message:"User blocked successfully", user: updatedUser})
+               const {data}=await blockUser(userId);
+               res.status(200).json({message:"User blocked successfully", user: data})
           } else {
-             
-               const updatedUser = await User.findOneAndUpdate({_id:userId}, {isBlocked:false}, {new:true})
-               res.status(200).json({message:"User unblocked successfully", user: updatedUser})
+          
+               const {data}=await unBlockUser(userId);
+               res.status(200).json({message:"User unblocked successfully", user: data})
           }
      } catch(err){
-          res.status(400).json({error: err.message})
+          res.status(400).json({error:err.message})
      }
 }
 
@@ -68,11 +67,12 @@ export const changeUserStatus = async (req,res)=>{
 export const getAlluserPosts =  async(req,res)=>{
      try{
          
-          const posts=await Posts.find();
-          res.status(200).json(posts)
+
+          const {data}=await fetchAllPosts();
+          res.status(200).json(data)
 
      }catch(err){
-          
+         
           res.status(500).json({success:false,error:err})
      }
 }
@@ -81,119 +81,52 @@ export const getAlluserPosts =  async(req,res)=>{
 export const getAllReportedPost = async(req,res)=>{
      try{
          
-          const posts=await Posts.aggregate([
-               {
-                 $project: {
-                   _id: 1,
-                   content: 1,
-                   likes: 1,
-                   postedUser: 1,
-                   image: 1,
-                   videoUrl: 1,
-                   comments: 1,
-                   isDelete: 1,
-                   isBlocked: 1,
-                   isPrivate: 1,
-                   numReports: {
-                     $size: "$reports"
-                   },
-                   reportsContent: "$reports.content"
-                 }
-               },
-               {
-                 $sort: {
-                   numReports: -1
-                 }
-               }
-             ])
-             
-          res.status(200).json(posts)
+          const {data}=await fetchTotalPostReports()  
+          res.status(200).json(data)
         
-
      }catch(err){
           
-          res.status(500).json({success:false,error:err})
+          res.status(500).json({success:false,error:err,message:"Failed to fetch reported post"})
      }
 }
 
 
 export const changePostStatus= async(req,res)=>{
      const {postId,postStatus}=req.query;
-     console.log(postId,postStatus)
+   
      try{
           if(postStatus==='block'){
-               const post=  await Posts.findOneAndUpdate({_id:postId},{
-                      isBlocked:true
-                 })
+              await  blockPosts(postId)
                  return res.status(200).json({message:"Post blocked successfully"})
             }else{
-                 const post=  await Posts.findOneAndUpdate({_id:postId},{
-                      isBlocked:false
-                 })
+              await unBlockPosts(postId)
                  return res.status(200).json({message:"Post UnBlocked successfully"})
             }
      }catch(err){
-          res.status(400).json({error: err.message})
+          res.status(400).json({error: err.message,message:"Failed to change post Status"})
      }
     
 }
 
 
-export const deleteUserPosts = async(req,res)=>{
-     try{
-          if(!req.admin) return res.status(401).json({message:"No Authentication"})
-          const postId=req.params.id;
-          Posts.findOneAndUpdate({_id:postId},{
-               $set:{
-                    isDelete:true
-               }
-          }).then(()=>{
-               return res.status(200).json({success:true,message:"User Post Deleted"})
-          }).catch((err)=>{
-               return res.status(400).json({success:false,error:err})
-          })
-          
-     }catch(err){
-          res.status(500).json({success:false,error:err})
-     }
-}
+
 
 export const getMonthWiseUserGrowth = async(req,res)=>{
      try{
-          const users = await User.aggregate([
-               {
-                 $group: {
-                   _id: { $month: "$createdAt" },
-                   count: { $sum: 1 }
-                 }
-               },
-               {
-                    $sort: {
-                      _id: 1
-                    }
-                  }
-             ])
-             console.log(users)
-             res.status(200).json(users);
+
+               const {data}=await fetchMonthWiseUserGrowth()
+             res.status(200).json(data);
      }catch(err){
-          console.log(err)
-          res.status(200).json({message:err})
+         
+          res.status(200).json({message:"Failed to fetch user growth",error:err.message})
      }
 }
 
 
 export const getMothWisePostCount = async(req,res)=>{
      try{
-          const posts = await Posts.aggregate([
-               {
-                 $group: {
-                   _id: { $month: "$createdAt" },
-                   count: { $sum: 1 }
-                 }
-               }
-             ])
-             console.log(posts)
-             res.status(200).json(posts);
+          const {data} = await fetchMonthWisePostGrowth()   
+             res.status(200).json(data);
      }catch(err){
           console.log(err)
           res.status(200).json({message:err})
