@@ -86,7 +86,32 @@ export const getAlluserPosts =  async(req,res)=>{
 export const getAllReportedPost = async(req,res)=>{
      try{
          
-          const posts=await Posts.find().sort({'reports.length':1});
+          const posts=await Posts.aggregate([
+               {
+                 $project: {
+                   _id: 1,
+                   content: 1,
+                   likes: 1,
+                   postedUser: 1,
+                   image: 1,
+                   videoUrl: 1,
+                   comments: 1,
+                   isDelete: 1,
+                   isBlocked: 1,
+                   isPrivate: 1,
+                   numReports: {
+                     $size: "$reports"
+                   },
+                   reportsContent: "$reports.content"
+                 }
+               },
+               {
+                 $sort: {
+                   numReports: -1
+                 }
+               }
+             ])
+             
           res.status(200).json(posts)
         
 
@@ -140,54 +165,40 @@ export const deleteUserPosts = async(req,res)=>{
 
 export const getMonthWiseUserGrowth = async(req,res)=>{
      try{
-          const users=await User.aggregate([
+          const users = await User.aggregate([
                {
-                    $group: {
-                      _id: {
-                        month: { $month: "$createdAt" },
-                        year: { $year: "$createdAt" }
-                      },
-                      count: { $sum: 1 }
-                    }
-                  },
-                  {
-                    $sort: { "_id.month": 1 }
-                  },
-                  {
-                    $project: {
-                      _id: 0,
-                      month: {
-                        $let: {
-                          vars: {
-                            monthsInYear: [
-                              "January",
-                              "February",
-                              "March",
-                              "April",
-                              "May",
-                              "June",
-                              "July",
-                              "August",
-                              "September",
-                              "October",
-                              "November",
-                              "December"
-                            ]
-                          },
-                          in: {
-                            $arrayElemAt: [
-                              "$$monthsInYear",
-                              { $subtract: [ "$_id.month", 1 ] }
-                            ]
-                          }
-                        }
-                      },
-                      count: 1
+                 $group: {
+                   _id: { $month: "$createdAt" },
+                   count: { $sum: 1 }
+                 }
+               },
+               {
+                    $sort: {
+                      _id: 1
                     }
                   }
-          ])
-         
-          res.status(200).json(users)
+             ])
+             console.log(users)
+             res.status(200).json(users);
+     }catch(err){
+          console.log(err)
+          res.status(200).json({message:err})
+     }
+}
+
+
+export const getMothWisePostCount = async(req,res)=>{
+     try{
+          const posts = await Posts.aggregate([
+               {
+                 $group: {
+                   _id: { $month: "$createdAt" },
+                   count: { $sum: 1 }
+                 }
+               }
+             ])
+             console.log(posts)
+             res.status(200).json(posts);
      }catch(err){
           console.log(err)
           res.status(200).json({message:err})

@@ -673,3 +673,25 @@ export const searchUserFollowing = async(req,res)=>{
       res.status(400).json({message:"Search Folowing error",error:err})
    }
 }
+
+
+export const searchAllUsers = async(req,res)=>{
+   try{
+      const {userSearchName}=req.query;
+
+      const users=await User.find({
+         "$or": [
+             {
+                 userName: { $regex: userSearchName }
+             }, 
+             {
+                 email: { $regex: userSearchName }
+             } 
+         ] 
+     })
+     res.status(200).json(users)
+   }catch(Err){
+      console.log(Err)
+      res.status(400).json({message:"Search Folowing error",error:Err})
+   }
+}

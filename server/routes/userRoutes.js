@@ -5,6 +5,7 @@ import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, explo
 import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUsers, getUserSuggestion, otpSignupVerification, registerUser,
         removeFollower,
         resetAndConfrimOtp,
+        searchAllUsers,
         searchUserFollowing,
         sendOtpToMail,
         unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin, verificationAndSignup } from '../controller/userController.js';
@@ -87,6 +88,7 @@ router.post('/sendOtp',sendOtpToMail)
 router.post('/resetPassword',resetAndConfrimOtp)
 
 router.get('/searchUsers',verifyToken,isBlocked,searchUserFollowing)
+router.get('/searchAll',verifyToken,isBlocked,searchAllUsers)
 
 
 
