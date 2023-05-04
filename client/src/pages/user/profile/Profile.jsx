@@ -264,7 +264,7 @@ function Profile() {
                   <div className="center">
                     <Box>
                       <Stack direction={"column"} alignItems={"center"}>
-                        <span style={{ marginTop: "50px" }} >{userName}</span>
+                        <span style={{ marginTop: "100px" }} >{userName}</span>
 
                       </Stack>
 
