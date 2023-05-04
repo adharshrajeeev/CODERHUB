@@ -30,7 +30,7 @@ export const registerUser = async (req,res)=>{
                password:hashedpassword,
                phoneNumber,
                dateOfBirth,gender,
-               profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1681119372/noProfilePicture_j1uj5g.jpg"
+               profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1683175773/istockphoto-1337144146-612x612_rnhtjp.jpg"
             })
             res.status(200).json({success:true,message:"success new user created",user:newUser})
          }
@@ -94,7 +94,7 @@ export const verificationAndSignup= async(req,res)=>{
             password:hashedpassword,
             phoneNumber,
             dateOfBirth,gender,
-            profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1681119372/noProfilePicture_j1uj5g.jpg",
+            profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1683175773/istockphoto-1337144146-612x612_rnhtjp.jpg",
             mailOtp:randomOtp
             })
             console.log(newUser,"new User created")
