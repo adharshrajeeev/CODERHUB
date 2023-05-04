@@ -18,7 +18,7 @@ function ExplorePosts() {
   const dispatch = useDispatch();
   const userId=useSelector((state)=>state.user?.user?._id)
   const allPosts = useSelector((state) => state.user?.explorePosts);
-  console.log(allPosts,"all explore postrs")
+ 
   const exploreAllPosts = async () => {
     try {
       const token = localStorage.getItem('token')
@@ -51,7 +51,7 @@ function ExplorePosts() {
     return ()=>window.removeEventListener("scroll",handleScroll)
 
   },[])
-  console.log(allPosts,":")
+ 
 
   return (
     <div className='explore'>
