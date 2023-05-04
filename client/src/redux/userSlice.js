@@ -25,9 +25,6 @@ const userSlice=createSlice({
         setLogout:(state)=>{
             state.user=null
             state.token=null
-            state.posts=null;
-            state.homePosts=null;
-            state.explorePosts=null;
         },
         setFriends:(state,action)=>{
             if(state.user){
@@ -61,12 +58,9 @@ const userSlice=createSlice({
             state.homePosts=updatedPost
         },
         setExplorePosts:(state,action)=>{
-            const newPosts=action.payload;
-            const updatedPost=[
-                ...state.explorePosts,
-                ...newPosts
-            ]
-            state.explorePosts=updatedPost
+            const newPosts = action.payload;
+            const updatedPosts = newPosts.filter(post => !state.explorePosts.some(p => p._id === post._id));
+             state.explorePosts = [...state.explorePosts, ...updatedPosts];    
         },
         updateExplorePosts:(state,action)=>{
             const updatedPost =  state.explorePosts.map((post)=>{
