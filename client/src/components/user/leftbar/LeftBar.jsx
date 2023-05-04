@@ -23,8 +23,9 @@ import ExpandLess from '@mui/icons-material/ExpandLess';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import './LeftBarStyle.scss'
 import { useNavigate } from 'react-router-dom';
-import AddPostModal from '../modals/AddPostModal';
 import AddPostAndVideo from '../modals/AddPostAndVideo';
+import { useDispatch } from 'react-redux';
+import { setLogout } from '../../../redux/userSlice';
 
 
 
@@ -36,6 +37,7 @@ function LeftBar() {
 
 
   const navigate = useNavigate();
+  const dispatch=useDispatch();
   const [open, setOpen] = React.useState(true);
 
   const handleClick = () => {
@@ -43,8 +45,9 @@ function LeftBar() {
   };
 
   const handleLogout = () => {
+
     localStorage.removeItem("token");
-    // dispatch(setLogout());
+    dispatch(setLogout())
     navigate('/')
 
   }
