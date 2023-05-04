@@ -25,6 +25,9 @@ const userSlice=createSlice({
         setLogout:(state)=>{
             state.user=null
             state.token=null
+            state.posts=null;
+            state.homePosts=null;
+            state.explorePosts=null;
         },
         setFriends:(state,action)=>{
             if(state.user){
