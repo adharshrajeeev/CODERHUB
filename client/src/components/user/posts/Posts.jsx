@@ -30,7 +30,7 @@ const Posts = () => {
 
 
   return <div className="posts">
-    {homePosts.map((post,index)=>(
+    {homePosts?.map((post,index)=>(
       <Post post={post} key={index}/>
     ))}
   </div>;
