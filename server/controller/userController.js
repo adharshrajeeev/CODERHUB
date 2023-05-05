@@ -100,7 +100,7 @@ export const verificationAndSignup= async(req,res)=>{
             console.log(newUser,"new User created")
             transporter.sendMail(message).then((response)=>{
              return  res.status(200).json({
-                  message:"U have received a mail",
+                  message:"U have received a mail", 
                   userId:newUser._id
                })
             }).catch((err)=>{
