@@ -85,3 +85,13 @@ export const fetchMonthWisePostGrowth = async()=>{
         throw new Error(err.message)
     }
 }
+
+
+export const fetchPostDetails=async(postId)=>{
+  try{
+    const post=await Posts.findOne({_id:postId})
+    return {data:post}
+  }catch(err){
+    throw new Error(err.message)
+  }
+}

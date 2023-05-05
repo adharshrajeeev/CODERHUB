@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt'
 import { adminLoginValidate } from "../middlewares/validation.js"
 import Admin from "../model/admin.js";
 import { blockUser, fetchAllUsers, fetchMonthWiseUserGrowth, unBlockUser } from '../repositories/userRepository.js';
-import { blockPosts, fetchAllPosts, fetchMonthWisePostGrowth, fetchTotalPostReports, unBlockPosts } from '../repositories/postRepository.js';
+import { blockPosts, fetchAllPosts, fetchMonthWisePostGrowth, fetchPostDetails, fetchTotalPostReports, unBlockPosts } from '../repositories/postRepository.js';
 
 export const adminLogin = async(req,res)=>{
 
@@ -130,5 +130,16 @@ export const getMothWisePostCount = async(req,res)=>{
      }catch(err){
           console.log(err)
           res.status(200).json({message:err})
+     }
+}
+
+
+export const getPostDetails= async(req,res)=>{
+     try{
+          const {data} = await fetchPostDetails(req.params.postId);
+          res.status(200).json(data);
+     }catch(err){
+          console.log(err)
+          res.status(200).json({message:err.message})
      }
 }
