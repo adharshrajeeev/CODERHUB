@@ -15,11 +15,9 @@ import Followings from './pages/user/network/Followings';
 import Followers from './pages/user/network/Followers';
 import UserProfiles from './pages/user/profile/UserProfiles';
 import AdminPostList from './pages/admin/adminPosts/AdminPostList';
-// import Messenger from './pages/user/messaging/Messenger';
 import Settings from './pages/user/settings/Settings';
 import LazyLoading from './components/user/Loading/LazyLoading';
 import PasswordForget from './pages/user/forget/PasswordForget';
-import MessagePage from './pages/user/referenceChat/MessagePage';
 import Messenger from './pages/user/messenger/Messenger';
 import SearchedResults from './pages/user/searchResults/SearchedResults';
 import PostView from './pages/admin/postDetails/PostView';
@@ -102,8 +100,6 @@ function App() {
 
             <Route path='/messenger' element={
             <AuthorizeUser>
-              {/* <Messenger /> */}
-              {/* <MessagePage/> */}
               <Messenger/>
             </AuthorizeUser>
           } />
