@@ -12,6 +12,8 @@ import { CHANGE_POST_STATUS, GET_REPORTED_POSTS } from '../../../utils/ConstUrls
 import toast, { Toaster } from 'react-hot-toast'
 import { adminConfig } from '../../../utils/Services';
 import BlockPostModal from '../modals/BlockPostModal';
+import ArrowCircleRightIcon from '@mui/icons-material/ArrowCircleRight';
+import {useNavigate} from 'react-router-dom'
 import { DataGrid } from '@mui/x-data-grid';
 
 const columns = [
@@ -27,23 +29,14 @@ const columns = [
 function PostList() {
 
   const [postsLists, setPostLists] = useState([]);
+  const navigate=useNavigate()
 
   const adminToken = localStorage.getItem("adminToken");
 
   const getAllPostsList = async () => {
     try {
       axios.get(GET_REPORTED_POSTS,{ headers: { "Authorization":`Bearer ${adminToken}` } }).then((response) => {
-        setPostLists(response.data);
-      //  response.data?.map((item,index)=>({
-      //     id: index + 1,
-      //     postedUserName:item.postedUser.userName,
-      //     imageUrl: item.image.url,
-      //     content: item.content,
-      //     likes: [item.likes].length,
-      //     comments: item.comments.length,
-      //     reports: item.reports.length,
-      //   }))
-        
+        setPostLists(response.data);    
       }).catch((err) => {
         toast.error("Oops Somethign went wrong")
       })
@@ -70,7 +63,7 @@ function PostList() {
       })
     }
   }
-  const getRowId = (row) => row._id;
+
 
   useEffect(() => {
     getAllPostsList();
@@ -83,11 +76,12 @@ function PostList() {
           <TableHead>
             <TableRow>
               <TableCell>Nos</TableCell>
-              <TableCell align="right">postId</TableCell>
+              {/* <TableCell align="right">postId</TableCell> */}
               <TableCell align="right">Posted User</TableCell>
               <TableCell align="right">Total Reports</TableCell>
-              <TableCell align="right"> Reason</TableCell>
+              {/* <TableCell align="right"> Reason</TableCell> */}
               <TableCell align="right">Option</TableCell>
+              <TableCell>View</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -99,16 +93,17 @@ function PostList() {
                 <TableCell component="th" scope="row">
                   {index + 1}
                 </TableCell>
-                <TableCell align="right">{post._id}</TableCell>
+                {/* <TableCell align="right">{post._id}</TableCell> */}
                 <TableCell align="right">{post.postedUser.userName}</TableCell>
                 <TableCell align="right">{post.numReports}</TableCell>
-                <TableCell align="right">{post.reportsContent}</TableCell>
+                {/* <TableCell align="right">{post.reportsContent}</TableCell> */}
                 <TableCell align="right">
                   {/* <Button variant="contained" size="small" onClick={()=>handleBlockAndUnBlock(post._id,post.isBlocked)}>
                     {post.isBlocked ? "UnBlock" : "Block"}
                   </Button> */}
                   <BlockPostModal isBlocked={post.isBlocked} handleBlockAndUnBlock={handleBlockAndUnBlock} postId={post._id} data={"Post"}/>
                 </TableCell>
+                <TableCell style={{ textAlign: "center" }} onClick={()=>navigate(`/admin/posts/detailed/${post._id}`)} ><ArrowCircleRightIcon/></TableCell>
               </TableRow>
             ))}
           </TableBody>
