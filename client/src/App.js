@@ -22,6 +22,7 @@ import PasswordForget from './pages/user/forget/PasswordForget';
 import MessagePage from './pages/user/referenceChat/MessagePage';
 import Messenger from './pages/user/messenger/Messenger';
 import SearchedResults from './pages/user/searchResults/SearchedResults';
+import PostView from './pages/admin/postDetails/PostView';
 const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
@@ -158,6 +159,14 @@ function App() {
               <AdminPostList />
             </AuthorizeAdmin>
           } />
+
+            <Route path='/admin/posts/detailed/:postId' element={
+            <AuthorizeAdmin>
+              <PostView />
+            </AuthorizeAdmin>
+          } />
+
+
           {/* <Route path='*' element={<PageNotFound />} /> */}
         </Routes>
       </BrowserRouter>
