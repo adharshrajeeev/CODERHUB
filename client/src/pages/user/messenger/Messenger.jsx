@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
+import './Messenger.css'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
-import './Messenger.css'
 import Conversations from '../../../components/user/conversations/Conversations'
 import Message from '../../../components/user/conversations/Message'
 import ChatOnline from '../../../components/user/conversations/ChatOnline'
@@ -131,17 +131,14 @@ function Messenger() {
 
     const handleSearch =  async()=>{
         try{
-           
+            setMessageError({searchErr:false})
            axios.get(`${SEARCH_USER_FOLLOWINGS}?userId=${userId}&userName=${searchUserName}`,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
                setSearchName("")
                setSearchedUser(response?.data[0]);
-               getConversations();
+            //    getConversations();
            }).catch((Err)=>{
-            console.log(Err)
             setSearchName("")
-               if(Err.response?.data?.message){
-                   setMessageError({searchErr:true})
-               }
+            setMessageError({searchErr:true})
            })
         }catch(Err){
             console.log(Err)
@@ -156,7 +153,10 @@ function Messenger() {
                 receiverId:receiverId
             }
             axios.post(ADD_NEW_CONVERSATION,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-                console.log(response)
+                setCurrentChat(response.data.savedConversation);
+                setSearchName("")
+                setSearchedUser(null)
+                getConversations();
             }).catch((err)=>{
                 console.log(err)
             })
@@ -164,6 +164,8 @@ function Messenger() {
             console.log(Err)
         }
     }
+
+    
 
     return (
         <div>
@@ -232,11 +234,11 @@ function Messenger() {
                                 }
                             </div>
                         </div>
-                        <div className="chatOnline">
+                        {/* <div className="chatOnline">
                             <div className="chatOnlineWrapper">
                                 <ChatOnline/>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </div>
             </div>
