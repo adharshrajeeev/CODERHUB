@@ -52,6 +52,9 @@ export const SEND_NEW_MESSAGE='/messages'
 
 export const SEARCH_USER_FOLLOWINGS='/searchUsers'
 export const SEARCH_ALL_USERS='/searchAll'
+export const GET_ALL_NOTIFICATIONS='/notifications'
+export const GET_NOTIFICATION_DATA='/notificationDetails'
+export const CHANGE_NOTIFICATION_STATUS='/readNotification'
 
 
 

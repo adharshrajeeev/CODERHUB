@@ -21,6 +21,7 @@ import PasswordForget from './pages/user/forget/PasswordForget';
 import Messenger from './pages/user/messenger/Messenger';
 import SearchedResults from './pages/user/searchResults/SearchedResults';
 import PostView from './pages/admin/postDetails/PostView';
+import NotifcationsPage from './pages/user/userNotifications/NotifcationsPage';
 const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
@@ -124,9 +125,14 @@ function App() {
        <AuthorizeUser>
          <SearchedResults/>
          </AuthorizeUser>
-    
      } />
 
+        <Route path='/notifications' element={
+       
+       <AuthorizeUser>
+       <NotifcationsPage/>
+         </AuthorizeUser>
+     } />
 
           {/* ========================================ADMIN ROUTESS============================================================= */}
 
