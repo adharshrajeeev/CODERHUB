@@ -13,7 +13,7 @@ import { verifyToken } from '../middlewares/authentication.js';
 import { addConversation, getAllConversation } from '../controller/conversationController.js';
 import { getAllMessgaes, postMessage } from '../controller/messageController.js';
 import { isBlocked } from '../middlewares/authorize.js';
-import { getAllNotifications, readNotification } from '../controller/notificationController.js';
+import { deteletUserNotification, getAllNotifications, readNotification } from '../controller/notificationController.js';
 
 // import { imageUpload, videoUpload } from '../config/multer.js';
 
@@ -108,6 +108,7 @@ router.get('/allMessages/:conversationId',verifyToken,getAllMessgaes)
 //NOTIFACTION ROUTERS
 router.get('/notifications/:userId',verifyToken,isBlocked,getAllNotifications)
 router.put('/readNotification/:notificationId',verifyToken,isBlocked,readNotification)
+router.delete('/deleteNotification/:notificationId',verifyToken,isBlocked,deteletUserNotification)
 
 
 export default router 
