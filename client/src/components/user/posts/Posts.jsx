@@ -6,6 +6,7 @@ import { ALL_POSTS } from "../../../utils/ConstUrls";
 import decodeToken from '../../../utils/Services';
 import { useDispatch, useSelector } from 'react-redux';
 import { setHomePosts, setPosts } from '../../../redux/userSlice';
+import NoDataFound from "../noDataAvailable/NoDataFound";
 
 const Posts = () => {
 
@@ -30,6 +31,9 @@ const Posts = () => {
 
 
   return <div className="posts">
+    {
+      homePosts.length===0 && <NoDataFound data={'Posts'}/>
+    }
     {homePosts?.map((post,index)=>(
       <Post post={post} key={index}/>
     ))}

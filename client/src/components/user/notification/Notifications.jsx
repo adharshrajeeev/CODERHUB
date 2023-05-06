@@ -4,6 +4,7 @@ import axios from '../../../utils/axios'
 import decodeToken from '../../../utils/Services'
 import { GET_ALL_NOTIFICATIONS } from '../../../utils/ConstUrls';
 import NotificationStack from './NotificationStack';
+import NoDataFound from '../noDataAvailable/NoDataFound';
 
 
 function Notifications() {
@@ -33,6 +34,9 @@ function Notifications() {
   
     <Stack spacing={2} sx={{ maxWidth: '100%' }} p={2}>
         {
+            notifications?.length===0 && <NoDataFound data={'Notifications'}/>
+        }
+        {   
             notifications?.map((n,index)=>(
                 <NotificationStack key={index} notification={n} userId={userId} fetchAllNotifications={fetchAllNotifications}/>
             ))
