@@ -2,6 +2,7 @@ import path from 'path'
 import cloudinary from '../config/cloudinary.js';
 import Posts from '../model/posts.js';
 import User from '../model/users.js';
+import { addLikeNotification, removeLikeNotification } from '../repositories/notificationRepository.js';
 
 
 
@@ -241,7 +242,8 @@ export const likePost = async (req, res) => {
                 $addToSet: {
                     likes: userId
                 }
-            }).then((response) => {
+            }).then(async(response) => {
+                await addLikeNotification(response?.postedUser?._id,userId,postId,"LIKE")
                 resolve(res.status(200).json({ message: "user liked post", response }))
             }).catch((err) => {
                 resolve(res.status(400).json({ message: "Oops Something went wrong in Like", error: err }))
@@ -262,7 +264,8 @@ export const unLikePost = async (req, res) => {
             $pull: {
                 likes: userId
             }
-        })
+        },{new:true})
+        await removeLikeNotification(post?.postedUser?._id,userId,postId,"LIKE")
         res.status(200).json({ success: true, message: "user unliked post", post })
     } catch (err) {
 
