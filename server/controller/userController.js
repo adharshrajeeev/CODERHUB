@@ -667,7 +667,7 @@ export const searchUserFollowing = async(req,res)=>{
          ] 
      })
    //   const searchedUsers=users.map((user)=>user._id)
-     if(users.length==0) {return res.status(400).json({messasge:"No Users"})}
+     if(users.length==0) {return res.status(400).json({message:"No Users"})}
      else return  res.status(200).json(users)
    }catch(err){
       res.status(400).json({message:"Search Folowing error",error:err})
