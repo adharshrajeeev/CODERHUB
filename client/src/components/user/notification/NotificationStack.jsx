@@ -5,7 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import axios  from '../../../utils/axios';
 import moment from 'moment'
-import { CHANGE_NOTIFICATION_STATUS } from '../../../utils/ConstUrls';
+import { CHANGE_NOTIFICATION_STATUS, DELETE_NOTIFICATION } from '../../../utils/ConstUrls';
 
 
 function NotificationStack({notification,userId,fetchAllNotifications}) {
@@ -41,7 +41,16 @@ function NotificationStack({notification,userId,fetchAllNotifications}) {
             console.log(err.message)
         }
     }
-     
+    
+    const handleDeleteNotification = async ()=>{
+      try{
+        await axios.delete(`${DELETE_NOTIFICATION}/${notification?._id}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
+        handleClose()
+        fetchAllNotifications();
+      }catch(err){
+        console.log(err.message)
+      }
+    }
 
   return (
     <>
@@ -60,9 +69,7 @@ function NotificationStack({notification,userId,fetchAllNotifications}) {
             !notification.read && 
         <MenuItem onClick={handleNotificationRead}>Mark as Read</MenuItem>
         }
-        <MenuItem onClick={()=>setNotificationColor({bgColor:"white",fontColor:"black"})}>Delete Notification</MenuItem>
-        {/* <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={handleClose}>Logout</MenuItem> */}
+        <MenuItem onClick={handleDeleteNotification}>Delete Notification</MenuItem>
       </Menu>
     </>
   )
