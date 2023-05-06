@@ -46,7 +46,7 @@ function Navbar() {
     <div className="right">
       <PersonOutlinedIcon onClick={()=>navigate('/profile')} sx={{cursor:"pointer"}}/>
       <EmailOutlinedIcon />
-      <NotificationsOutlinedIcon />
+      <NotificationsOutlinedIcon onClick={()=>navigate('/notifications')} sx={{cursor:"pointer"}}/>
       <div className="user">
         {/* <img
           src=
