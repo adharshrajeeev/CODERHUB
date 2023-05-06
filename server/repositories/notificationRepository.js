@@ -54,3 +54,14 @@ export const changeNotificationReadStatus=async(notificationId)=>{
         throw new Error(err.message) 
     }
 }
+
+
+export const deleteNotification = async(notificationId)=>{
+    try{
+        const notification=await Notification.findByIdAndDelete({_id:notificationId})
+        return {data:notification}
+    }catch(err){ 
+        console.log(err.message);
+        throw new Error(err.message) 
+    }
+}
