@@ -8,6 +8,7 @@ import User from '../model/users.js';
 import Posts from '../model/posts.js';
 import Mailgen from 'mailgen'; 
 import dotenv from 'dotenv'
+import { fetchAllUsers, fetchUserById } from '../repositories/userRepository.js';
 dotenv.config();
 
 export const registerUser = async (req,res)=>{
@@ -171,11 +172,11 @@ export const userLogin = async(req,res)=>{
 export const getAllUsers = async(req,res)=>{
       try{
 
-         const users = await User.find().select('-password')
-         res.status(200).json(users)
+         const {data}=await fetchAllUsers();
+         res.status(200).json(data)
 
       }catch(err){
-         res.status(400).json({error:err}) 
+         res.status(400).json({error:err.message}) 
       }  
 }
 
@@ -193,12 +194,11 @@ export const getUsers=async(req,res)=>{
 export const getUserDetails = async (req,res)=>{
    try{  
          
-         const userdetails= await User.findOne({_id:req.params.id});
-      
-         res.status(200).json({userdetails})
+         const {data} = await fetchUserById(req.params.id)
+         res.status(200).json({userdetails:data})
    }catch(err){
      
-      res.status(400).json({error:err,message:"oops suggestion user server error"})
+      res.status(400).json({error:err.message,message:"oops suggestion user server error"})
    }
 }
 
