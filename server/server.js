@@ -8,6 +8,7 @@ import userRoutes from './routes/userRoutes.js'
 import adminRoutes from  './routes/adminRoutes.js'
 import http from 'http';
 import { Server } from 'socket.io'
+import { errorHandler } from './middlewares/errorHandler.js'
 
 
 
@@ -33,9 +34,15 @@ app.use(bodyParser.urlencoded({ limit: '30mb', extended: true }))
 app.use('/api',userRoutes)
 app.use('/api/admin',adminRoutes)
 
-app.get('*',(req,res)=>{
-    res.status(404).send("PAGE NOT FOUND")
+app.all('*',(req,res,next)=>{
+  const err=new Error(`Requested URL ${req.url} not Found!`)
+  err.statusCode=404;
+  next(err)
+   
 })
+ 
+
+app.use(errorHandler)
 
 let users=[];
 let OnlineUsers=[];
