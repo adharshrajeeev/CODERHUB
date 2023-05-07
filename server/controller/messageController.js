@@ -1,24 +1,22 @@
-import Messages from '../model/messages.js'
+import { addNewMessage, fetchAllMessages } from '../repositories/messageRepository.js';
 
 export const postMessage = async(req,res)=>{
     try{
-        const newMessage=new Messages(req.body);
-        const savedMessage = await newMessage.save();
-        res.status(200).json(savedMessage)
+        const {data}=await addNewMessage(req.body)
+        res.status(200).json(data)
     }catch(err){
-      console.log(err)
-        res.status(500).json(err)
+         console.log(err.message)
+        res.status(400).json(err.message)
     }
 }
 
 export const getAllMessgaes=async(req,res)=>{
     try{
-        const messages=await Messages.find({
-            conversationId:req.params.conversationId
-        });
-        res.status(200).json(messages)
+        const {data} = await fetchAllMessages(req.params.conversationId)
+        res.status(200).json(data)
     }catch(err){
-        res.status(500).json(err)
+        console.log(err.message)
+        res.status(500).json(err.message)
 
     }
 }
