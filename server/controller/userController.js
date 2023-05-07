@@ -236,23 +236,7 @@ export const getUserProfileInfo = async (req,res)=>{
 }
 
 
-export const getUserSuggestion = async (req,res)=>{ /// needed to complete 
-   try{
-         const userId=req.params.id
-         const user=await User.findById(userId);
-         const allUsers=await User.find({_id:{$ne:userId}}).limit(5)
-         const following=user.following.map((userFollowing)=>userFollowing._id); 
-         if(following.length === 0) return res.status(201).json(allUsers)
 
-         const friendSuggestions=await User.find({following:{$nin:following}}); 
-       
-         res.status(200).json(friendSuggestions)
-         
-
-   }catch(err){
-      res.status(400).json({error:err,message:"oops suggestion user server error"})
-   }
-}
 
 
 
