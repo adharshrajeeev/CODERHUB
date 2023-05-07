@@ -1,4 +1,5 @@
 import React  from 'react'
+import './NavbarStyle.scss'
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
@@ -8,10 +9,10 @@ import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import { Link, useNavigate } from "react-router-dom";
-import './NavbarStyle.scss'
 import { useSelector } from 'react-redux';
-import SearchResults from '../searchedList/SearchResults';
 import Searches from '../searchedList/Searches';
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
 
 
 
@@ -46,7 +47,11 @@ function Navbar() {
     <div className="right">
       <PersonOutlinedIcon onClick={()=>navigate('/profile')} sx={{cursor:"pointer"}}/>
       <EmailOutlinedIcon />
+        <Badge badgeContent={4} color="primary">
+      
       <NotificationsOutlinedIcon onClick={()=>navigate('/notifications')} sx={{cursor:"pointer"}}/>
+      </Badge>
+    
       <div className="user">
         {/* <img
           src=
