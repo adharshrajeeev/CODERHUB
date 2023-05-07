@@ -183,10 +183,10 @@ export const getAllUsers = async(req,res)=>{
 
 export const getUsers=async(req,res)=>{
    try{
-      const user=await User.findOne({_id:req.params.userId}).select('-password');
-      res.status(200).json(user)
+      const {data} = await fetchUserById(req.params.userId)
+      res.status(200).json(data)
    }catch(Err){
-      res.status(500).json(Err)
+      res.status(500).json(Err.message)
    }
 }
 
@@ -203,14 +203,7 @@ export const getUserDetails = async (req,res)=>{
 }
 
 
-export const getUserAllData = (req,res)=>{ 
-   return new Promise(async(resolve,reject)=>{
-      const userData=await User.findOne({_id:req.query.userId});
-      res.status(200).json(userData)
-   }).catch((err)=>{
-      res.status(400).json({error:err,message:"oops suggestion user server error"})
-   })
-}
+
 
 
 export const updateUserDetals =async(req,res)=>{
