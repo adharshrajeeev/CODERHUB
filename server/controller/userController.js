@@ -8,7 +8,7 @@ import User from '../model/users.js';
 import Posts from '../model/posts.js';
 import Mailgen from 'mailgen'; 
 import dotenv from 'dotenv'
-import { fetchAllUsers, fetchUserById } from '../repositories/userRepository.js';
+import { fetchAllUsers, fetchUserById, updateUserDetailsById } from '../repositories/userRepository.js';
 dotenv.config();
 
 export const registerUser = async (req,res)=>{
@@ -208,17 +208,9 @@ export const getUserDetails = async (req,res)=>{
 
 export const updateUserDetals =async(req,res)=>{
  
-      try{
-         
-         const newData=await User.findOneAndUpdate({_id:req.params.id},{
-            $set:{
-               userName:req.body.userName,
-               gender:req.body.gender,
-               phoneNumber:req.body.phoneNumber,
-               userBio:req.body.userBio
-            }
-         },{new:true}); 
-   res.status(200).json(newData)
+      try{   
+         const {data}=await updateUserDetailsById(req.params.id,req.body)
+         res.status(200).json(data)
       }catch(err){
          res.status(401).json({message:"Ops Something went wrong"})
       }

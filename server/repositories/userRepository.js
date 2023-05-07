@@ -63,3 +63,23 @@ export const fetchUserById = async(userId)=>{
         throw new Error(err.message)
     }
 }
+
+export const updateUserDetailsById = async(userId,body)=>{
+    try{
+        const {userName,gender,phoneNumber,userBio}=body;
+        const updatedData=await User.findOneAndUpdate({_id:userId},{
+            $set:{
+                userName,
+                gender,
+                phoneNumber,
+                userBio
+            }
+        },{new:true})
+        
+        return {data:updatedData}
+
+    }catch(err){
+        console.log(err.message)
+        throw new Error(err.message)
+    }
+}
