@@ -57,7 +57,7 @@ const Post = ({ post, loading,socket,user }) => {
       } else {
 
         await axios.put(LIKE_POST, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-          socket.emit("sendNotification",{
+          socket?.emit("sendNotification",{
             senderName:userName,
             receiverName:post?.postedUser?.userName,
             type:"LIKE"
@@ -65,12 +65,12 @@ const Post = ({ post, loading,socket,user }) => {
           setLiked(FavoriteOutlinedIcon);
           SetLikeCount(count => count + 1)
         }).catch((err) => {
-          toast.error("Oops Something Went Wrong ")
+          toast.error(err.message)
         })
 
       }
     } catch (err) {
-      toast.error("Oops Something Went Wrong ")
+      toast.error(err.message)
     }
   }
 
