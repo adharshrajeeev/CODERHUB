@@ -7,7 +7,8 @@ const initialState ={
     token:null,
     posts:[],
     homePosts:[],
-    explorePosts:[]
+    explorePosts:[],
+    notifications:[]
 }
 
 const userSlice=createSlice({
@@ -82,11 +83,25 @@ const userSlice=createSlice({
         },
         addUserBio:(state,action)=>{
             state.user.userBio=action.payload
+        },
+        setNotification:(state,action)=>{
+            state.notifications=action.payload
+        },
+        updateNotification:(state,action)=>{
+            const updatedNotification = state.notifications.map((notification)=>{
+                if(notification._id ===  action.payload._id) return action.payload
+                return notification
+            })
+            state.posts=updatedNotification
+        },
+        deleteNotification:(state,action)=>{
+            state.notifications=state.notifications.filter((notification)=>notification._id!==action.payload)
         }
     }
 })
 
 export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,
-            setProfilepic,setCoverPic,changeUserName,addUserBio,setHomePosts,setExplorePosts,updateExplorePosts,updateHomePosts} = userSlice.actions;
+            setProfilepic,setCoverPic,changeUserName,addUserBio,setHomePosts,setExplorePosts,updateExplorePosts,
+            updateHomePosts,setNotification,updateNotification,deleteNotification} = userSlice.actions;
 
 export default userSlice.reducer;

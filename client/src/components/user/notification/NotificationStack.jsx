@@ -6,12 +6,15 @@ import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import axios  from '../../../utils/axios';
 import moment from 'moment'
 import { CHANGE_NOTIFICATION_STATUS, DELETE_NOTIFICATION } from '../../../utils/ConstUrls';
+import { useDispatch } from 'react-redux';
+import { deleteNotification, updateNotification } from '../../../redux/userSlice';
 
 
 function NotificationStack({notification,userId,fetchAllNotifications}) {
     const [notificationColor,setNotificationColor]=useState({bgColor:"#dedede",fontColor:"black"});
     const token=localStorage.getItem('token')
     const [anchorEl, setAnchorEl] = React.useState(null);
+    const dispatch=useDispatch();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
       setAnchorEl(event.currentTarget);
@@ -36,7 +39,8 @@ function NotificationStack({notification,userId,fetchAllNotifications}) {
             console.log(res.data)
             handleClose()
             setNotificationColor({bgColor:"white",fontColor:"black"})
-            fetchAllNotifications();
+            dispatch(updateNotification(res.data))
+          
         }catch(err){
             console.log(err.message)
         }
@@ -46,7 +50,8 @@ function NotificationStack({notification,userId,fetchAllNotifications}) {
       try{
         await axios.delete(`${DELETE_NOTIFICATION}/${notification?._id}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
         handleClose()
-        fetchAllNotifications();
+        dispatch(deleteNotification(notification?._id))
+      
       }catch(err){
         console.log(err.message)
       }
