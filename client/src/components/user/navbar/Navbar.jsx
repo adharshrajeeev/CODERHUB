@@ -1,4 +1,4 @@
-import React  from 'react'
+import React, { useEffect, useState }  from 'react'
 import './NavbarStyle.scss'
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -16,14 +16,20 @@ import MailIcon from '@mui/icons-material/Mail';
 
 
 
-function Navbar() {
+function Navbar({socket}) {
 
-
+  const [notifications,setNotifications]=useState([])
   const userName=useSelector((state)=>state.user?.user?.userName);
   const navigate=useNavigate();
 
 
+  useEffect(()=>{
+    socket?.on('getNotification',data=>{
+      setNotifications(prev=>[...prev,data])
+    })
+  },[socket])
 
+  console.log(notifications,"notificationssss")
 
   return (
     <div className="navbar">
@@ -47,7 +53,7 @@ function Navbar() {
     <div className="right">
       <PersonOutlinedIcon onClick={()=>navigate('/profile')} sx={{cursor:"pointer"}}/>
       <EmailOutlinedIcon />
-        <Badge badgeContent={4} color="primary">
+        <Badge badgeContent={notifications?.length} color="primary">
       
       <NotificationsOutlinedIcon onClick={()=>navigate('/notifications')} sx={{cursor:"pointer"}}/>
       </Badge>
