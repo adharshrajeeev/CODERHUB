@@ -17,11 +17,12 @@ import CircularLoading from "../Loading/CircularLoading";
 
 
 
-const Post = ({ post, loading }) => {
+const Post = ({ post, loading,socket,user }) => {
   const [commentOpen, setCommentOpen] = useState(false);
 
   const userId = useSelector((state) => state.user?.user?._id)
   let profilePic = useSelector((state) => state.user?.user?.profilePic);
+  const userName=useSelector((state)=>state?.user?.user?.userName)
   const [likeCount, SetLikeCount] = useState(post.likes?.length)
   const [Like, setLiked] = useState(post.likes?.includes(userId) ? FavoriteOutlinedIcon : FavoriteBorderOutlinedIcon);
 
@@ -44,7 +45,7 @@ const Post = ({ post, loading }) => {
 
       if (Like === FavoriteOutlinedIcon) {
         axios.put(UNLIKE_POST, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-
+         
           setLiked(FavoriteBorderOutlinedIcon);
           SetLikeCount(count => count - 1)
         }).catch((err) => {
@@ -56,7 +57,11 @@ const Post = ({ post, loading }) => {
       } else {
 
         await axios.put(LIKE_POST, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-
+          socket.emit("sendNotification",{
+            senderName:userName,
+            receiverName:post?.postedUser?.userName,
+            type:"LIKE"
+          })
           setLiked(FavoriteOutlinedIcon);
           SetLikeCount(count => count + 1)
         }).catch((err) => {
