@@ -61,7 +61,17 @@ const getUser = (usersId)=>{
     return users?.find((user)=>user.userId === usersId)
 }
 
+const addNewUser = (userName,socketId) =>{
+  !OnlineUsers.some(user=>user.userName === userName) && OnlineUsers.push({userName,socketId});
+}
 
+const removeNotificationUser = (socketId)=>{
+  OnlineUsers=OnlineUsers.filter(user=>user.socketId !== socketId)
+}
+
+const getNotificationUser = (userName) =>{
+  return OnlineUsers?.find(user=>user?.userName === userName);
+}
 // const addOnlineUser=(userId)=>{
 //     OnlineUsers.push(userId)
 // }
@@ -76,11 +86,24 @@ io.on("connection",(socket)=>{
   }) 
 
 
-  //When Online 
 
-//   socket.on("OnlineUser",(userId)=>{
-    
-//   })
+ //Notfication Feature
+
+ socket.on('newUser',(userName)=>{
+  console.log(userName,socket.id,"addneruser")
+  addNewUser(userName,socket.id);
+ })
+
+ socket.on("sendNotification",({senderName,receiverName,type})=>{
+  console.log(senderName,receiverName,type,"sedn") 
+  const receiver=getNotificationUser(receiverName);
+  console.log(receiver,"receiever name")
+    io.to(receiver?.socketId).emit('getNotification',{
+      senderName,
+      type
+    }) 
+ })
+
 
   //send and get message
 
@@ -99,6 +122,7 @@ io.on("connection",(socket)=>{
   socket.on("disconnect",()=>{
     console.log("A user Disconnected .....>>>>>>");
     removeUser(socket.id);
+    removeNotificationUser(socket.id)
     io.emit("getUsers",users)
   })
 

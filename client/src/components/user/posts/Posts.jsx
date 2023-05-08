@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setHomePosts, setPosts } from '../../../redux/userSlice';
 import NoDataFound from "../noDataAvailable/NoDataFound";
 
-const Posts = () => {
+const Posts = ({socket,user}) => {
 
 
   useEffect(()=>{
@@ -32,10 +32,10 @@ const Posts = () => {
 
   return <div className="posts">
     {
-      homePosts.length===0 && <NoDataFound data={'Posts'}/>
+      homePosts?.length===0 && <NoDataFound data={'Posts'}/>
     }
     {homePosts?.map((post,index)=>(
-      <Post post={post} key={index}/>
+      <Post post={post} key={index} socket={socket} user={user}/>
     ))}
   </div>;
 };
