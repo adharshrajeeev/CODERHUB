@@ -9,11 +9,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useDispatch } from 'react-redux'
 import { useNavigate, Link, Route, useLocation } from "react-router-dom";
-import axios from '../../../utils/axios'
-import { USER_LOGIN } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast';
 import Divider from '@mui/material/Divider';
 import { setLogin } from '../../../redux/userSlice';
+import { userLogin } from '../../../api/UserServices';
 function Login() {
 
 
@@ -25,7 +24,6 @@ function Login() {
   const dispatch = useDispatch();
 
   useEffect(()=>{
-    // setMessage(resetMessage)
     if(resetMessage) {
      toast(resetMessage,
   {
@@ -48,29 +46,18 @@ function Login() {
     if (email === "" || password === "") {
       return toast.error("Please Fill the Components")
     }
-    const body = JSON.stringify({
+    const body = {
       email,
       password
-    })
-    // try {
-
-      await axios.post(USER_LOGIN, body, { headers: { "Content-Type": "application/json" } }).then((response) => {
-      
-
+    }
+          const response=await userLogin(body);
           dispatch(setLogin({
             user: response.data.userdetails,
             token: response.data.token
           }));
           localStorage.setItem("token", response.data.token)
           return navigate("/home");
-      }).catch((err) => {
-        console.log(err,"eroro")
-        toast.error(err.response.data.message)
-      })
-    // } catch (err) {
-    //   console.log(err,"catcg rr")
-    //   toast.error("Oops Something went wrong")
-    // }
+
   };
   return (
     <Container component="main" maxWidth="xs">

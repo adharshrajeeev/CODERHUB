@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import axios from '../../../utils/axios'
-import { ADD_COVERPICTURE, ADD_PROFILEIMAGE, SHOW_USER_POST } from '../../../utils/ConstUrls';
+import './profileStyle.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
@@ -14,8 +13,7 @@ import Typography from '@mui/material/Typography';
 import { setCoverPic, setPosts, setProfilepic } from '../../../redux/userSlice'
 import Post from '../../../components/user/post/Post';
 import toast, { Toaster } from 'react-hot-toast';
-import './profileStyle.scss';
-import { fetchUserDetails } from '../../../api/UserServices';
+import { addUserCoverPhoto, addUserProfileImage, fetchUserDetails, fetchUserPosts } from '../../../api/UserServices';
 import decodeToken from '../../../utils/Services';
 import PeopleIcon from '@mui/icons-material/People';
 import { Stack } from '@mui/material';
@@ -42,7 +40,6 @@ function Profile() {
 
 
 
-  // const [posts, setPosts] = useState([]);
   const [value, setValue] = React.useState('1');
 
   const handleChange = (event, newValue) => {
@@ -74,8 +71,7 @@ function Profile() {
 
   const getUserPosts = async () => {
     try {
-      const response = await axios.get(`${SHOW_USER_POST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}` } })
-      // setPosts(response.data.posts.filter((post) => post.postedUser._id === userId))
+      const response = await fetchUserPosts(userId)
       console.log(response.data.posts,"userposts")
       dispatch(setPosts(response.data.posts))
     } catch (err) {
@@ -97,19 +93,12 @@ function Profile() {
     const formData = new FormData();
     formData.append('image', coverPicture);
     try {
-      const token = localStorage.getItem('token')
-      const { data } = await axios.post(`${ADD_COVERPICTURE}/${userId}`, formData, { headers: { 'Authorization': `Bearer ${token}` } })
-      if (data.success) {
-        setCoverLoading(false)
-        handleCloseCover();
-        dispatch(setCoverPic(data.coverUrl))
-        toast.success("USER COVER PICTURE ADDED")
-
-      } else {
-        setCoverLoading(false)
-        handleCloseCover();
-        toast.error("Ops Something went wrong Try Again Later")
-      }
+    
+      const response = await addUserCoverPhoto(userId,formData)
+      setCoverLoading(false)
+      handleCloseCover();
+      dispatch(setCoverPic(response?.data.coverUrl))
+      toast.success("USER COVER PICTURE ADDED")
     } catch (err) {
       setCoverLoading(false);
       handleCloseCover();
@@ -134,19 +123,13 @@ function Profile() {
     const formData = new FormData();
     formData.append('image', profilePicture);
     try {
-      const token = localStorage.getItem('token')
-      const { data } = await axios.post(`${ADD_PROFILEIMAGE}/${userId}`, formData, { headers: { 'Authorization': `Bearer ${token}` } })
-      console.log(data)
-      if (data.success) {
-        handleClose();
-        dispatch(setProfilepic(data.imageUrl))
+      const response = await addUserProfileImage(userId,formData);
+      handleClose();
+        dispatch(setProfilepic(response?.data.imageUrl))
         toast.success("USER IMAGE UPDATED")
-
-      } else {
-        alert(data.message)
-      }
     } catch (err) {
       console.log(err)
+      toast.error(err?.response?.data?.message)
     }
 
   }
@@ -157,7 +140,6 @@ function Profile() {
 
   }, [])
 
-  console.log(userPosts,"userposts")
   return (
 
     <div>
@@ -305,7 +287,6 @@ function Profile() {
           position="top-center"
           reverseOrder={false}
         />
-        {/* <RightBar /> */}
       </div>
     </div>
 

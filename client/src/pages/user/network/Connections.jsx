@@ -3,32 +3,33 @@ import './FriendStyle.scss'
 import Navbar from '../../../components/user/navbar/Navbar'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import decodeToken from '../../../utils/Services';
-import axios from '../../../utils/axios'
-import { GET_CONNECTIONS } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading'
-const LazyFriendsLists=React.lazy(()=>import('../../../components/user/friendslist/ConnectionsList'))
+import { fetchAllConnections } from '../../../api/UserServices';
+const LazyFriendsLists = React.lazy(() => import('../../../components/user/friendslist/ConnectionsList'))
 
 function Connections() {
   const userId = decodeToken();
   const [connections, setConnections] = useState([]);
- 
+
   const listAllUsers = async () => {
-    const token = localStorage.getItem('token')
-    axios.get(`${GET_CONNECTIONS}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-      setConnections(response.data);
-    }).catch((err) => {
-        toast.error("Oops Something went Wrong")
-    })
+
+    try {
+      const response = await fetchAllConnections(userId)
+      setConnections(response?.data);
+
+    } catch (err) {
+      toast.error(err.response?.data?.message)
+    }
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     listAllUsers();
-  },[])
+  }, [])
 
- 
+
   return (
     <>
       <Navbar />
@@ -39,20 +40,17 @@ function Connections() {
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 {
-                  connections.map(users=>(
-                <Grid item xs={4}>
-                  <React.Suspense fallback={<SkeletonLoading/>}>
-                    <LazyFriendsLists users={users} key={users._id} listAllUsers={listAllUsers}/>
-                  </React.Suspense>
-                </Grid>
+                  connections?.map(users => (
+                    <Grid item xs={4}>
+                      <React.Suspense fallback={<SkeletonLoading />}>
+                        <LazyFriendsLists users={users} key={users._id} listAllUsers={listAllUsers} />
+                      </React.Suspense>
+                    </Grid>
 
                   ))
                 }
-
-
               </Grid>
             </Box>
-          
           </div>
         </div>
       </div>

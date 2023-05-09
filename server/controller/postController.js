@@ -140,17 +140,17 @@ export const getUserPost = async (req, res) => {
 
         res.status(200).json({ success: true, posts })
     } catch (err) {
-        res.status(400).json({ success: false, error: err })
+        res.status(400).json({ success: false, error: err.message,message:"Failed to Fetch Posts" })
     }
 
 }
-
+ 
 export const getEditPost = async (req, res) => {
     try {
         const postDetails = await Posts.findById(req.params.id)
         res.status(200).json({ success: true, postDetails })
     } catch (err) {
-        res.status(500).json({ success: false, error: err })
+        res.status(500).json({ success: false, error: err,message:"Failed to Fetch Posts" })
     }
 }
 

@@ -7,8 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import decodeToken from '../../../utils/Services';
-import axios from '../../../utils/axios'
-import { GET_FOLLOWERS_LIST } from '../../../utils/ConstUrls';
+import { fetchAllFollowers } from '../../../api/UserServices';
 
 function Followers() {
 
@@ -17,12 +16,12 @@ function Followers() {
   const userId = decodeToken();
 
   const getAllFollowers = async ()=>{
-    const token=localStorage.getItem('token')
-    axios.get(`${GET_FOLLOWERS_LIST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response)=>{
+    try{
+      const response = await fetchAllFollowers(userId);
       setFollowers(response.data);
-    }).catch((err)=>{
-      toast.error("Oops Something went Wrong")
-    })
+    }catch(err){
+      toast.error(err?.response?.data?.message)
+    }
   }
 
   useEffect(()=>{
@@ -39,7 +38,7 @@ function Followers() {
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 {
-                  followers.map((users, index) => (
+                  followers?.map((users, index) => (
                     <Grid item xs={4}>
                       <FollowersList users={users} key={index} getAllFollowers={getAllFollowers} />
                     </Grid>

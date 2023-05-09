@@ -9,11 +9,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { Link,useNavigate } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
-import axios from '../../../utils/axios'
 import MenuItem from '@mui/material/MenuItem';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { EMAIL_VERIFICATION_SIGNUP, SIGNUP } from "../../../utils/ConstUrls";
 import OtpVerification from '../../../components/user/signup/OtpVerification';
+import { userRegister } from '../../../api/UserServices';
 
 
 
@@ -35,40 +34,30 @@ export default  function Register() {
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    const body=JSON.stringify({
+    const body={
       userName,
       email,
       password,
       phoneNumber,
       dateOfBirth,
       gender
-    })
+    }
 
    
     if(userName==="" || email==="" || password==="" || phoneNumber==="" || dateOfBirth==="" || gender===""){
      return toast.error("Please fill the components")
     }
     try{
-      // let response=await axios.post(SIGNUP,body,{ headers: { "Content-Type": "application/json" } })
-      // if(response.data.success){
-      //      navigate('/')
-      // }else{
-      //  toast.error(response.data.message)
-      // }
+
       setLoading(true)
-      axios.post(EMAIL_VERIFICATION_SIGNUP,body,{headers:{"Content-Type":"application/json"}}).then((response)=>{
-        setUserId(response.data?.userId)
-        setLoading(false)
-        toast.success(response.data.message)
-        setOtpComponent(true)
-      }).catch((Err)=>{
-     setLoading(false)
-        console.log(Err);
-        toast.error(Err.response.data.message)
-      })
+      const response=await userRegister(body)
+      setUserId(response.data?.userId)
+      setLoading(false)
+      toast.success(response.data.message)
+
     }catch(err){
      setLoading(false)
-      toast.error("Oops Something went Wrong")
+      toast.error(err.response.data.message)
     }
    
   };

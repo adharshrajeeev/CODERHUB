@@ -1,19 +1,16 @@
 import React, { useState } from 'react'
 import CodeIcon from '@mui/icons-material/Code';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import SaveIcon from '@mui/icons-material/Save';
 import SendIcon from '@mui/icons-material/Send';
 import LoadingButton from '@mui/lab/LoadingButton';
 import toast, { Toaster } from 'react-hot-toast';
-import axios from '../../../utils/axios'
 import OtpSubmit from '../../../components/user/forgotPassword/OtpSubmit';
-import { SEND_OTP_REQUEST } from '../../../utils/ConstUrls';
+import { sendOtpRequest } from '../../../api/UserServices';
 
 
 function PasswordForget() {
@@ -42,24 +39,19 @@ function PasswordForget() {
     }
 
 
-    const handleSendOtp = ()=>{
+    const handleSendOtp = async()=>{
         setLoading(true);
-        const body=JSON.stringify({
+        const body={
             email
-        })
+        }
         try{
-            axios.post(SEND_OTP_REQUEST,body,{headers:{"Content-Type":'application/json'}}).then((res)=>{
-              setUserId(res.data.userId)
-              setLoading(false);
-              setOtpComponent(true);
-              toast.success(res.data.message)
-            }).catch((err)=>{
-                console.log(err,"errrorrr")
-
-                setLoading(false);
-                toast.error(err.response.data.message)
-            })
-        }catch(err){
+            const response=await sendOtpRequest(body)
+            setUserId(response.data.userId)
+            setLoading(false);
+            setOtpComponent(true);
+            toast.success(response.data.message)
+            }catch(err){
+          setLoading(false);
           toast.error(err.response.data.message)
             console.log(err)
         }

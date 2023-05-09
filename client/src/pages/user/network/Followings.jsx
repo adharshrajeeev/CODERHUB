@@ -7,8 +7,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import decodeToken from '../../../utils/Services';
-import axios from '../../../utils/axios'
-import { GET_FOLLOWING_LIST } from '../../../utils/ConstUrls';
+import { fetchAllFollowings } from '../../../api/UserServices';
 
 function Followings() {
 
@@ -16,12 +15,12 @@ function Followings() {
   const userId = decodeToken();
 
   const listFollowingUsers = async () => {
-    const token = localStorage.getItem('token')
-    axios.get(`${GET_FOLLOWING_LIST}/${userId}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
+    try{
+      const response = await fetchAllFollowings(userId)
       setFollowing(response.data)
-    }).catch((err) => {
-      toast.error("Oops Something went wrong")
-    })
+    }catch(err){
+      toast.error(err?.response?.data?.message)
+    }
   }
 
   useEffect(() => {
@@ -38,18 +37,15 @@ function Followings() {
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 {
-                  following.map((users, index) => (
+                  following?.map((users, index) => (
                     <Grid item xs={4}>
                       <FollowignLists users={users} key={index} listFollowingUsers={listFollowingUsers} />
                     </Grid>
 
                   ))
                 }
-
-
               </Grid>
             </Box>
-
           </div>
         </div>
         <Toaster
