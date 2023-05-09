@@ -59,12 +59,12 @@ function Home() {
         </div>
         <div className="charts">
           <Box>
-            <Grid container spacing={2}>
-              <Grid xs={6} md={6}>
+            <Grid container >
+              <Grid  >
 
                 <UserChart />
               </Grid>
-              <Grid xs={6} md={6}>
+              <Grid  >
                 <PostChat />
 
               </Grid>
