@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
+import './profileStyle.scss';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import Navbar from '../../../components/user/navbar/Navbar'
 import Post from '../../../components/user/post/Post';
-import './profileStyle.scss';
-import axios from '../../../utils/axios'
 import toast,{Toaster} from 'react-hot-toast'
 import { useParams } from 'react-router-dom';
-import { FOLLOW_USER, GET_PROFILE_DETAILS, UNFOLLOW_USER } from '../../../utils/ConstUrls';
 import noProfilePicture from '../../../assets/noProfilePicture.jpg'
 import decodeToken from '../../../utils/Services';
 import { Box, Button, Stack } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
+import { fetchOtherUserDetails, followUser, unFollowUser } from '../../../api/UserServices';
 
 function UserProfiles() {
 
@@ -20,27 +19,26 @@ function UserProfiles() {
     const [posts,setPosts]=useState([]);
     const getUserProfileDetails = async ()=>{
         const userId=decodeToken();
-        const token = localStorage.getItem('token');
-        axios.get(`${GET_PROFILE_DETAILS}?personId=${params.id}&userId=${userId}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } }).then((response)=>{
-          console.log(response.data.userData) 
-          setUserDetails(response.data.userData);
-            setPosts(response.data.posts)
-            setFollowing(response.data.isFollowing)
-        }).catch((err)=>{
-            toast.error("Oops Something went wrong") 
-        })
+        try{
+          const response = await fetchOtherUserDetails(params?.id,userId)
+            setUserDetails(response?.data?.userData);
+            setPosts(response?.data?.posts)
+            setFollowing(response?.data?.isFollowing)
+        }catch(err){
+          toast.error(err?.response?.data?.message)
+        }
     }
 
     const handleFollowUser = async()=>{
         const userId=decodeToken();
         const followerId=params.id;
-        const body=JSON.stringify({
+        const body={
           userId,
           followerId
-        })
-        const token=localStorage.getItem('token')
-        axios.post(FOLLOW_USER,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-          toast(response.data.message,
+        }
+          try{
+            const response = await followUser(body)
+               toast(response.data.message,
             {
               icon: '👏',
               style: {
@@ -51,36 +49,34 @@ function UserProfiles() {
             }
           );
           getUserProfileDetails();
-        }).catch((err)=>{
-          toast.error("oops something went wrong")
-        })
+          }catch(err){
+            toast.error(err.response.data.message)
+          }
       }
 
       const handleUnfollow =  async ()=>{
         const userId=decodeToken();
         const followingId=params.id
-        const body=JSON.stringify({
+        const body={
           userId,
           followingId
-        })
-        const token=localStorage.getItem('token');
-    
-        axios.post(UNFOLLOW_USER,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-          toast(response.data.message,
-            {
-              icon: '👏',
-              style: {
-                borderRadius: '10px',
-                background: '#333',
-                color: '#fff',
-              },
-            }
-          );
-          getUserProfileDetails();
-        }).catch((err)=>{
-          toast.error("OOPS Something went wrong");
-          console.log(err)
-        })
+        }
+        try{
+          const response = await unFollowUser(body)
+             toast(response.data.message,
+          {
+            icon: '👏',
+            style: {
+              borderRadius: '10px',
+              background: '#333',
+              color: '#fff',
+            },
+          }
+        );
+        getUserProfileDetails();
+        }catch(err){
+          toast.error(err.response.data.message)
+        }
     
       }
 
@@ -157,7 +153,7 @@ function UserProfiles() {
                 </div>
                 <div className='userPosts'>
 
-                  {posts.map(post => (
+                  {posts?.map(post => (
                      <Post post={post} key={post._id}/>
                   ))}
                 </div>
@@ -166,8 +162,6 @@ function UserProfiles() {
 
           </div>
         </div>
-       
-        {/* <RightBar /> */}
       </div>  
       <Toaster/>
     </div>
