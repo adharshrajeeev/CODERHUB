@@ -1,13 +1,8 @@
 import React, { useEffect, useState } from 'react'
+import './home.scss';
 import AdminNavbar from '../../../components/admin/navbar/Navbar'
 import AdminSidebar from '../../../components/admin/sidebar/Sidebar'
 import AdminWidget from '../../../components/admin/widgets/Widget'
-import axios from '../../../utils/axios'
-import { adminConfig } from '../../../utils/Services'
-import { GET_ALL_POSTS, GET_ALL_USERS } from '../../../utils/ConstUrls';
-
-
-import './home.scss';
 import UserChart from '../../../components/admin/charts/UserChart'
 import { Box, Grid } from '@mui/material'
 import PostChat from '../../../components/admin/charts/PostChat'
