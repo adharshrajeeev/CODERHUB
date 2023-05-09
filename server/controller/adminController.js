@@ -11,7 +11,7 @@ export const adminLogin = async(req,res)=>{
           console.log(req.body)
           const {error}=adminLoginValidate(req.body)
      
-          if(error) return res.status(200).json({success:false,message:error.details[0].message})
+          if(error) return res.status(401).json({success:false,message:error.details[0].message})
 
           const {adminId,adminPassword}=req.body;
           const adminDetails=await Admin.findOne({adminId})
@@ -19,7 +19,7 @@ export const adminLogin = async(req,res)=>{
               
                const matchPassword = await bcrypt.compare(adminPassword,adminDetails.adminPassword)
             
-               if(!matchPassword) return res.status(200).json({success:false,message:"Admin Password is not matched"})
+               if(!matchPassword) return res.status(401).json({success:false,message:"Admin Password is not matched"})
       
                const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWTKEY)
                res.status(200).json({success:true,message:"Login success",adminToken})
@@ -42,7 +42,7 @@ export const getAllUsers = async (req,res)=>{
      
      }catch(err){
           console.error(err);
-          res.status(400).json({error:err})
+          res.status(400).json({message:'Failed to fetch Users'})
      }
 }
 
@@ -73,7 +73,7 @@ export const getAlluserPosts =  async(req,res)=>{
 
      }catch(err){
          
-          res.status(500).json({success:false,error:err})
+          res.status(500).json({success:false,error:err,message:"Failed to fetch Posts"})
      }
 }
 

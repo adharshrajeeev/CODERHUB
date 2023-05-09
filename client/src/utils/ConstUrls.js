@@ -1,5 +1,5 @@
 export const baseUserUrl = "http://localhost:7000/api/"
-// export const baseAdminUrl = "http://localhost:7000/api/admin"
+export const baseAdminUrl = "http://localhost:7000/api/admin"
 
 //USER SIDE URLS===>>>>>>>
 
@@ -64,12 +64,12 @@ export const DELETE_NOTIFICATION='/deleteNotification'
 
 //ADMIN SIDE URLS===>>>>>>
 
-export const ADMINLOGIN='/admin/login'
-export const GET_ALL_USERS='/admin/allUsers'
-export const CHANGE_USER_STATUS='/admin/changeStatus'
-export const GET_REPORTED_POSTS='/admin/reportedPosts'
-export const CHANGE_POST_STATUS='/admin/postStatus'
-export const GET_ALL_POSTS='/admin/allPosts'
-export const USER_MONTH_WISE_GROWTH='/admin/monthWiseUser'
-export const POST_MONTH_WISE_COUNT='/admin/monthWisePostCount'
-export const GET_POST_DETAILS='/admin/postDetails'
+export const ADMINLOGIN='/login'
+export const GET_ALL_USERS='/allUsers'
+export const CHANGE_USER_STATUS='/changeStatus'
+export const GET_REPORTED_POSTS='/reportedPosts'
+export const CHANGE_POST_STATUS='/postStatus'
+export const GET_ALL_POSTS='/allPosts'
+export const USER_MONTH_WISE_GROWTH='/monthWiseUser'
+export const POST_MONTH_WISE_COUNT='/monthWisePostCount'
+export const GET_POST_DETAILS='/postDetails'

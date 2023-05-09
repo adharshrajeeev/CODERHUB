@@ -8,6 +8,7 @@ import User from '../model/users.js';
 import Posts from '../model/posts.js';
 import Mailgen from 'mailgen'; 
 import dotenv from 'dotenv'
+import { fetchAllUsers, fetchUserById, updateUserDetailsById } from '../repositories/userRepository.js';
 dotenv.config();
 
 export const registerUser = async (req,res)=>{
@@ -171,21 +172,21 @@ export const userLogin = async(req,res)=>{
 export const getAllUsers = async(req,res)=>{
       try{
 
-         const users = await User.find().select('-password')
-         res.status(200).json(users)
+         const {data}=await fetchAllUsers();
+         res.status(200).json(data)
 
       }catch(err){
-         res.status(400).json({error:err}) 
+         res.status(400).json({error:err.message}) 
       }  
 }
 
 
 export const getUsers=async(req,res)=>{
    try{
-      const user=await User.findOne({_id:req.params.userId}).select('-password');
-      res.status(200).json(user)
+      const {data} = await fetchUserById(req.params.userId)
+      res.status(200).json(data)
    }catch(Err){
-      res.status(500).json(Err)
+      res.status(500).json(Err.message)
    }
 }
 
@@ -193,39 +194,23 @@ export const getUsers=async(req,res)=>{
 export const getUserDetails = async (req,res)=>{
    try{  
          
-         const userdetails= await User.findOne({_id:req.params.id});
-      
-         res.status(200).json({userdetails})
+         const {data} = await fetchUserById(req.params.id)
+         res.status(200).json({userdetails:data})
    }catch(err){
      
-      res.status(400).json({error:err,message:"oops suggestion user server error"})
+      res.status(400).json({error:err.message,message:"oops suggestion user server error"})
    }
 }
 
 
-export const getUserAllData = (req,res)=>{ 
-   return new Promise(async(resolve,reject)=>{
-      const userData=await User.findOne({_id:req.query.userId});
-      res.status(200).json(userData)
-   }).catch((err)=>{
-      res.status(400).json({error:err,message:"oops suggestion user server error"})
-   })
-}
+
 
 
 export const updateUserDetals =async(req,res)=>{
  
-      try{
-         
-         const newData=await User.findOneAndUpdate({_id:req.params.id},{
-            $set:{
-               userName:req.body.userName,
-               gender:req.body.gender,
-               phoneNumber:req.body.phoneNumber,
-               userBio:req.body.userBio
-            }
-         },{new:true}); 
-   res.status(200).json(newData)
+      try{   
+         const {data}=await updateUserDetailsById(req.params.id,req.body)
+         res.status(200).json(data)
       }catch(err){
          res.status(401).json({message:"Ops Something went wrong"})
       }
@@ -251,23 +236,7 @@ export const getUserProfileInfo = async (req,res)=>{
 }
 
 
-export const getUserSuggestion = async (req,res)=>{ /// needed to complete 
-   try{
-         const userId=req.params.id
-         const user=await User.findById(userId);
-         const allUsers=await User.find({_id:{$ne:userId}}).limit(5)
-         const following=user.following.map((userFollowing)=>userFollowing._id); 
-         if(following.length === 0) return res.status(201).json(allUsers)
 
-         const friendSuggestions=await User.find({following:{$nin:following}}); 
-       
-         res.status(200).json(friendSuggestions)
-         
-
-   }catch(err){
-      res.status(400).json({error:err,message:"oops suggestion user server error"})
-   }
-}
 
 
 

@@ -3,6 +3,7 @@ import Chart from 'react-apexcharts'
 import axios from '../../../utils/axios'
 import { POST_MONTH_WISE_COUNT } from '../../../utils/ConstUrls'
 import { adminConfig } from '../../../utils/Services'
+import { fetchMonthWisePostReport } from '../../../api/AdminServices'
 
 
 function PostChat() {
@@ -42,9 +43,10 @@ function PostChat() {
     useEffect(() => {
       const monthWiseReport = async () => {
         try {
-          const response = await axios.get(POST_MONTH_WISE_COUNT,adminConfig);
-          const data = response.data.map(({ count }) => count);
-          const months = response.data.map((result) => {
+          const response = await fetchMonthWisePostReport();
+          
+          const data = response?.data?.map(({ count }) => count);
+          const months = response?.data?.map((result) => {
             const date = new Date();
             date.setMonth(result._id - 1);
             return date.toLocaleString('default', { month: 'short' });
@@ -61,7 +63,7 @@ function PostChat() {
             }
           }));
         } catch (err) {
-          console.log(err);
+          console.log(err.response.data.message);
         }
       };
       monthWiseReport();

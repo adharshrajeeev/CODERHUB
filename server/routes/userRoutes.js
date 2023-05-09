@@ -2,12 +2,8 @@ import express from 'express'
 import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
         getLikedPostCount, getUserPost, likePost, reportPostByUser, reportPostUserHome, unLikePost, updateUserPost } from '../controller/postController.js';
-import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserAllData, getUserBio, getUserDetails, getUserProfileInfo, getUserProfilePic, getUsers, getUserSuggestion, otpSignupVerification, registerUser,
-        removeFollower,
-        resetAndConfrimOtp,
-        searchAllUsers,
-        searchUserFollowing,
-        sendOtpToMail,
+import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfileInfo,
+         getUserProfilePic, getUsers, otpSignupVerification, registerUser, removeFollower,resetAndConfrimOtp,searchAllUsers,searchUserFollowing,sendOtpToMail,
         unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin, verificationAndSignup } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
 import { addConversation, getAllConversation } from '../controller/conversationController.js';
@@ -37,10 +33,9 @@ router.get('/user/:userId',verifyToken,isBlocked,getUsers)
 
 router.get('/userDetails/:id',verifyToken,isBlocked,getUserDetails)  
 router.get('/users',verifyToken,isBlocked,getAllUsers); 
-router.get('/suggestionUsers/:id',getUserSuggestion) //need to rectify
+
 router.get('/userPosts/:id',verifyToken,isBlocked,getUserPost);
 
-router.get('/getUserData',verifyToken,isBlocked,getUserAllData)
 
 router.get('/userProfileDetails',verifyToken,isBlocked,getUserProfileInfo)
 router.post('/updateUserDetails/:id',verifyToken,isBlocked,updateUserDetals)

@@ -5,10 +5,8 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import Divider from '@mui/joy/Divider';
 import Typography from '@mui/joy/Typography';
 import { useParams } from 'react-router-dom';
-import axios from '../../../utils/axios'
-import { GET_POST_DETAILS } from '../../../utils/ConstUrls';
-import { adminConfig } from '../../../utils/Services';
 import moment from 'moment'
+import { fetchPostDetailsById } from '../../../api/AdminServices';
 
 function DetailedPost() {
 
@@ -18,8 +16,7 @@ function DetailedPost() {
     const fetchPostDetails = async()=>{
         try{
 
-            const res = await axios.get(`${GET_POST_DETAILS}/${postId}`,adminConfig)
-            console.log(res.data)
+            const res = await fetchPostDetailsById(postId)
             setPostDetails(res.data)
         }catch(err){
             console.log(err)
