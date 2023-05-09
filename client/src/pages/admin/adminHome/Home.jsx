@@ -11,6 +11,7 @@ import './home.scss';
 import UserChart from '../../../components/admin/charts/UserChart'
 import { Box, Grid } from '@mui/material'
 import PostChat from '../../../components/admin/charts/PostChat'
+import { fetchAllPosts, fetchAllUsers } from '../../../api/AdminServices'
 
 
 
@@ -18,28 +19,28 @@ function Home() {
 
   const [userCount,setUserCount]=useState(0);
   const [postCount,setPostsCount]=useState(0)
-  const adminToken=localStorage.getItem('adminToken')
 
-  
 
   const getTotalUsers = async()=>{
     
     try{
       
-      const {data}=await axios.get(GET_ALL_USERS,adminConfig); 
+      const data=await fetchAllUsers();
       setUserCount(data.length)
     }catch(err){
-      console.log("user details get error",err)
+      alert(err.response.data.message)
     }
 
   }
 
   const getAllPosts= async()=>{
-    axios.get(GET_ALL_POSTS,adminConfig).then((res)=>{
-      setPostsCount(res.data.length)
-    }).catch((err)=>{
-      console.log(err)
-    })
+    try{
+
+      const data=await fetchAllPosts();
+      setPostsCount(data.length)
+    }catch(err){
+      alert(err.response.data.message)
+    }
   }
 
   useEffect(()=>{
