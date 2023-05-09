@@ -11,10 +11,13 @@ export const verifyToken = (req,res,next)=>{
         let token = authHeader.split(" ").pop();
         jwt.verify(token,process.env.JWT_SECETKEY,(err,decoded)=>{
         if(err){
-            return res.status(200).json({message:"Authentication failed"})
+            
+            return res.status(401).json({message:"Authentication failed",authfalse:true})
+        }else{
+           
+            req.token=token;
+            next();
         }
-        req.token=token;
-        next();
     })
 
     }catch(err){
