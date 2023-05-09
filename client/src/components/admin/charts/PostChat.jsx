@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
-import axios from '../../../utils/axios'
-import { POST_MONTH_WISE_COUNT } from '../../../utils/ConstUrls'
-import { adminConfig } from '../../../utils/Services'
 import { fetchMonthWisePostReport } from '../../../api/AdminServices'
 
 

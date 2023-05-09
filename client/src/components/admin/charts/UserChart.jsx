@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
-import axios from '../../../utils/axios'
-import { USER_MONTH_WISE_GROWTH } from '../../../utils/ConstUrls'
-import { adminConfig } from '../../../utils/Services'
 import { fetchMontWiseUserReport } from '../../../api/AdminServices'
 
 function UserChart() {
