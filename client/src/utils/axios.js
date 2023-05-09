@@ -1,10 +1,16 @@
 import axios from 'axios'
-import { baseUserUrl } from './ConstUrls';
+import { baseAdminUrl, baseUserUrl } from './ConstUrls';
 import toast from 'react-hot-toast'
 
 
+const noAdminAuthRoutes=['/admin']
+
 const instance=axios.create({
     baseURL:baseUserUrl
+})
+
+const adminInstance=axios.create({
+    baseURL:baseAdminUrl
 })
 
 instance.interceptors.response.use((response)=>{
@@ -28,4 +34,15 @@ instance.interceptors.response.use((response)=>{
   
 })
 
+adminInstance.interceptors.request.use((config)=>{
+    const adminToken=localStorage.getItem('adminToken')
+    if(adminToken){
+        config.headers.Authorization=`Bearer ${adminToken}`
+    }
+    return config
+},(error)=>{
+    return Promise.reject(error);
+})
+
 export default instance 
+export {adminInstance} 
