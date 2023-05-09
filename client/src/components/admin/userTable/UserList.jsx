@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import './userTable.css'
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,30 +7,12 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import axios from '../../../utils/axios';
-
-
-import { alpha, styled } from '@mui/material/styles';
-import { pink } from '@mui/material/colors';
-import Switch from '@mui/material/Switch'
 import toast, { Toaster } from 'react-hot-toast'
-import './userTable.css'
-import { CHANGE_USER_STATUS, GET_ALL_USERS } from '../../../utils/ConstUrls';
 import BlockPostModal from '../modals/BlockPostModal';
+import { changeUserStatus, fetchAllUsers } from '../../../api/AdminServices';
 
 
-const PinkSwitch = styled(Switch)(({ theme }) => ({
-  '& .MuiSwitch-switchBase.Mui-checked': {
-    color: pink[600],
-    '&:hover': {
-      backgroundColor: alpha(pink[600], theme.palette.action.hoverOpacity),
-    },
-  },
-  '& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track': {
-    backgroundColor: pink[600],
-  },
-}));
-const label = { inputProps: { 'aria-label': 'Color switch demo' } };
+
 
 
 
@@ -42,15 +25,11 @@ function UserList() {
     getUserDetails();
   }, [])
 
-  const adminToken = localStorage.getItem("adminToken");
+
   const getUserDetails = async () => {
     try {
-      axios.get(GET_ALL_USERS, { headers: { "Authorization": `Bearer ${adminToken}` } }).then((response) => {
-        setUsers(response.data);
-
-      }).catch((err) => {
-        console.log(err, "catch error in userFetching")
-      })
+      const response=await fetchAllUsers();
+      setUsers(response);
     } catch (err) {
       console.log(err)
     }
@@ -60,22 +39,14 @@ function UserList() {
 
 
   const handleBlocknUnBlock = async (userId, status) => {
-    // handleClickOpen()
     if (status) {
-      axios.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=unBlock`, status, { headers: { "Authorization": `Bearer ${adminToken}` } }).then((response) => {
-        toast.success(response.data.message);
-        getUserDetails();
-      }).catch((err) => {
-        toast.error("Oops Something went wrong")
-      })
+      const response=await changeUserStatus(userId,'unBlock');
+      toast.success(response.data.message);
+      getUserDetails();
     } else {
-      axios.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=block`, status, { headers: { "Authorization": `Bearer ${adminToken}` } }).then((response) => {
-        toast.success(response.data.message);
-        getUserDetails();
-      }).catch((err) => {
-        toast.error("Oops Something went wrong")
-      })
-
+      const response=await changeUserStatus(userId,'block');
+      toast.success(response.data.message);
+      getUserDetails();
     }
   }
 
@@ -90,7 +61,6 @@ function UserList() {
             <TableCell align="right">Email</TableCell>
             <TableCell align="right">Age</TableCell>
             <TableCell align="right">Gender</TableCell>
-            {/* <TableCell align="right">Status</TableCell> */}
             <TableCell align="right">Option</TableCell>
           </TableRow>
         </TableHead>
@@ -107,15 +77,9 @@ function UserList() {
               <TableCell align="right">{user.email}</TableCell>
               <TableCell align="right">{user.dateOfBirth}</TableCell>
               <TableCell align="right">{user.gender}</TableCell>
-              {/* <TableCell align="right">{user.gender}</TableCell> */}
 
               <TableCell align="right">
-                {/* <Button variant="outlined" size="small"  onClick={()=>handleBlocknUnBlock(user._id,user.isBlocked)}> */}
-
-                {/* <PinkSwitch checked={user.isBlocked} onChange={() => handleBlocknUnBlock(user._id, user.isBlocked)} label="End"
-                  labelPlacement="end" /> */}
                   <BlockPostModal isBlocked={user.isBlocked} handleBlockAndUnBlock={handleBlocknUnBlock} postId={user._id} data={"User"}/>
-                {/* </Button>  */}
               </TableCell>
             </TableRow>
           ))}
