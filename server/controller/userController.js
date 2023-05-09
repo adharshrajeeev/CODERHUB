@@ -460,7 +460,7 @@ export const getAllConnections=async(req,res)=>{
       let connections=await User.find({$and:[{_id:{$nin:user.following}},{_id:{$ne:req.params.id}}]})
       res.status(200).json(connections)
    }catch(err){
-      res.status(500).json({success:false,error:"oops somethig went wrong in connections"})
+      res.status(500).json({success:false,error:"oops somethig went wrong in connections",message:"Failed to fetch users"})
    }
 }
  
