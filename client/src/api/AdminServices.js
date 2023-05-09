@@ -74,3 +74,12 @@ export const changePostStatus =async (postId,status)=>{
         throw err
     }
 }
+
+export const fetchPostDetailsById = async(postId)=>{
+    try{
+        const response=await adminInstance.get(`${GET_POST_DETAILS}/${postId}`);
+        return response
+    }catch(err){
+        throw err
+    }
+}
