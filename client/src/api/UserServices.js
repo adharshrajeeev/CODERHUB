@@ -1,5 +1,5 @@
 import store from '../redux/store'
-import { EMAIL_VERIFICATION_SIGNUP, GET_CONNECTIONS, GET_USER_DETAILS, SEND_OTP_REQUEST, USER_LOGIN } from '../utils/ConstUrls'
+import { EMAIL_VERIFICATION_SIGNUP, GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_USER_DETAILS, SEND_OTP_REQUEST, USER_LOGIN } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
 
@@ -69,6 +69,26 @@ export const sendOtpRequest =async(body)=>{
 export const fetchAllConnections = async (userId)=>{
     try{
         const response = await instance.get(`${GET_CONNECTIONS}/${userId}`)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+
+export const fetchAllFollowers = async (userId)=>{
+    try{
+        const response = await instance.get(`${GET_FOLLOWERS_LIST}/${userId}`)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+
+export const fetchAllFollowings = async (userId)=>{
+    try{
+        const response = await instance.get(`${GET_FOLLOWING_LIST}/${userId}`)
         return response
     }catch(err){
         throw err
