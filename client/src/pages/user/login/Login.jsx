@@ -50,13 +50,19 @@ function Login() {
       email,
       password
     }
+        try{
+
           const response=await userLogin(body);
           dispatch(setLogin({
             user: response.data.userdetails,
             token: response.data.token
           }));
           localStorage.setItem("token", response.data.token)
-          return navigate("/home");
+           navigate("/home");
+        }catch(err){
+          toast.error(err?.response?.data?.message)
+          console.log(err)
+        }
 
   };
   return (
