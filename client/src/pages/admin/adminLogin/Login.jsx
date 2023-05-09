@@ -9,11 +9,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import toast,{Toaster} from 'react-hot-toast'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import axios from '../../../utils/axios'
-import { ADMINLOGIN } from '../../../utils/ConstUrls';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAdminLogin } from '../../../redux/adminSlice';
+import { adminLogin } from '../../../api/AdminServices';
 
 const theme = createTheme();
 
@@ -24,30 +23,26 @@ function Login() {
         const navigate=useNavigate();
         const dispatch=useDispatch();
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async(event) => {
         event.preventDefault();
         if(adminId==="" || adminPassword===""){
             return toast.error("Please fill the components.")
         }
-        const body=JSON.stringify({
+        const body={
             adminId,
             adminPassword
-        });
+        }
 
         try{
 
-            axios.post(ADMINLOGIN,body,{ headers: { "Content-Type": "application/json" } }).then(({data})=>{
-                if(data.success){
-                    dispatch(setAdminLogin(data.adminToken))
-                    navigate('/admin/dashboard'); 
-                    localStorage.setItem('adminToken',data.adminToken);
-                }else{
-                    toast.error(data.message)
-                }
-            })
+            const {adminToken}=await adminLogin(body)
+            dispatch(setAdminLogin(adminToken));
+            localStorage.setItem('adminToken',adminToken)
+            navigate('/admin/dashboard'); 
+
         }catch(err){
-            toast.error("OOPS SOMETHING WENT WRONG");
-            console.log("admin login catch error",err)
+        
+           toast.error(err.response.data.message)
         }
     };
 
