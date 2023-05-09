@@ -3,6 +3,7 @@ import Chart from 'react-apexcharts'
 import axios from '../../../utils/axios'
 import { USER_MONTH_WISE_GROWTH } from '../../../utils/ConstUrls'
 import { adminConfig } from '../../../utils/Services'
+import { fetchMontWiseUserReport } from '../../../api/AdminServices'
 
 function UserChart() {
   const [userData, setUserData] = useState([]);
@@ -41,9 +42,10 @@ function UserChart() {
   useEffect(() => {
     const monthWiseReport = async () => {
       try {
-        const response = await axios.get(USER_MONTH_WISE_GROWTH,adminConfig);
-        const data = response.data.map(({ count }) => count);
-        const months = response.data.map((result) => {
+        const response = await fetchMontWiseUserReport()
+        
+        const data = response?.data?.map(({ count }) => count);
+        const months = response?.data?.map((result) => {
           const date = new Date();
           date.setMonth(result._id - 1);
           return date.toLocaleString('default', { month: 'short' });
@@ -59,9 +61,8 @@ function UserChart() {
             }
           }
         }));
-        console.log(monthNames)
       } catch (err) {
-        console.log(err);
+        console.log(err.response.data.message);
       }
     };
     monthWiseReport();
