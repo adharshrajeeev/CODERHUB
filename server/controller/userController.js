@@ -434,7 +434,7 @@ export const UpdateUserPicture = async (req,res)=>{
    try {
       
       const userId=req.params.id;
-      if(!req.file) return res.status(400).json({success:false,error:"No Image Found"})
+      if(!req.file) return res.status(400).json({success:false,error:"No Image Found",message:"No Image Found"})
 
       const profilePic=await cloudinary.uploader.upload(req.file.path,{
          folder:"Profile"
@@ -447,7 +447,7 @@ export const UpdateUserPicture = async (req,res)=>{
       res.status(200).json({success:true,message:"User Profile picture updated",imageUrl})
 
    } catch (err) {
-      res.status(500).json({success:false,error:err})
+      res.status(500).json({success:false,error:err,message:"Error in Updating Profile Picture"})
    }
 }
 
@@ -472,7 +472,7 @@ export const getAllFollowings = async(req,res)=>{
 
       res.status(200).json(followings)
    }catch(err){
-      res.status(500).json({success:false,error:"oops somethig went wrong in follwing"})
+      res.status(500).json({success:false,error:err.message,message:"Failed to fetch Followings"})
    }
    
 }
@@ -484,7 +484,7 @@ export const getAllFollowers = async (req,res)=>{
          let followersList=await User.find({_id:{$in:followers}});
          res.status(200).json(followersList)
    }catch(err){
-      res.status(500).json({success:false,error:"oops somethig went wrong in follwing"})
+      res.status(500).json({success:false,error:err.message,message:"Failed to fetch Followers"})
    }
 }
 
