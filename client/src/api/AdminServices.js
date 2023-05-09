@@ -1,4 +1,4 @@
-import { ADMINLOGIN, GET_ALL_POSTS, GET_ALL_USERS, POST_MONTH_WISE_COUNT, USER_MONTH_WISE_GROWTH } from "../utils/ConstUrls";
+import { ADMINLOGIN, CHANGE_USER_STATUS, GET_ALL_POSTS, GET_ALL_USERS, POST_MONTH_WISE_COUNT, USER_MONTH_WISE_GROWTH } from "../utils/ConstUrls";
 import { adminInstance } from "../utils/axios";
 
 
@@ -41,6 +41,15 @@ export const fetchMontWiseUserReport = async ()=>{
 export const fetchMonthWisePostReport = async ()=>{
     try{
         const response=await adminInstance.get(POST_MONTH_WISE_COUNT)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+export const changeUserStatus =async (userId,status)=>{
+    try{
+        const response=await adminInstance.put(`${CHANGE_USER_STATUS}?userId=${userId}&userStatus=${status}`)
         return response
     }catch(err){
         throw err
