@@ -1,5 +1,5 @@
 import store from '../redux/store'
-import { GET_USER_DETAILS, USER_LOGIN } from '../utils/ConstUrls'
+import { EMAIL_VERIFICATION_SIGNUP, GET_USER_DETAILS, USER_LOGIN } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
 
@@ -42,6 +42,16 @@ export const userLogin = async(body)=>{
     try{
       const response=await  instance.post(USER_LOGIN,body)
       return response
+    }catch(err){
+        throw err
+    }
+}
+
+
+export const userRegister =async(body)=>{
+    try{
+        const response=await instance.post(EMAIL_VERIFICATION_SIGNUP,body)
+        return response
     }catch(err){
         throw err
     }
