@@ -9,12 +9,11 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Button from '@mui/material/Button';
 import Slide from '@mui/material/Slide';
-import axios from '../../../utils/axios';
 import {useDispatch} from 'react-redux'
 import EditPostModal  from '../modals/EditPostModal'
-import { DELETE_POSTS } from '../../../utils/ConstUrls';
 import { setPosts } from '../../../redux/userSlice';
 import PostReportModal from '../modals/ReportPostModal';
+import { deleteUserPost } from '../../../api/UserServices';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -44,8 +43,7 @@ function PostMenuButton({postId,postedUserId,userId,content,postImage}) {
 
     const handleDeletePost = async ()=>{
         try{
-          const token =localStorage.getItem('token')
-         const response=await axios.delete(`${DELETE_POSTS}?postId=${postId}&userId=${userId}`,{ headers: { 'Authorization': `Bearer ${token}` } }) ;
+         const response=await deleteUserPost(postId,userId)
           dispatch(setPosts(response.data.posts))
          handleClickClose();
          handleClose();
