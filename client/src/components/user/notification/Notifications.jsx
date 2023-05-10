@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import Stack from '@mui/material/Stack';
-import axios from '../../../utils/axios'
 import decodeToken from '../../../utils/Services'
-import { GET_ALL_NOTIFICATIONS } from '../../../utils/ConstUrls';
 import NotificationStack from './NotificationStack';
 import NoDataFound from '../noDataAvailable/NoDataFound';
 import { useDispatch, useSelector } from 'react-redux';
@@ -15,13 +13,12 @@ function Notifications() {
    
     const notifications=useSelector((state)=>state?.user?.notifications);
     const dispatch=useDispatch();
-    const token=localStorage.getItem('token');
     const userId=decodeToken();
  
     const fetchAllNotifications= async()=>{
         try{
-         const res=await   axios.get(`${GET_ALL_NOTIFICATIONS}/${userId}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
-        dispatch(setNotification(res.data))
+         const response=await  fetchAllNotifications(userId)
+        dispatch(setNotification(response.data))
         }catch(Err){
             console.log(Err)
         }

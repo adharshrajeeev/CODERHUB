@@ -1,5 +1,5 @@
 import store from '../redux/store'
-import { ADD_COMMENTS, ADD_COVERPICTURE, ADD_PROFILEIMAGE, DELETE_COMMENT, EMAIL_VERIFICATION_SIGNUP, EXPLORE_ALLPOST, FOLLOW_USER, GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_PROFILE_DETAILS, GET_USER_DETAILS, OTP_AND_RESET_PASS, REMOVE_FOLLOWER, SEND_OTP_REQUEST, 
+import { ADD_COMMENTS, ADD_COVERPICTURE, ADD_PROFILEIMAGE, CHANGE_NOTIFICATION_STATUS, DELETE_COMMENT, DELETE_NOTIFICATION, EMAIL_VERIFICATION_SIGNUP, EXPLORE_ALLPOST, FOLLOW_USER, GET_ALL_NOTIFICATIONS, GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_PROFILE_DETAILS, GET_USER_DETAILS, OTP_AND_RESET_PASS, REMOVE_FOLLOWER, SEND_OTP_REQUEST, 
     SHOW_USER_POST, UNFOLLOW_USER, USER_LOGIN } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
@@ -200,3 +200,29 @@ export const sendOtpandResetPassword = async (body)=>{
     }
 }
 
+export const fetchAllNotifications = async (userId)=>{
+    try{
+        const response = await instance.get(`${GET_ALL_NOTIFICATIONS}/${userId}`)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+export const changeNotificationStatus = async (notificationId)=>{
+    try{
+        const response = await instance.put(`${CHANGE_NOTIFICATION_STATUS}/${notificationId}`)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+export const deleteUserNotification = async (notificationId)=>{
+    try{
+        const response =await instance.delete(`${DELETE_NOTIFICATION}/${notificationId}`);
+        return response
+    }catch(err){
+        throw err
+    }
+}
