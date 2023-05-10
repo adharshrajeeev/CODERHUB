@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './ExploreStyle.scss';
 import Post from '../post/Post';
-// import { useSelector,useDispatch } from "react-redux";
-import axios from '../../../utils/axios'
-import { EXPLORE_ALLPOST } from '../../../utils/ConstUrls'
 import { useDispatch, useSelector } from 'react-redux';
-import { setExplorePosts, setHomePosts } from '../../../redux/userSlice';
+import { setExplorePosts } from '../../../redux/userSlice';
+import { fetchExplorePosts } from '../../../api/UserServices';
 
 
 function ExplorePosts() {
@@ -21,9 +19,7 @@ function ExplorePosts() {
  
   const exploreAllPosts = async () => {
     try {
-      const token = localStorage.getItem('token')
-      const response = await axios.get(`${EXPLORE_ALLPOST}?userId=${userId}&page=${page}`, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
-
+      const response = await fetchExplorePosts(userId,page)
       dispatch(setExplorePosts(response.data));
       setLoading(false)
     } catch (err) {
