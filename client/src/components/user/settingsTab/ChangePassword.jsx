@@ -10,14 +10,12 @@ import FormLabel from '@mui/joy/FormLabel';
 import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import toast,{Toaster} from 'react-hot-toast'
-import axios from '../../../utils/axios'
-import { CHANGE_USER_PASSWORD } from '../../../utils/ConstUrls';
-import {useNavigate} from 'react-router-dom'
 import decodeToken from '../../../utils/Services'
+import { changeUserPassword } from '../../../api/UserServices';
 
 function ChangePassword() {
 
-    const navigate=useNavigate();
+
     const [showPassword, setShowPassword] = useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const [showNewPassword,setShowNewPassword]=useState(false);
@@ -61,21 +59,18 @@ function ChangePassword() {
     const handleSavePassword = async ()=>{
         try{
             const userId=decodeToken();
-            const token=localStorage.getItem('token')
-            const body=JSON.stringify({
+            const body={
                 userId,
                 currentPassword,
                 newPassword,
                 confirmPassoword
-            })
-            axios.put(CHANGE_USER_PASSWORD,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-                setCurrentPassword("")
-                setNewPassword("")
-                setConfirmPassword("")
-                toast.success(response.data.message)
-            }).catch((err)=>{
-                toast.error(err.response.data.message)
-            })
+            }
+
+            const response = await changeUserPassword(body)
+            setCurrentPassword("")
+            setNewPassword("")
+            setConfirmPassword("")
+            toast.success(response.data.message)
         }catch(err){
             toast.error(err.response.data.message)
         }
