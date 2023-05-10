@@ -1,10 +1,9 @@
 import React from 'react'
 import './FriendsStyle.css'
-import axios from '../../../utils/axios'
 import decodeToken from '../../../utils/Services'
 import toast,{Toaster} from 'react-hot-toast'
-import { UNFOLLOW_USER } from '../../../utils/ConstUrls'
 import { Link } from 'react-router-dom';
+import { unFollowUser } from '../../../api/UserServices'
 
 function Following({users,listFollowingUsers}) {
 
@@ -12,28 +11,28 @@ function Following({users,listFollowingUsers}) {
   const handleUnfollow =  async ()=>{
     const userId=decodeToken();
     const followingId=users._id;
-    const body=JSON.stringify({
+    const body={
       userId,
       followingId
-    })
-    const token=localStorage.getItem('token');
+    }
+    try{
+    const response = await unFollowUser(body)
+    toast(response.data.message,
+      {
+        icon: '👏',
+        style: {
+          borderRadius: '10px',
+          background: '#333',
+          color: '#fff',
+        },
+      }
+    );
+    listFollowingUsers();
+  }catch(err){
 
-    axios.post(UNFOLLOW_USER,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
-      toast(response.data.message,
-        {
-          icon: '👏',
-          style: {
-            borderRadius: '10px',
-            background: '#333',
-            color: '#fff',
-          },
-        }
-      );
-      listFollowingUsers();
-    }).catch((err)=>{
-      toast.error("OOPS Something went wrong");
-      console.log(err)
-    })
+    toast.error("OOPS Something went wrong");
+    console.log(err)
+  }
 
   }
 

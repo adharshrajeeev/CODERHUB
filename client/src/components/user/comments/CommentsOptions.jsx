@@ -2,12 +2,11 @@ import React from 'react'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import axios from '../../../utils/axios'
 import toast from 'react-hot-toast'
-import { DELETE_COMMENT } from '../../../utils/ConstUrls';
 import { useDispatch } from 'react-redux';
 import { setPost, updateExplorePosts, updateHomePosts } from '../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
+import { deleteComment } from '../../../api/UserServices';
 
 
 
@@ -26,25 +25,32 @@ function CommentsOptions({ postId, commentId, userId, commentedUserId }) {
     };
 
     const handleCommentDelete = async () => {
-        ;
-        const token = localStorage.getItem('token')
-        const formData = new FormData();
-        formData.append("postId", postId);
-        formData.append("commentId", commentId)
-        axios.put(DELETE_COMMENT, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } }).then((response) => {
+        
+       
+        try{
+
+            const body={
+                postId:postId,
+                commentId:commentId
+            }
+            const response = await deleteComment(body)
             if(location.pathname==='/home'){
                 dispatch(updateHomePosts(response.data))
             }else if(location.pathname==='/explore'){
                 dispatch(updateExplorePosts(response.data))
             }else{
-
+    
                 dispatch(setPost(response.data))
             }
             toast.success("Comment Deleted")
-        }).catch((err) => {
+        }catch(Err){
+            console.log(Err)
+            console.log(Err.response.data.message)
+        }
 
-            toast.error("Oops Something went wrong")
-        })
+
+
+       
     }
 
     return (

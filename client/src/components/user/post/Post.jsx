@@ -1,3 +1,4 @@
+import { useState } from "react";
 import "./post.scss";
 import FavoriteBorderOutlinedIcon from "@mui/icons-material/FavoriteBorderOutlined";
 import FavoriteOutlinedIcon from "@mui/icons-material/FavoriteOutlined";
@@ -5,15 +6,13 @@ import TextsmsOutlinedIcon from "@mui/icons-material/TextsmsOutlined";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import { Link } from "react-router-dom";
 import Comments from "../comments/Comments";
-import { useState } from "react";
 import { useSelector } from "react-redux";
-import axios from '../../../utils/axios'
 import moment from 'moment'
-import { LIKE_POST, UNLIKE_POST } from "../../../utils/ConstUrls";
 import toast, { Toaster } from 'react-hot-toast'
 import PostMenuButton from "./PostMenuButton";
 import { RWebShare } from "react-web-share";
 import CircularLoading from "../Loading/CircularLoading";
+import { toggleLikePost, toggleUnLikePost } from "../../../api/UserServices";
 
 
 
@@ -36,41 +35,30 @@ const Post = ({ post, loading,socket,user }) => {
 
   const handleLike = async () => {
     try {
-      const token = localStorage.getItem('token')
-      const body = JSON.stringify({
+      const body = {
         postId: post._id,
         userId: userId
       }
-      )
+      
 
       if (Like === FavoriteOutlinedIcon) {
-        axios.put(UNLIKE_POST, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-         
-          setLiked(FavoriteBorderOutlinedIcon);
-          SetLikeCount(count => count - 1)
-        }).catch((err) => {
-          toast.error("Oops Something went Wrong")
-        })
-
-
-
+        await toggleUnLikePost(body)
+        setLiked(FavoriteBorderOutlinedIcon);
+        SetLikeCount(count => count - 1)
+      
       } else {
-
-        await axios.put(LIKE_POST, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-          socket?.emit("sendNotification",{
-            senderName:userName,
-            receiverName:post?.postedUser?.userName,
-            type:"LIKE"
-          })
-          setLiked(FavoriteOutlinedIcon);
-          SetLikeCount(count => count + 1)
-        }).catch((err) => {
-          toast.error(err.message)
+        await toggleLikePost(body)
+        socket?.emit("sendNotification",{
+          senderName:userName,
+          receiverName:post?.postedUser?.userName,
+          type:"LIKE"
         })
-
+        setLiked(FavoriteOutlinedIcon);
+        SetLikeCount(count => count + 1)
       }
     } catch (err) {
-      toast.error(err.message)
+      console.log(err)
+      toast.error(err.response.data.message)
     }
   }
 

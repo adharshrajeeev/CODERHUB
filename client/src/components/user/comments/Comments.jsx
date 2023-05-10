@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import axios from '../../../utils/axios'
-import { ADD_COMMENTS } from '../../../utils/ConstUrls';
+import './comments.scss'
 import moment from 'moment';
 import { useDispatch } from 'react-redux'
 import { setPost, updateExplorePosts, updateHomePosts } from '../../../redux/userSlice';
 import {Toaster, toast} from 'react-hot-toast'
-import './comments.scss'
 import { useLocation } from "react-router-dom";
 import CommentsOptions from './CommentsOptions';
+import { addNewComment } from '../../../api/UserServices';
 
 
 const Comments = ({ postId, userId, comments }) => {
@@ -25,12 +24,12 @@ const Comments = ({ postId, userId, comments }) => {
 
 
     try {
-      const formData = new FormData();
-      formData.append("postId", postId);
-      formData.append("content", postComments);
-      formData.append("userId", userId);
-      const token = localStorage.getItem('token')
-      const response = await axios.post(ADD_COMMENTS, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } });
+      const body={
+        postId:postId,
+        content:postComments,
+        userId:userId
+      }
+      const response = await addNewComment(body)
       if(location.pathname==='/home'){
         dispatch(updateHomePosts(response.data))
       }else if(location.pathname==='/explore'){
@@ -44,12 +43,11 @@ const Comments = ({ postId, userId, comments }) => {
     }
   }
 
-  //Temporary       
+
 
   return (
     <div className="userComments">
       <div className="write">
-        {/* <img src={currentUser.profilePic} alt="" /> */}
         <input type="text" placeholder="write a comment" value={postComments} onChange={(e) => setPostComments(e.target.value)} />
         <button onClick={handleSubmitComment}>Send</button>
       </div>

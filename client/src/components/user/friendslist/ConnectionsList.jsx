@@ -1,10 +1,9 @@
 import React from 'react';
-import axios from '../../../utils/axios'
-import decodeToken from '../../../utils/Services';
-import { FOLLOW_USER } from '../../../utils/ConstUrls';
-import toast,{Toaster} from 'react-hot-toast'
 import './FriendsStyle.css'
+import decodeToken from '../../../utils/Services';
+import toast,{Toaster} from 'react-hot-toast'
 import { Link } from 'react-router-dom';
+import { followUser } from '../../../api/UserServices';
 
 
 
@@ -15,12 +14,14 @@ function Followers({ users,listAllUsers }) {
   const handleFollowUser = async()=>{
     const userId=decodeToken();
     const followerId=users._id
-    const body=JSON.stringify({
+    const body={
       userId,
       followerId
-    })
-    const token=localStorage.getItem('token')
-    axios.post(FOLLOW_USER,body,{ headers: { 'Authorization': `Bearer ${token}`,"Content-Type": "application/json", }}).then((response)=>{
+    }
+    
+    try{
+
+      const response = await followUser(body)
       toast(response.data.message,
         {
           icon: '👏',
@@ -32,9 +33,10 @@ function Followers({ users,listAllUsers }) {
         }
       );
       listAllUsers();
-    }).catch((err)=>{
-      toast.error("oops something went wrong")
-    })
+    }catch(err){
+      toast.error(err.response.data.message)
+    }
+   
   }
 
 

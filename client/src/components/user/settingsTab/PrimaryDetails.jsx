@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import Box from '@mui/material/Box';
-import axios from '../../../utils/axios'
-import { GET_USERDATA, UPDATE_USER_DETAILS } from '../../../utils/ConstUrls';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import toast, { Toaster } from 'react-hot-toast'
@@ -11,6 +9,7 @@ import Grid from '@mui/joy/Grid';
 import decodeToken from '../../../utils/Services';
 import { useDispatch } from 'react-redux';
 import { changeUserName } from '../../../redux/userSlice';
+import { fetchUserData, updateUserPrimaryDetails } from '../../../api/UserServices';
 
 function PrimaryDetails() {
 
@@ -29,19 +28,19 @@ function PrimaryDetails() {
 
   const getUserPrimaryData = async () => {
     const userId = decodeToken();
-    const token = localStorage.getItem('token')
-    axios.get(`${GET_USERDATA}?userId=${userId}`, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
 
+    try{
+      const response =await fetchUserData(userId)
       setUserName(response.data.userName);
       setUserEmail(response.data.email);
       setPhoneNumber(response.data.phoneNumber);
       setUserGender(response.data.gender);
       setUserEmail(response.data.email);
       setUserBio(response.data.userBio ? response.data.userBio : "")
-    }).catch((err) => {
-      console.log(err)
-      toast.error("Oops Something went wrong")
-    })
+    }catch(err){
+      console.log(err );
+      toast.error(err.response.data.message)
+    }
   }
 
   const handleDetailsChange = (field, data) => {
@@ -82,34 +81,29 @@ function PrimaryDetails() {
     }
   }
 
-  function handleSaveDetails() {
+ async function  handleSaveDetails () {
     if (userName === "" || userGender === "" || userPhoneNumber === "") {
       return toast.err("Please Fill the components")
     }
     setLoading(true)
-    const formData = new FormData();
-    formData.append("userName", userName);
-    formData.append("gender", userGender);
-    formData.append("phoneNumber", userPhoneNumber)
-    formData.append("userBio",userBio)
+    const body={
+      userName:userName, 
+      gender:userGender,
+      phoneNumber:userPhoneNumber,
+      userBio:userBio
+    }
     try {
       const userId = decodeToken();
-      const token = localStorage.getItem('token')
-      axios.post(`${UPDATE_USER_DETAILS}/${userId}`, formData, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json" } }).then((response) => {
-        setUserName(response.data.userName);
+      const response = await updateUserPrimaryDetails(userId,body)
+      setUserName(response.data.userName);
 
-        dispatch(changeUserName(response?.data?.userName))
-        setUserEmail(response.data.email);
-        setPhoneNumber(response.data.phoneNumber);
-        setUserGender(response.data.gender);
-        setUserBio(response.data.userBio)
-        toast.success("Save Success");
-        setLoading(false)
-      }).catch((err) => {
-        setLoading(false)
-        console.log(err)
-        toast.error("Ops Something went wrong")
-      })
+      dispatch(changeUserName(response?.data?.userName))
+      setUserEmail(response.data.email);
+      setPhoneNumber(response.data.phoneNumber);
+      setUserGender(response.data.gender);
+      setUserBio(response.data.userBio)
+      toast.success("Save Success");
+      setLoading(false)
 
     } catch (err) {
       console.log(err)

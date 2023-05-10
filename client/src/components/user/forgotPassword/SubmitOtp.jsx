@@ -8,11 +8,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import TextField from '@mui/material/TextField';
 import FormLabel from '@mui/joy/FormLabel';
 import { Button } from '@mui/material';
-import axios from '../../../utils/axios'
 import toast from 'react-hot-toast'
 import Box from '@mui/material/Box';
 import decodeToken from '../../../utils/Services';
-import { OTP_AND_RESET_PASS } from '../../../utils/ConstUrls';
+import { sendOtpandResetPassword } from '../../../api/UserServices';
 
 
 
@@ -54,31 +53,29 @@ function SubmitOtp({setComponent}) {
     try{
   
       const userId=decodeToken();
-      const token=localStorage.getItem('token');
-      const body=JSON.stringify({
+      const body={
         userId,
         newPassword,
         OTP
-      })
-      axios.post(OTP_AND_RESET_PASS,body,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response)=>{
-        setComponent(false)
-        toast(response?.data.message,
-          {
-            icon: '👏',
-            style: {
-              borderRadius: '10px',
-              background: '#333',
-              color: '#fff',
-            },
-          }
-        );
-      }).catch((err)=>{
-        setNewPassword("");
-        setOTP("")
-        toast.error(err.response.data.message)
-      })
-    }catch(Err){
-      toast.error("Ops Something went wrong")
+      }
+      const response = await sendOtpandResetPassword(body)
+      
+      setComponent(false)
+      toast(response?.data.message,
+        {
+          icon: '👏',
+          style: {
+            borderRadius: '10px',
+            background: '#333',
+            color: '#fff',
+          },
+        }
+      );
+    }catch(err){
+      setNewPassword("");
+      setOTP("")
+      toast.error(err.response.data.message)
+    
     }
   }
 

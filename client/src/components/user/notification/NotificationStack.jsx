@@ -3,16 +3,14 @@ import SnackbarContent from '@mui/material/SnackbarContent';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import axios  from '../../../utils/axios';
 import moment from 'moment'
-import { CHANGE_NOTIFICATION_STATUS, DELETE_NOTIFICATION } from '../../../utils/ConstUrls';
 import { useDispatch } from 'react-redux';
 import { deleteNotification, updateNotification } from '../../../redux/userSlice';
+import { changeNotificationStatus, deleteUserNotification } from '../../../api/UserServices';
 
 
 function NotificationStack({notification,userId,fetchAllNotifications}) {
     const [notificationColor,setNotificationColor]=useState({bgColor:"#dedede",fontColor:"black"});
-    const token=localStorage.getItem('token')
     const [anchorEl, setAnchorEl] = React.useState(null);
     const dispatch=useDispatch();
     const open = Boolean(anchorEl);
@@ -35,20 +33,20 @@ function NotificationStack({notification,userId,fetchAllNotifications}) {
 
     const handleNotificationRead=async()=>{
         try{
-            const res=await  axios.put(`${CHANGE_NOTIFICATION_STATUS}/${notification?._id}`,{},{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
+            const res=await  changeNotificationStatus(notification._id)
             console.log(res.data)
             handleClose()
             setNotificationColor({bgColor:"white",fontColor:"black"})
             dispatch(updateNotification(res.data))
           
         }catch(err){
-            console.log(err.message)
+            console.log(err.response.data.message)
         }
     }
     
     const handleDeleteNotification = async ()=>{
       try{
-        await axios.delete(`${DELETE_NOTIFICATION}/${notification?._id}`,{ headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json",  } })
+        await deleteUserNotification(notification._id)
         handleClose()
         dispatch(deleteNotification(notification?._id))
       

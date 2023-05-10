@@ -186,7 +186,7 @@ export const getUsers=async(req,res)=>{
       const {data} = await fetchUserById(req.params.userId)
       res.status(200).json(data)
    }catch(Err){
-      res.status(500).json(Err.message)
+      res.status(500).json({error:Err.message,message:"Failed to fetch User Details"})
    }
 }
 

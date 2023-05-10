@@ -7,10 +7,9 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import axios from '../../../utils/axios'
 import toast, { Toaster } from 'react-hot-toast';
-import { EMAIL_VERIFICATION_SIGNUP, OTP_SIGNUP } from '../../../utils/ConstUrls';
 import { useNavigate } from 'react-router-dom';
+import { verifyOtpRequest } from '../../../api/UserServices';
 
 function OtpVerification({userId}) {
 
@@ -30,18 +29,21 @@ function OtpVerification({userId}) {
     const handleOtpSubmit = async (e)=>{
         e.preventDefault();
       
-        const body=JSON.stringify({
+        const body={
             OTP,
            userId
-        })
-        axios.post(OTP_SIGNUP,body,{ headers: { "Content-Type": "application/json" } }).then((response)=>{
-        
+        }
+        try{
+          await verifyOtpRequest(body)
           navigate('/',{state:{message:"Signup done successfully"}})
-        }).catch((err)=>{
-            setOTP("")
-            toast.error(err.response.data.message)
-            console.log(err)
-        })
+
+        }catch(err){
+
+          setOTP("")
+          toast.error(err.response.data.message)
+          console.log(err)
+        }
+      
     }
 
 
