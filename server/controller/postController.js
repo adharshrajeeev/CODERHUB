@@ -309,7 +309,7 @@ export const addPostComment = async (req, res) => {
         const post = await Posts.findOne({ _id: postId })
         res.status(200).json(post)
     } catch (err) {
-        res.status(500).json({ error: err })
+        res.status(500).json({ error: err.message,message:"Failed to add Comment" })
     }
 }
 
@@ -323,7 +323,7 @@ export const deletePostComment = async (req, res) => {
         const post = await Posts.findOne({ _id: postId })
         res.status(200).json(post)
     }).catch((err) => {
-        res.status(500).json({ error: err })
+        res.status(500).json({ error: err.message,message:"Failed to delete Comment" })
     })
 
 }
