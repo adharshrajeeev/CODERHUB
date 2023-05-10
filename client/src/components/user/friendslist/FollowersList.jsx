@@ -1,10 +1,9 @@
 import React from 'react'
 import './FriendsStyle.css'
-import axios from '../../../utils/axios'
 import decodeToken from '../../../utils/Services';
-import { REMOVE_FOLLOWER } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast'
 import { Link } from 'react-router-dom';
+import { removeFollower } from '../../../api/UserServices';
 
 
 function Followers({ users, getAllFollowers }) {
@@ -13,12 +12,12 @@ function Followers({ users, getAllFollowers }) {
   const handleRemove = async () => {
     const userId = decodeToken();
     const followerId = users._id
-    const body = JSON.stringify({
+    const body = {
       userId,
       followerId
-    })
-    const token = localStorage.getItem('token')
-    axios.post(REMOVE_FOLLOWER, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
+    }
+    try{
+      const response = await removeFollower(body)
       toast(response.data.message,
         {
           icon: '👏',
@@ -30,9 +29,10 @@ function Followers({ users, getAllFollowers }) {
         }
       );
       getAllFollowers();
-    }).catch((err) => {
+      
+    }catch(err){
       toast.error("oops something went wrong")
-    })
+    }
   }
   return (
     <div className="card-container">
