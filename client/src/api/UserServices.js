@@ -1,12 +1,13 @@
 import store from '../redux/store'
 import { ADD_COMMENTS, ADD_COVERPICTURE, ADD_PROFILEIMAGE, ALL_POSTS, CHANGE_NOTIFICATION_STATUS, CHANGE_USER_PASSWORD, DELETE_COMMENT, DELETE_NOTIFICATION, DELETE_POSTS, EMAIL_VERIFICATION_SIGNUP, EXPLORE_ALLPOST, FOLLOW_USER, GET_ALL_NOTIFICATIONS,
      GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_PROFILE_DETAILS, GET_USER_DETAILS, LIKE_POST, OTP_AND_RESET_PASS, REMOVE_FOLLOWER, SEND_OTP_REQUEST, 
-    SHOW_USER_POST, UNFOLLOW_USER, UNLIKE_POST, USER_LOGIN } from '../utils/ConstUrls'
+    SHOW_USER_POST, UNFOLLOW_USER, UNLIKE_POST, UPDATE_USER_DETAILS, USER_LOGIN } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
 
 import jwt_decode from 'jwt-decode';
 import instance from '../utils/axios';
+import { GET_USER } from '../utils/ConstUrls';
 
 
 export const fetchUserDetails = async()=>{
@@ -270,6 +271,26 @@ export const fetchUserFriendsPosts = async (userId)=>{
 export const changeUserPassword = async (body)=>{
     try{
         const response =await instance.put(CHANGE_USER_PASSWORD,body)
+        return response
+    }catch(err){    
+        throw err
+    }
+}
+
+
+export const fetchUserData = async (userId)=>{
+    try{
+        const response = await instance.get(`${GET_USER}/${userId}`)
+        return response
+    }catch(err){    
+        throw err
+    }
+}
+
+
+export const updateUserPrimaryDetails = async (userId,body) =>{
+    try{
+        const response =await instance.post(`${UPDATE_USER_DETAILS}/${userId}`,body)
         return response
     }catch(err){    
         throw err
