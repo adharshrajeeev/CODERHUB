@@ -1,5 +1,5 @@
 import store from '../redux/store'
-import { ADD_COVERPICTURE, ADD_PROFILEIMAGE, EMAIL_VERIFICATION_SIGNUP, FOLLOW_USER, GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_PROFILE_DETAILS, GET_USER_DETAILS, SEND_OTP_REQUEST, 
+import { ADD_COMMENTS, ADD_COVERPICTURE, ADD_PROFILEIMAGE, DELETE_COMMENT, EMAIL_VERIFICATION_SIGNUP, FOLLOW_USER, GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_PROFILE_DETAILS, GET_USER_DETAILS, SEND_OTP_REQUEST, 
     SHOW_USER_POST, UNFOLLOW_USER, USER_LOGIN } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
 import axios from '../utils/axios';
@@ -147,6 +147,26 @@ export const followUser = async (body) =>{
 export const unFollowUser = async (body) =>{
     try{
         const response = await instance.post(UNFOLLOW_USER,body)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+
+export const addNewComment =async(body)=>{
+    try{
+        const response = await instance.post(ADD_COMMENTS,body);
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+
+export const deleteComment = async (body)=>{
+    try{
+        const response = await instance.put(DELETE_COMMENT,body)
         return response
     }catch(err){
         throw err
