@@ -7,10 +7,9 @@ import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { useNavigate, Link } from "react-router-dom";
-import axios from '../../../utils/axios'
+import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
-import { OTP_AND_RESET_PASS } from '../../../utils/ConstUrls';
+import { sendOtpandResetPassword } from '../../../api/UserServices';
 
 
 
@@ -41,21 +40,19 @@ function OtpSubmit({userId}) {
 
   const handleResetSubmit = async(e)=>{
     e.preventDefault();
-    const body=JSON.stringify({
+    const body={
       newPassword,
       userId,
       OTP
-    })
-
-    axios.post(OTP_AND_RESET_PASS,body,{headers:{"Content-Type":"application/json"}}).then((response)=>{
-      console.log(response,"respose reset")
+    }
+    try{
+      const response = await sendOtpandResetPassword(body)
       navigate('/',{state:{message:"Password reset sucessfully"}})
-    }).catch((err)=>{
-      console.log(err)
+    }catch(err){
       setNewPassword("");
       setOTP("")
       toast.error(err.response.data.message)
-    })
+    }
   }
 
 

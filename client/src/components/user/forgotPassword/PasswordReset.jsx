@@ -8,10 +8,8 @@ import Box from '@mui/material/Box';
 import SendIcon from '@mui/icons-material/Send';
 import { ThemeProvider, styled } from '@mui/material/styles';
 import { useSelector } from 'react-redux';
-import { fetchUserDetails } from '../../../api/UserServices';
-import axios from '../../../utils/axios'
+import { fetchUserDetails, sendOtpRequest } from '../../../api/UserServices';
 import decodeToken from '../../../utils/Services';
-import { SEND_OTP_REQUEST } from '../../../utils/ConstUrls';
 import toast, { Toaster } from 'react-hot-toast'
 import SubmitOtp from './SubmitOtp';
 
@@ -38,24 +36,23 @@ function PasswordReset() {
 
   const handleSendOtp = async () => {
     setLoading(true);
-    const userId = decodeToken();
-    const token = localStorage.getItem('token')
-    const body = JSON.stringify({
+    const userId = decodeToken()
+    const body = {
       userId,
       userEmail
-    })
+    }
     try {
-      axios.post(SEND_OTP_REQUEST, body, { headers: { 'Authorization': `Bearer ${token}`, "Content-Type": "application/json", } }).then((response) => {
-        setComponent(true)
-        setLoading(false);
-        toast.success(response.data.message)
-      }).catch((Err) => {
-        setLoading(false);
-        console.log(Err.response.data.message)
-      })
+
+      const response = await sendOtpRequest(body)
+      setComponent(true)
+      setLoading(false);
+      toast.success(response.data.message)
+
     } catch (err) {
+      setLoading(false);
+      console.log(err.response.data.message)
       console.log(err, "error in reset catch")
-      toast.error(err)
+      toast.error(err.response.data.message)
     }
   }
 
