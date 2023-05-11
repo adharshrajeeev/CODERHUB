@@ -155,8 +155,10 @@ function NewNavbar({socket}) {
     </Menu>
   );
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" style={{color:"black",backgroundColor:"#f7f7f7"}}>
+    <div className="newNav" style={{position:"sticky",top:0}}>
+
+    <Box sx={{ flexGrow: 1 }} >
+      <AppBar position="sticky" style={{color:"white",backgroundColor:"black",top: 0}}>
         <Toolbar>
           <IconButton
             size="large"
@@ -177,15 +179,7 @@ function NewNavbar({socket}) {
             CODERHUB
           </Typography>
           <Search>
-            {/* <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper> */}
-            {/* <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            /> */}
             <Searches/>
-          
           </Search>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
@@ -232,6 +226,7 @@ function NewNavbar({socket}) {
       {renderMobileMenu}
       {renderMenu}
     </Box>
+    </div>
   )
 }
 
