@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import './profileStyle.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
@@ -18,6 +17,7 @@ import decodeToken from '../../../utils/Services';
 import PeopleIcon from '@mui/icons-material/People';
 import { Stack } from '@mui/material';
 import ProfileEditButton from '../../../components/user/modals/ProfileEditButton';
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 
 
 
@@ -143,7 +143,7 @@ function Profile() {
   return (
 
     <div>
-      <Navbar />
+      <NewNavbar/>
       <div style={{ display: "flex" }}>
         <LeftBar />
         <div style={{ flex: 8 }}>

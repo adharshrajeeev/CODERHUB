@@ -1,9 +1,9 @@
 import React,{useEffect} from 'react'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import { fetchUserDetails } from "../../../api/UserServices";
 import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading';
 import Notifications from '../../../components/user/notification/Notifications';
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 
 function NotifcationsPage() {
 
@@ -12,7 +12,7 @@ function NotifcationsPage() {
       },[])
   return (
     <div>
-      <Navbar/>
+      <NewNavbar/>
       <div style={{ display: "flex" }}>
         <LeftBar/>
         <div style={{ flex: 8 }}>

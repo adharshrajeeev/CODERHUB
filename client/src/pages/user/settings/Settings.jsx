@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import './settingsStyle.scss'
 import { fetchUserDetails } from '../../../api/UserServices'
 import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading'
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 const LazySettings=React.lazy(()=>import('../../../components/user/settingsTab/UserSettings'))
 
 function Settings() {
@@ -13,7 +13,7 @@ function Settings() {
 
   return (
     <div>
-      <Navbar/>
+      <NewNavbar/>
       <div style={{ display: "flex" }}>
         <LeftBar/>
         <div style={{ flex: 8 }}>

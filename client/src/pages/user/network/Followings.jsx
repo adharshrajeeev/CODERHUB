@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import './FriendStyle.scss'
-import Navbar from '../../../components/user/navbar/Navbar'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
 import FollowignLists from '../../../components/user/friendslist/FollowingList';
 import toast, { Toaster } from 'react-hot-toast';
@@ -8,6 +7,7 @@ import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import decodeToken from '../../../utils/Services';
 import { fetchAllFollowings } from '../../../api/UserServices';
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 
 function Followings() {
 
@@ -29,7 +29,7 @@ function Followings() {
 
   return (
     <>
-      <Navbar />
+      <NewNavbar />
       <div style={{ display: "flex" }}>
         <LeftBar />
         <div style={{ flex: 8 }}>

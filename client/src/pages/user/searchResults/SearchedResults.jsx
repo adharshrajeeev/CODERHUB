@@ -1,9 +1,9 @@
 import React,{useEffect, useState} from 'react'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import { fetchUserDetails } from "../../../api/UserServices";
 import { useLocation } from 'react-router-dom';
 import SearchData from '../../../components/user/searchedList/SearchData';
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 
 function SearchedResults() {
 
@@ -24,7 +24,7 @@ function SearchedResults() {
 
   return (
     <div>
-    <Navbar/>
+   <NewNavbar/>
     <div style={{ display: "flex" }}>
       <LeftBar/>
       <div style={{ flex: 8 }}>

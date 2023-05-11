@@ -1,10 +1,10 @@
 import React,{useEffect} from 'react'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import RightBar from '../../../components/user/rightBar/RightBar';
 import { fetchUserDetails } from "../../../api/UserServices";
 import { useSelector } from 'react-redux';
 import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading';
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 const LazyExplore = React.lazy(()=>import('../../../components/user/explore/ExplorePosts'))
 
 function Explore() {
@@ -16,7 +16,7 @@ function Explore() {
   const userId=useSelector((state)=>state?.user?.user?._id)
   return (
     <div>
-      <Navbar/>
+     <NewNavbar/>
       <div style={{ display: "flex" }}>
         <LeftBar/>
         <div style={{ flex: 6 }}>

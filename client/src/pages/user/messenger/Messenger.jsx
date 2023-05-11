@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './Messenger.css'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import Conversations from '../../../components/user/conversations/Conversations'
 import Message from '../../../components/user/conversations/Message'
 import ChatOnline from '../../../components/user/conversations/ChatOnline'
@@ -12,6 +11,7 @@ import {io} from 'socket.io-client'
 import { fetchUserDetails } from "../../../api/UserServices";
 import { Divider } from '@mui/material'
 import toast,{Toaster} from 'react-hot-toast'
+import NewNavbar from '../../../components/user/navbar/NewNavbar'
 
 function Messenger() {
 
@@ -169,7 +169,7 @@ function Messenger() {
 
     return (
         <div>
-            <Navbar />
+           <NewNavbar/>
             <div style={{ display: "flex" }}>
                 <LeftBar />
                 <div style={{ flex: 8 }}>

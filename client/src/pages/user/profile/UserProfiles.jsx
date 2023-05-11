@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './profileStyle.scss';
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import Navbar from '../../../components/user/navbar/Navbar'
 import Post from '../../../components/user/post/Post';
 import toast,{Toaster} from 'react-hot-toast'
 import { useParams } from 'react-router-dom';
@@ -10,6 +9,7 @@ import decodeToken from '../../../utils/Services';
 import { Box, Button, Stack } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { fetchOtherUserDetails, followUser, unFollowUser } from '../../../api/UserServices';
+import NewNavbar from '../../../components/user/navbar/NewNavbar';
 
 function UserProfiles() {
 
@@ -86,7 +86,7 @@ function UserProfiles() {
 
   return (
     <div>
-      <Navbar />
+      <NewNavbar/>
       <div style={{ display: "flex" }}>
         <LeftBar />
         <div style={{ flex: 8 }}>
