@@ -11,11 +11,9 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SendIcon from '@mui/icons-material/Send';
 import axios from '../../../utils/axios'
 import { REPORT_POST, REPORT_POST_HOME } from '../../../utils/ConstUrls';
-import MaleIcon from '@mui/icons-material/Male';
-import FemaleIcon from '@mui/icons-material/Female';
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux';
-import { setExplorePosts, setHomePosts, setPosts } from '../../../redux/userSlice';
+import { setExplorePostAfterReport, setHomePosts, setPosts } from '../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
 
 
@@ -83,7 +81,7 @@ function PostReportModal({ postId, postedUserId, userId }) {
                 if(response.data.success) {
                     setOpen(false)
                    
-                        dispatch(setExplorePosts(response.data.posts))
+                        dispatch(setExplorePostAfterReport(response.data.posts))
                         toast.success(response.data.message);
                 
     

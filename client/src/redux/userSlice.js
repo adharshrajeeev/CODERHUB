@@ -63,6 +63,9 @@ const userSlice=createSlice({
             const updatedPosts = newPosts.filter(post => !state.explorePosts.some(p => p._id === post._id));
              state.explorePosts = [...state.explorePosts, ...updatedPosts];    
         },
+        setExplorePostAfterReport:(state,action)=>{
+            state.explorePosts=action.payload
+        },
         updateExplorePosts:(state,action)=>{
             const updatedPost =  state.explorePosts.map((post)=>{
                
@@ -102,6 +105,6 @@ const userSlice=createSlice({
 
 export const {setMode , setLogin, setLogout,setFriends, setPost ,setPosts,
             setProfilepic,setCoverPic,changeUserName,addUserBio,setHomePosts,setExplorePosts,updateExplorePosts,
-            updateHomePosts,setNotification,updateNotification,deleteNotification} = userSlice.actions;
+            updateHomePosts,setNotification,updateNotification,deleteNotification,setExplorePostAfterReport} = userSlice.actions;
 
 export default userSlice.reducer;
