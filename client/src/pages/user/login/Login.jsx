@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import CodeIcon from '@mui/icons-material/Code';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -8,11 +9,12 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useDispatch } from 'react-redux'
-import { useNavigate, Link, Route, useLocation } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import toast, { Toaster } from 'react-hot-toast';
 import Divider from '@mui/material/Divider';
 import { setLogin } from '../../../redux/userSlice';
 import { userLogin } from '../../../api/UserServices';
+import { isValidatePassword, validateEmail } from '../../../components/user/utils/Validation';
 function Login() {
 
 
@@ -20,6 +22,8 @@ function Login() {
   const resetMessage=location.state?.message
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState("");
+  const [loginError,setLoginError]=useState({emailErr:null,passwordError:null});
+  const [loading,setLoading]=useState(false)
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -39,6 +43,25 @@ function Login() {
     }
   },[resetMessage])
 
+
+  const onHandleEmailChange = (event)=>{
+    if(!validateEmail(event.target.value)){
+      setLoginError({emailErr:"Enter Valid EmailId"})
+    }else{
+      setLoginError({emailErr:null})
+    }
+    setEmail(event.target.value)
+  }
+
+
+  const onHandlePasswordChange = (event) =>{
+    if(!isValidatePassword(event.target.value)){
+      setLoginError({passwordError:"Enter Valid Password(Min 8 characters)"})
+    }else{
+      setLoginError({passwordError:null})
+    }
+    setPassword(event.target.value)
+  }
   
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -51,7 +74,7 @@ function Login() {
       password
     }
         try{
-
+          setLoading(true)
           const response=await userLogin(body);
           dispatch(setLogin({
             user: response.data.userdetails,
@@ -60,8 +83,8 @@ function Login() {
           localStorage.setItem("token", response.data.token)
            navigate("/home");
         }catch(err){
+          setLoading(false)
           toast.error(err?.response?.data?.message)
-          console.log(err)
         }
 
   };
@@ -86,15 +109,16 @@ function Login() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-
+                error={Boolean(loginError.emailErr)}
                 fullWidth
                 id="email"
                 label="Email Address"
                 name="email"
                 autoComplete="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={onHandleEmailChange}
               />
+              {loginError.emailErr && <span style={{color: 'red',fontSize:"small"}}>{loginError.emailErr}</span>}
             </Grid>
             <Grid item xs={12}>
               <TextField
@@ -104,20 +128,24 @@ function Login() {
                 label="Password"
                 type="password"
                 id="password"
-                autoComplete="new-password"
+                autoComplete="new-password" 
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
+                onChange={onHandlePasswordChange}
+                />
+                { loginError.passwordError && <span style={{color: 'red',fontSize:"small"}}>{loginError.passwordError}</span>}
             </Grid>
           </Grid>
-          <Button
+          <LoadingButton
             type="submit"
             fullWidth
+            loading={loading}
+            disabled={Boolean(loginError.emailErr) || !Boolean(email) || !Boolean(password) || Boolean(loginError.passwordError)}
             variant="contained"
+            
             sx={{ mt: 3, mb: 2, color: "white", background: "black" }}
           >
             LOGIN
-          </Button>
+          </LoadingButton>
           <Box display={"flex"} justifyContent="center" alignItems="center" sx={{cursor:"pointer",textDecoration:"none"}} >
           <Link to={'/forgetPassword'} style={{textDecoration:"none"}}>
            <Typography>
@@ -137,8 +165,6 @@ function Login() {
               <Divider />
             </Grid>
           </Grid>
-          {/* <Grid container justifyContent="center">
-            <Grid > */}
               <Link to={'/signup'} variant="body2">
                 <Button
                   type="submit"
@@ -149,8 +175,6 @@ function Login() {
                 </Button>
 
               </Link>
-            {/* </Grid>
-          </Grid> */}
         </Box>
       </Box>
       <Toaster position="top-center"
