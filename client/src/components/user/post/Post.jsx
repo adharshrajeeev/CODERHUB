@@ -42,19 +42,19 @@ const Post = ({ post, loading,socket,user }) => {
       
 
       if (Like === FavoriteOutlinedIcon) {
-        await toggleUnLikePost(body)
         setLiked(FavoriteBorderOutlinedIcon);
         SetLikeCount(count => count - 1)
+        await toggleUnLikePost(body)
       
       } else {
+        setLiked(FavoriteOutlinedIcon);
+        SetLikeCount(count => count + 1)
         await toggleLikePost(body)
         socket?.emit("sendNotification",{
           senderName:userName,
           receiverName:post?.postedUser?.userName,
           type:"LIKE"
         })
-        setLiked(FavoriteOutlinedIcon);
-        SetLikeCount(count => count + 1)
       }
     } catch (err) {
       console.log(err)
