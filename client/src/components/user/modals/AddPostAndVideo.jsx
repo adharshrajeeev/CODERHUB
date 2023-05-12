@@ -7,13 +7,14 @@ import ModalDialog from '@mui/joy/ModalDialog';
 import Stack from '@mui/joy/Stack';
 import Add from '@mui/icons-material/Add';
 import Textarea from '@mui/joy/Textarea';
-import Typography from '@mui/joy/Typography';
+import Typography from '@mui/joy/Typography'; 
 import { useDispatch, useSelector } from 'react-redux';
 import axios from '../../../utils/axios'
 import { ADD_POST } from '../../../utils/ConstUrls';
 import { setExplorePosts, setHomePosts, setPosts } from '../../../redux/userSlice';
 import { useLocation } from 'react-router-dom';
 import toast,{Toaster} from 'react-hot-toast'
+import { fetchExplorePosts, fetchUserFriendsPosts, fetchUserPosts } from '../../../api/UserServices';
 
 function AddPostAndVideo() {
     const [open, setOpen] = useState(false);
@@ -96,13 +97,16 @@ function AddPostAndVideo() {
             if(response.data.success){
                 setLoading(false);
                 if(location.pathname=='/home'){
-                  dispatch(setHomePosts(response.data.posts))
-                  console.log("home")
+                  const response=fetchUserFriendsPosts(userId)
+                  dispatch(setHomePosts(response.data))
                 }else if(location.pathname=='/explore'){
-                  dispatch(setExplorePosts(response.data.posts))
-                  console.log("explroe")
+                  
+                  const response=await fetchExplorePosts(userId)
+                  dispatch(setExplorePosts(response.data))
+                 
                 }else{  
-                  console.log("profile")
+                  
+                  const response = await fetchUserPosts(userId)
                   dispatch(setPosts(response.data.posts));
                 }
                 setPostContent("")

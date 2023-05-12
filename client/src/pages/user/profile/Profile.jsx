@@ -72,7 +72,6 @@ function Profile() {
   const getUserPosts = async () => {
     try {
       const response = await fetchUserPosts(userId)
-      console.log(response.data.posts,"userposts")
       dispatch(setPosts(response.data.posts))
     } catch (err) {
       console.log(err)
