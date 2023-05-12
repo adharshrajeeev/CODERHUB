@@ -122,7 +122,7 @@ function Login() {
             </Grid>
             <Grid item xs={12}>
               <TextField
-
+                error={Boolean(loginError.passwordError)}
                 fullWidth
                 name="password"
                 label="Password"

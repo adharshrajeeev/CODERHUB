@@ -1,18 +1,18 @@
 import  React,{useState} from 'react';
 import CodeIcon from '@mui/icons-material/Code';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Link,useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import toast, { Toaster } from 'react-hot-toast';
 import MenuItem from '@mui/material/MenuItem';
 import LoadingButton from '@mui/lab/LoadingButton';
 import OtpVerification from '../../../components/user/signup/OtpVerification';
 import { userRegister } from '../../../api/UserServices';
+import { isValidatePassword, isValidatePhoneNumber, validateEmail } from '../../../components/user/utils/Validation';
 
 
 
@@ -27,10 +27,41 @@ export default  function Register() {
   const [dateOfBirth,setDateOfBirth]=useState("");
   const [phoneNumber,setPhoneNumber]=useState("");
   const [gender,setGender]=useState("");
+  const [signupError,setSignUpError] = useState({useNameErr:null,emailErr:null,passwordErr:null,phoneNumberErr:null})
   const [otpComponent,setOtpComponent]=useState(false);
   const [userId,setUserId]=useState("")
   const [loading,setLoading]=useState(false)
-  const navigate = useNavigate();
+
+
+  const handleEmailChange = (event)=>{
+    if(!validateEmail(event.target.value)){
+      setSignUpError({emailErr:"Enter Valid Email"})
+    }else{
+      setSignUpError({emailErr:null})
+    }
+    setEmail(event.target.value)
+  }
+
+
+  const handlePhoneNumberChange = (event)=>{
+    if(!isValidatePhoneNumber(event.target.value)){
+      setSignUpError({phoneNumberErr:"Enter valid Number"})
+    }else{
+      setSignUpError({phoneNumberErr:false})
+    }
+    setPhoneNumber(event.target.value)
+  }
+
+  const handlePasswordChange = (event)=>{
+    if(!isValidatePassword(event.target.value)){
+      setSignUpError({passwordErr:"Enter Valid Password(Min 8 Letters)"})
+    }else{
+      setSignUpError({passwordErr:null})
+    }
+    setPassword(event.target.value)
+  }
+
+
 
   const handleSubmit = async(event) => {
     event.preventDefault();
@@ -51,12 +82,14 @@ export default  function Register() {
 
       setLoading(true)
       const response=await userRegister(body)
+      setOtpComponent(true)
       setUserId(response.data?.userId)
       setLoading(false)
       toast.success(response.data.message)
 
     }catch(err){
      setLoading(false)
+     setOtpComponent(false)
       toast.error(err.response.data.message)
     }
    
@@ -99,20 +132,21 @@ export default  function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-            
+                error={Boolean(signupError.emailErr)}
                  fullWidth
                  id="email"
                  label="Email Address"
                  name="email"
                  autoComplete="email"
                  value={email}
-                 onChange={(e)=>setEmail(e.target.value)}
+                 onChange={handleEmailChange}
                 />
+                {signupError.emailErr && <span style={{color: 'red',fontSize:"small"}}>{signupError.emailErr}</span>}
               </Grid>
               <Grid item xs={12} sm={6}>
                 <TextField
                   name="dateOfBirth"
-      
+                   helperText="Please select Gender"
                   type='date'
                   fullWidth
                   id="DateOfBirth"
@@ -146,20 +180,21 @@ export default  function Register() {
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                
-                  fullWidth
-                  type='number'
-                  id="phoneNumber"
-                  label="Phone Number"
-                  name="phoneNumber"
-                  autoComplete="number"
-                  value={phoneNumber}
-                  onChange={(e)=>setPhoneNumber(e.target.value)}
-                />
+                    error={Boolean(signupError.phoneNumberErr)}
+                    fullWidth
+                    type='number'
+                    id="phoneNumber"
+                    label="Phone Number"
+                    name="phoneNumber"
+                    autoComplete="number"
+                    value={phoneNumber}
+                    onChange={handlePhoneNumberChange}
+                    />
+                {signupError.phoneNumberErr && <span style={{color: 'red',fontSize:"small"}}>{signupError.phoneNumberErr}</span>}
               </Grid>
               <Grid item xs={12}>
                 <TextField
-                
+                    error={Boolean(signupError.passwordErr)}
                   fullWidth
                   name="password"
                   label="Password"
@@ -167,24 +202,21 @@ export default  function Register() {
                   id="password"
                   autoComplete="new-password"
                   value={password}
-                  onChange={(e)=>setPassword(e.target.value)}
+                  onChange={handlePasswordChange}
                 />
+                {signupError.passwordErr && <span style={{color: 'red',fontSize:"small"}}>{signupError.passwordErr}</span>}
               </Grid>
             </Grid>
-            {
-              loading ?  <LoadingButton loading fullWidth variant="contained" sx={{ mt: 3, mb: 2,color:"white",background:"black" }}>
-              Signup
-            </LoadingButton> :
-
-            <Button
+            
+             <LoadingButton loading={loading} 
               type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2,color:"white",background:"black" }}
-            >
-              Sign Up
-            </Button>
-            }
+             fullWidth variant="contained" 
+             sx={{ mt: 3, mb: 2,color:"white",background:"black" }}
+             disabled={signupError.passwordErr || signupError.emailErr || signupError.phoneNumberErr || !Boolean(email) || !Boolean(userName) || !Boolean(phoneNumber) || !Boolean(password)}
+             >
+              Signup
+            </LoadingButton> 
+            
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to={'/'} variant="body2" style={{textDecoration:"none"}}>
