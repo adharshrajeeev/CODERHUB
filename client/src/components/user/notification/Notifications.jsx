@@ -5,6 +5,7 @@ import NotificationStack from './NotificationStack';
 import NoDataFound from '../noDataAvailable/NoDataFound';
 import { useDispatch, useSelector } from 'react-redux';
 import { setNotification } from '../../../redux/userSlice';
+import { fetchAllNotifications } from '../../../api/UserServices';
 
 
 function Notifications() {
@@ -15,7 +16,7 @@ function Notifications() {
     const dispatch=useDispatch();
     const userId=decodeToken();
  
-    const fetchAllNotifications= async()=>{
+    const fetchNotifications= async()=>{
         try{
          const response=await  fetchAllNotifications(userId)
         dispatch(setNotification(response.data))
@@ -25,8 +26,8 @@ function Notifications() {
     }  
 
     useEffect(()=>{
-        fetchAllNotifications();
-    },[userId])
+        fetchNotifications();
+    },[])
     
 
   return (

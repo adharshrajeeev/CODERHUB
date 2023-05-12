@@ -34,7 +34,6 @@ function NotificationStack({notification,userId,fetchAllNotifications}) {
     const handleNotificationRead=async()=>{
         try{
             const res=await  changeNotificationStatus(notification._id)
-            console.log(res.data)
             handleClose()
             setNotificationColor({bgColor:"white",fontColor:"black"})
             dispatch(updateNotification(res.data))
