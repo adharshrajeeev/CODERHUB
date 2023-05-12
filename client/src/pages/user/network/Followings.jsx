@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import './FriendStyle.scss'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import FollowignLists from '../../../components/user/friendslist/FollowingList';
 import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import decodeToken from '../../../utils/Services';
 import { fetchAllFollowings } from '../../../api/UserServices';
+import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading'
 import NewNavbar from '../../../components/user/navbar/NewNavbar';
+import NoDataAvailable from '../../../components/user/noDataAvailable/NoDataFound'
+const LazyFollowings = React.lazy(()=>import('../../../components/user/friendslist/FollowingList'))
 
 function Followings() {
 
@@ -25,7 +27,7 @@ function Followings() {
 
   useEffect(() => {
     listFollowingUsers();
-  }, [])
+  }, [following])
 
   return (
     <>
@@ -37,12 +39,18 @@ function Followings() {
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 {
+                  following && following.length > 0 ?
                   following?.map((users, index) => (
                     <Grid item xs={4}>
-                      <FollowignLists users={users} key={index} listFollowingUsers={listFollowingUsers} />
+                      <React.Suspense fallback={<SkeletonLoading />}>
+                          <LazyFollowings users={users} key={index} listFollowingUsers={listFollowingUsers}/>
+                      </React.Suspense>
                     </Grid>
-
                   ))
+                  :
+                  <Grid item xs={12}>
+                  <NoDataAvailable data={"Followings"}/>
+                </Grid>
                 }
               </Grid>
             </Box>

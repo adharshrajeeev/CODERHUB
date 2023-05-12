@@ -1,15 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './FriendsStyle.css'
 import decodeToken from '../../../utils/Services';
 import toast,{Toaster} from 'react-hot-toast'
 import { Link } from 'react-router-dom';
 import { followUser } from '../../../api/UserServices';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
 
 
 function Followers({ users,listAllUsers }) {
 
+  const [loading,setLoading]=useState(false)
 
   const handleFollowUser = async()=>{
     const userId=decodeToken();
@@ -20,7 +22,7 @@ function Followers({ users,listAllUsers }) {
     }
     
     try{
-
+      setLoading(true)
       const response = await followUser(body)
       toast(response.data.message,
         {
@@ -34,6 +36,7 @@ function Followers({ users,listAllUsers }) {
       );
       listAllUsers();
     }catch(err){
+      setLoading(false)
       toast.error(err.response.data.message)
     }
    
@@ -48,11 +51,11 @@ function Followers({ users,listAllUsers }) {
       <Link to={`/user-profile/${users._id}`}   style={{ cursor:"pointer",textDecoration: "none", color: "inherit" }}>
       <h3>{users?.userName}</h3>
       </Link>
-      <div className="buttons">
-        <button className="communityFollow" onClick={handleFollowUser}>
+      {/* <div className="buttons"> */}
+        <LoadingButton variant="contained" loading={loading} onClick={handleFollowUser}>
           FOLLOW
-        </button>
-      </div>
+        </LoadingButton>
+      {/* </div> */}
       <Toaster/>
     </div>
 

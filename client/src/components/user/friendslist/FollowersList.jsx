@@ -1,13 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './FriendsStyle.css'
 import decodeToken from '../../../utils/Services';
 import toast, { Toaster } from 'react-hot-toast'
 import { Link } from 'react-router-dom';
 import { removeFollower } from '../../../api/UserServices';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 
 function Followers({ users, getAllFollowers }) {
 
+  const [loading,setLoading]=useState(false)
 
   const handleRemove = async () => {
     const userId = decodeToken();
@@ -17,6 +19,7 @@ function Followers({ users, getAllFollowers }) {
       followerId
     }
     try{
+      setLoading(true)
       const response = await removeFollower(body)
       toast(response.data.message,
         {
@@ -31,6 +34,7 @@ function Followers({ users, getAllFollowers }) {
       getAllFollowers();
       
     }catch(err){
+      setLoading(false)
       toast.error("oops something went wrong")
     }
   }
@@ -41,11 +45,9 @@ function Followers({ users, getAllFollowers }) {
       <Link to={`/user-profile/${users._id}`}   style={{ cursor:"pointer",textDecoration: "none", color: "inherit" }}>
       <h3>{users?.userName}</h3>
       </Link>
-      <div className="buttons">
-        <button className="followersLists" onClick={handleRemove}>
+        <LoadingButton variant="contained" loading={loading} onClick={handleRemove}> 
           Remove
-        </button>
-      </div>
+        </LoadingButton>
       <Toaster />
     </div>
   )

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react'
 import './FriendStyle.scss'
 import LeftBar from '../../../components/user/leftbar/LeftBar'
-import FollowersList from '../../../components/user/friendslist/FollowersList';
 import toast, { Toaster } from 'react-hot-toast';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import decodeToken from '../../../utils/Services';
 import { fetchAllFollowers } from '../../../api/UserServices';
 import NewNavbar from '../../../components/user/navbar/NewNavbar';
+import SkeletonLoading from '../../../components/user/Loading/SkeletonLoading'
+import NoDataAvailable from '../../../components/user/noDataAvailable/NoDataFound'
+const LazyFollowers = React.lazy(()=>import('../../../components/user/friendslist/FollowersList'))
 
 function Followers() {
 
@@ -26,7 +28,7 @@ function Followers() {
 
   useEffect(()=>{
     getAllFollowers();
-  },[])
+  },[followers])
   return (
     <>
       <NewNavbar />
@@ -38,21 +40,26 @@ function Followers() {
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 {
+                   followers && followers.length > 0 ?
                   followers?.map((users, index) => (
                     <Grid item xs={4}>
-                      <FollowersList users={users} key={index} getAllFollowers={getAllFollowers} />
+                      <React.Suspense fallback={<SkeletonLoading/>}>
+                        <LazyFollowers users={users} key={index} getAllFollowers={getAllFollowers}/>
+                      </React.Suspense>
                     </Grid>
 
                   ))
+                  :
+                  <Grid item xs={12}>
+                  <NoDataAvailable data={"Followers"}/>
+                </Grid>
                 }
-
-
               </Grid>
             </Box>
           </div>
         </div>
         <Toaster
-          position="top-center"
+         position="bottom-left"
           reverseOrder={false}
         />
       </div>
