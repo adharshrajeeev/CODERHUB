@@ -32,6 +32,7 @@ function Followers({ users, getAllFollowers }) {
         }
       );
       getAllFollowers();
+      setLoading(false)
       
     }catch(err){
       setLoading(false)

@@ -20,7 +20,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   });
 
 
-function PostMenuButton({postId,postedUserId,userId,content,postImage}) {
+function PostMenuButton({postId,postedUserId,userId,content,postImage,postVideo}) {
 
     const dispatch=useDispatch();
     const [anchorEl, setAnchorEl] = useState(false);
@@ -65,7 +65,7 @@ function PostMenuButton({postId,postedUserId,userId,content,postImage}) {
           'aria-labelledby': 'basic-button',
         }}
       >
-       <EditPostModal postId={postId} postedUserId={postedUserId} userId={userId} content={content} postImage={postImage}/>
+       <EditPostModal postId={postId} postedUserId={postedUserId} userId={userId} content={content} postImage={postImage} postVideo={postVideo}/>
   
         <MenuItem onClick={handleClickOpen}>Delete</MenuItem>
         <Dialog

@@ -31,6 +31,7 @@ function Following({users,listFollowingUsers}) {
       }
     );
     listFollowingUsers();
+    setLoading(false)
   }catch(err){
     setLoading(false)
     toast.error("OOPS Something went wrong");
