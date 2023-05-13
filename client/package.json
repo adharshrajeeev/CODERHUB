@@ -24,6 +24,7 @@
     "react-apexcharts": "^1.4.0",
     "react-dom": "^18.2.0",
     "react-hot-toast": "^2.4.0",
+    "react-image-crop": "^10.0.9",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.9.0",
     "react-scripts": "5.0.1",

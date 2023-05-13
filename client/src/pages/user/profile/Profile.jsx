@@ -18,6 +18,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import { Stack } from '@mui/material';
 import ProfileEditButton from '../../../components/user/modals/ProfileEditButton';
 import NewNavbar from '../../../components/user/navbar/NewNavbar';
+import AddProfileModal from '../../../components/user/modals/AddProfileModal';
 
 
 
@@ -64,6 +65,9 @@ function Profile() {
   const handleOpenCover = () => setOpenCover(true);
   const handleCloseCover = () => setOpenCover(false);
   const [coverPicture, setCoverPicture] = useState("");
+
+
+  const [openModal,setOpenModal]=useState(false)
   const dispatch = useDispatch();
 
 
@@ -168,37 +172,10 @@ function Profile() {
                   src={profilePic}
                   alt=""
                   className="profilePic"
-                  onClick={handleOpen}
+                  onClick={()=>setOpenModal(true)}
                 />
-                <Modal                                              //MODAL FOR PROFILE PICTURE CHANGE
-                  aria-labelledby="transition-modal-title"
-                  aria-describedby="transition-modal-description"
-                  open={open}
-                  onClose={handleClose}
-                  closeAfterTransition
-                  slots={{ backdrop: Backdrop }}
-                  slotProps={{
-                    backdrop: {
-                      timeout: 500,
-                    },
-                  }}
-                >
-                  <Fade in={open}>
-                    <Box sx={style} borderRadius={5}>
-                      <Typography id="transition-modal-title" variant="h6" component="h2">
-                        ADD USER IMAGE
-                      </Typography>
-                      <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-                        <form onSubmit={handleImageSumbit}>
-                          <label htmlFor="myfile">Select a file:</label>
-                          <input accept="image/*" type="file" name="file" onChange={handleChangeImg} />
-                          {previewPro && <input className='profileButtonSubmit' type="submit" />}
-                        </form>
-                        {previewPro && <img src={previewPro && URL.createObjectURL(previewPro)} style={{ width: "50px", height: "50px" }} alt="profilePicture" />}
-                      </Typography>
-                    </Box>
-                  </Fade>
-                </Modal>
+               
+                <AddProfileModal setOpenModal={setOpenModal} openModal={openModal} userId={userId}/>
                 <Modal                                            //MODAL FOR COVER PICTURE CHANGE
                   aria-labelledby="transition-modal-title"
                   aria-describedby="transition-modal-description"
@@ -208,7 +185,7 @@ function Profile() {
                   slots={{ backdrop: Backdrop }}
                   slotProps={{
                     backdrop: {
-                      timeout: 500,
+                      timeout: 500, 
                     },
                   }}
                 >
