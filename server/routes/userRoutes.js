@@ -45,7 +45,10 @@ router.put('/changePassword',verifyToken,isBlocked,changeUserPassword)
 router.get('/posts/:id',verifyToken,isBlocked,getAllPosts);
 router.get('/explore',verifyToken,isBlocked,exploreAllPosts)
 router.get('/editPost/:id',verifyToken,isBlocked,getEditPost)
-// router.put('/updatePost',verifyToken,upload.single('image'),isBlocked,updateUserPost) //should be solved
+router.put('/updatePost',verifyToken,upload.fields([
+        { name: 'image', maxCount: 1 },
+        { name: 'my-video', maxCount: 1 }
+      ]),isBlocked,updateUserPost) 
 router.delete('/deletePost',verifyToken,isBlocked,deleteUserPost)
 router.put('/like',verifyToken, isBlocked,likePost)
 router.put('/unLike',verifyToken,isBlocked,unLikePost);

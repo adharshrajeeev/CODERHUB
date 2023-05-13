@@ -158,30 +158,83 @@ export const getEditPost = async (req, res) => {
 export const updateUserPost = async (req, res) => {
     try {
 
-        const { content, postId, userId } = req.body;
-        console.log("content", content, "posteIId", postId, "userId", userId)
-        if (req.file) {
-            const cloudImage = await cloudinary.uploader.upload(req.file.path, {
+        const { content, postId, userId ,imageContent, videoContent, contentVideo, contentImg} = req.body;
+
+        if(imageContent){
+            const cloudImage = await cloudinary.uploader.upload(req.files.image[0].path,{
                 folder: "Posts"
-            });
-            await Posts.findOneAndUpdate({ _id: postId }, {
+            })
+                  await Posts.findOneAndUpdate({ _id: postId }, {
                 $set: {
-                    "image.url": cloudImage.url,
-                    content: content
+                    "image.url": cloudImage.url
                 }
             })
             const post = await Posts.findOne({ _id: postId })
             return res.status(200).json({ success: true, post, message: "post updated" })
         }
+
+        if(videoContent){
+          
+            let ext = path.extname(req.files['my-video'][0].originalname);
+            if (ext !== ".mp4" && ext !== ".mkv" && ext !== ".jpeg" && ext !== ".jpg" && ext !== ".png") {
+
+                return res.status(401).json({ message: "File Format not supported" })
+            }
+            if (ext == ".mp4" || ext == ".mkv") {
+                const cloudVideo = await cloudinary.uploader.upload(req.files['my-video'][0].path, {
+                    resource_type: "video",
+                    folder: "User-videos"
+                })
+                await Posts.findOneAndUpdate({_id:postId},{
+                    $set:{
+                        videoUrl:cloudVideo.url
+                    }
+                })
+                const post = await Posts.findOne({ _id: postId })
+                return res.status(200).json({ success: true, post, message: "post updated" })
+
+            }
+        }
+        if(contentVideo){
+            const cloudVideo = await cloudinary.uploader.upload(req.files['my-video'][0].path, {
+                resource_type: "video",
+                folder: "User-videos"
+            })
+            await Posts.findOneAndUpdate({_id:postId},{
+                $set:{
+                    videoUrl:cloudVideo.url,
+                    content
+                }
+            })
+            const post = await Posts.findOne({ _id: postId })
+            return res.status(200).json({ success: true, post, message: "post updated" })
+
+        }
+        if(contentImg){
+            const cloudImage = await cloudinary.uploader.upload(req.files.image[0].path,{
+                folder: "Posts"
+            })
+                  await Posts.findOneAndUpdate({ _id: postId }, {
+                $set: {
+                    content,
+                    "image.url": cloudImage.url
+                }
+            })
+            const post = await Posts.findOne({ _id: postId })
+            return res.status(200).json({ success: true, post, message: "post updated" })
+        }
+
         await Posts.findOneAndUpdate({ _id: postId }, {
             $set: {
-                content: content
+                content
             }
         })
         const post = await Posts.findOne({ _id: postId })
-        res.status(200).json({ success: true, post, message: "post updated" })
+        return res.status(200).json({ success: true, post, message: "post updated" })
+
 
     } catch (err) {
+        console.log(err)
         res.status(500).json({ success: false, error: err })
     }
 }
