@@ -22,6 +22,7 @@ import Messenger from './pages/user/messenger/Messenger';
 import SearchedResults from './pages/user/searchResults/SearchedResults';
 import PostView from './pages/admin/postDetails/PostView';
 import NotifcationsPage from './pages/user/userNotifications/NotifcationsPage';
+import PageNotFound from './pages/user/pageNotFound/PageNotFound';
 const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
@@ -169,7 +170,7 @@ function App() {
           } />
 
 
-          {/* <Route path='*' element={<PageNotFound />} /> */}
+          <Route path='*' element={<PageNotFound/>} />
         </Routes>
       </BrowserRouter>
     </div>

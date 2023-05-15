@@ -155,7 +155,7 @@ function NewNavbar({socket}) {
     </Menu>
   );
   return (
-    <div className="newNav" style={{position:"sticky",top:0}}>
+    <div className="newNav" style={{position:"sticky",top:0,zIndex:100}}>
 
     <Box sx={{ flexGrow: 1 }} >
       <AppBar position="sticky" style={{color:"white",backgroundColor:"black",top: 0}}>
