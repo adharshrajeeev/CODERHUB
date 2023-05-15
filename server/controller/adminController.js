@@ -1,35 +1,34 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcrypt'
 import { adminLoginValidate } from "../middlewares/validation.js"
-import Admin from "../model/admin.js";
 import { blockUser, fetchAllUsers, fetchMonthWiseUserGrowth, unBlockUser } from '../repositories/userRepository.js';
 import { blockPosts, fetchAllPosts, fetchMonthWisePostGrowth, fetchPostDetails, fetchTotalPostReports, unBlockPosts } from '../repositories/postRepository.js';
+import { comparePassword } from '../utils/bcrypt.js';
+import { fetchAdminDb } from '../repositories/adminRepository.js';
 
 export const adminLogin = async(req,res)=>{
 
      try{
-          console.log(req.body)
+
           const {error}=adminLoginValidate(req.body)
      
           if(error) return res.status(401).json({success:false,message:error.details[0].message})
 
           const {adminId,adminPassword}=req.body;
-          const adminDetails=await Admin.findOne({adminId})
+          const {data,message}=await fetchAdminDb(adminId)
+          const adminDetails=data
           if(adminDetails){
-              
-               const matchPassword = await bcrypt.compare(adminPassword,adminDetails.adminPassword)
-            
-               if(!matchPassword) return res.status(401).json({success:false,message:"Admin Password is not matched"})
+              const {data}= await comparePassword(adminPassword,adminDetails.adminPassword)
+               if(!data) return res.status(401).json({success:false,message:"Admin Password is not matched"})
       
                const adminToken=jwt.sign({id:adminDetails._id},process.env.ADMIN_JWTKEY)
                res.status(200).json({success:true,message:"Login success",adminToken})
           }else{
               
-               res.status(200).json({success:false,message:"admin credentials not found"})
+               res.status(400).json({success:false,message:message})
           }
           
      }catch(err){
-          res.status(400).json({error:err,message:"server eroor"})
+          res.status(500).json({error:err,message:"server eroor"})
      }
 
 }
