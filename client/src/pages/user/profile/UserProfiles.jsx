@@ -8,27 +8,38 @@ import noProfilePicture from '../../../assets/noProfilePicture.jpg'
 import decodeToken from '../../../utils/Services';
 import { Box, Button, Stack } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
-import { fetchOtherUserDetails, followUser, unFollowUser } from '../../../api/UserServices';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { fetchOtherUserDetails, fetchUserDetails, followUser, unFollowUser } from '../../../api/UserServices';
 import NewNavbar from '../../../components/user/navbar/NewNavbar';
+import { useSelector } from 'react-redux';
 
 function UserProfiles() {
 
     const params=useParams();
+    const userData=useSelector((state)=>state?.user?.user);
+    const [loading,setLoading]=useState(false)
     const [userDetails,setUserDetails]=useState("");
     const [isFollowing,setFollowing]=useState(false);
     const [posts,setPosts]=useState([]);
-    const getUserProfileDetails = async ()=>{
-        const userId=decodeToken();
-        try{
-          const response = await fetchOtherUserDetails(params?.id,userId)
-            setUserDetails(response?.data?.userData);
-            setPosts(response?.data?.posts)
-            setFollowing(response?.data?.isFollowing)
-        }catch(err){
-          toast.error(err?.response?.data?.message)
+    const userId=decodeToken();
+
+    const fetchUserDatas = async ()=>{
+      try{
+        const response= await fetchOtherUserDetails(params?.id,userId);
+        setUserDetails(response?.data?.userData);
+        setPosts(response?.data?.posts)
+        if(userData.following?.includes(params?.id)){
+          setFollowing(true)
         }
+      }catch(err){
+        setLoading(false)
+        console.log(err)
+      }
     }
 
+    useEffect(()=>{
+      fetchUserDatas()
+    },[])
     const handleFollowUser = async()=>{
         const userId=decodeToken();
         const followerId=params.id;
@@ -36,6 +47,7 @@ function UserProfiles() {
           userId,
           followerId
         }
+        setLoading(true)
           try{
             const response = await followUser(body)
                toast(response.data.message,
@@ -48,8 +60,12 @@ function UserProfiles() {
               },
             }
           );
-          getUserProfileDetails();
+          setLoading(false)
+          setFollowing(true)
+            fetchUserDetails()
           }catch(err){
+            setLoading(false)
+            console.log(err,"follow error")
             toast.error(err.response.data.message)
           }
       }
@@ -62,6 +78,8 @@ function UserProfiles() {
           followingId
         }
         try{
+          setLoading(true)
+          setFollowing(false)
           const response = await unFollowUser(body)
              toast(response.data.message,
           {
@@ -73,17 +91,17 @@ function UserProfiles() {
             },
           }
         );
-        getUserProfileDetails();
+        setLoading(false)
+        fetchUserDetails();
         }catch(err){
+          setLoading(false)
+          console.log(err,"unfolowo eror")
           toast.error(err.response.data.message)
         }
     
       }
 
-    useEffect(()=>{
-        getUserProfileDetails();
-    },[])
-
+  
   return (
     <div>
       <NewNavbar/>
@@ -136,14 +154,11 @@ function UserProfiles() {
                           {userDetails?.followers?.length} Followers
                         </Button>
                         {
-                           isFollowing ? <button style={{backgroundColor:"#ff5a5a"}} onClick={handleUnfollow}>Unfollow</button> : <button onClick={handleFollowUser} >Follow</button>
+                           isFollowing ? <LoadingButton style={{backgroundColor:"#ff5a5a"}} onClick={handleUnfollow} loading={loading} >Unfollow</LoadingButton> : <LoadingButton onClick={handleFollowUser} loading={loading}  >Follow</LoadingButton>
                         }
                         <Button variant="outlined" startIcon={<PeopleIcon />}>
                           {userDetails?.following?.length !== 0 ? userDetails?.following?.length : 0} Followings
                         </Button>
-                        {/* <Button variant="outlined" startIcon={<PeopleIcon />}>
-                          {userDetails?.following?.length !== 0 ? userDetails?.following?.length : 0} Followings
-                        </Button> */}
                       </Stack>
                     </Box>
                     {/* {
