@@ -27,11 +27,18 @@ export default  function Register() {
   const [dateOfBirth,setDateOfBirth]=useState("");
   const [phoneNumber,setPhoneNumber]=useState("");
   const [gender,setGender]=useState("");
-  const [signupError,setSignUpError] = useState({useNameErr:null,emailErr:null,passwordErr:null,phoneNumberErr:null})
+  const [signupError,setSignUpError] = useState({useNameErr:null,emailErr:null,passwordErr:null,phoneNumberErr:null,dateOfBirthErr:null})
   const [otpComponent,setOtpComponent]=useState(false);
   const [userId,setUserId]=useState("")
   const [loading,setLoading]=useState(false)
 
+
+  const today = new Date();
+  const minDate = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
+  const minDateString = minDate.toISOString().split("T")[0];
+
+
+  
 
   const handleEmailChange = (event)=>{
     if(!validateEmail(event.target.value)){
@@ -59,6 +66,18 @@ export default  function Register() {
       setSignUpError({passwordErr:null})
     }
     setPassword(event.target.value)
+  }
+
+
+  const handleDateChange = (event)=>{
+    const selectedDate=event.target.value
+    if(selectedDate >= minDateString){
+      setSignUpError({dateOfBirthErr:"You must be 18 years old or above"})
+    }else{
+      setSignUpError({dateOfBirthErr:null})
+      
+    }
+    setDateOfBirth(selectedDate)
   }
 
 
@@ -144,16 +163,17 @@ export default  function Register() {
                 {signupError.emailErr && <span style={{color: 'red',fontSize:"small"}}>{signupError.emailErr}</span>}
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  name="dateOfBirth"
-                   helperText="Please select Gender"
-                  type='date'
-                  fullWidth
-                  id="DateOfBirth"
-                  value={dateOfBirth}
-                  onChange={(e)=>setDateOfBirth(e.target.value)}
-                  autoFocus
-                />
+              <TextField
+               name="dateOfBirth"
+                helperText={!Boolean(signupError.dateOfBirthErr) && "Please select Gender"}
+               type="date"
+               fullWidth
+               id="DateOfBirth"
+              value={dateOfBirth}
+                onChange={handleDateChange}
+                 autoFocus
+                 />
+                 {signupError.dateOfBirthErr && <span style={{color: 'red',fontSize:"small"}}>{signupError.dateOfBirthErr}</span>}
               </Grid>
               <Grid item xs={12} sm={6}>
                   <TextField
@@ -212,7 +232,8 @@ export default  function Register() {
               type="submit"
              fullWidth variant="contained" 
              sx={{ mt: 3, mb: 2,color:"white",background:"black" }}
-             disabled={signupError.passwordErr || signupError.emailErr || signupError.phoneNumberErr || !Boolean(email) || !Boolean(userName) || !Boolean(phoneNumber) || !Boolean(password)}
+             disabled={signupError.passwordErr || signupError.emailErr || signupError.phoneNumberErr || signupError.dateOfBirthErr ||
+               !Boolean(email) || !Boolean(userName) || !Boolean(phoneNumber) || !Boolean(password) || !Boolean(gender)}
              >
               Signup
             </LoadingButton> 

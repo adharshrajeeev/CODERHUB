@@ -22,19 +22,16 @@ function UserSettings() {
         <TabList onChange={handleChange} aria-label="lab API tabs example">
           <Tab label="Primary Details" value="1" />
           <Tab label="Change Password" value="2" />
-          <Tab label="Block Users" value="3" />
         </TabList>
       </Box>
       <TabPanel value="1">
         <React.Suspense fallback={<SkeletonLoading/>} >
-
         <LazyPrimaryDetails/>
         </React.Suspense>
       </TabPanel>
       <TabPanel value="2">
         <ChangePassword/>
       </TabPanel>
-      <TabPanel value="3">Item Three</TabPanel>
     </TabContext>
   </Box>
   )
