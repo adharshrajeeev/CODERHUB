@@ -54,21 +54,15 @@ function Home() {
         </div>
         <div className="charts">
           <Box>
-            <Grid container >
-              <Grid  >
-
+            <Grid container>
+              <Grid item xs={12} md={6}>
                 <UserChart />
               </Grid>
-              <Grid  >
+              <Grid item xs={12} md={6}>
                 <PostChat />
-
               </Grid>
             </Grid>
           </Box>
-        </div>
-        <div className="listContainer">
-          {/* <div className="listTitle">Latest Transactions</div> */}
-          {/* <Table /> */}
         </div>
       </div>
     </div>

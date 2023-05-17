@@ -7,42 +7,63 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import toast,{Toaster} from 'react-hot-toast'
+import toast, { Toaster } from 'react-hot-toast'
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { setAdminLogin } from '../../../redux/adminSlice';
 import { adminLogin } from '../../../api/AdminServices';
+import { isValidatePassword, validateEmail } from '../../../components/user/utils/Validation';
 
 const theme = createTheme();
 
 function Login() {
 
-        const [adminId,setAdminId]=useState("")
-        const [adminPassword,setAdminPassword]=useState("");
-        const navigate=useNavigate();
-        const dispatch=useDispatch();
+    const [adminId, setAdminId] = useState("")
+    const [adminPassword, setAdminPassword] = useState("");
+    const [loginErr, setLoginError] = useState({ emailErr: null, passwordErr: null })
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
-    const handleSubmit = async(event) => {
+
+    const onHandleEmailChange = (event) => {
+        if (!validateEmail(event.target.value)) {
+            setLoginError({ emailErr: "Enter Valid EmailId" })
+        } else {
+            setLoginError({ emailErr: null })
+        }
+        setAdminId(event.target.value)
+    }
+
+    const handlePasswordChange = (event)=>{
+        if(!isValidatePassword(event.target.value)){
+            setLoginError({passwordErr:"Enter Valid Password(Min 8 characters)"})
+          }else{
+            setLoginError({passwordErr:null})
+          }
+          setAdminPassword(event.target.value)
+    }
+
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        if(adminId==="" || adminPassword===""){
+        if (adminId === "" || adminPassword === "") {
             return toast.error("Please fill the components.")
         }
-        const body={
+        const body = {
             adminId,
             adminPassword
         }
 
-        try{
+        try {
 
-            const {adminToken}=await adminLogin(body)
+            const { adminToken } = await adminLogin(body)
             dispatch(setAdminLogin(adminToken));
-            localStorage.setItem('adminToken',adminToken)
-            navigate('/admin/dashboard'); 
+            localStorage.setItem('adminToken', adminToken)
+            navigate('/admin/dashboard');
 
-        }catch(err){
-        
-           toast.error(err.response.data.message)
+        } catch (err) {
+
+            toast.error(err.response.data.message)
         }
     };
 
@@ -73,10 +94,11 @@ function Login() {
                             label="Email Address"
                             name="adminId"
                             value={adminId}
-                            onChange={(e)=>setAdminId(e.target.value)}
+                            onChange={onHandleEmailChange}
                             autoComplete="email"
                             autoFocus
                         />
+                         {loginErr.emailErr && <span style={{color: 'red',fontSize:"small"}}>{loginErr.emailErr}</span>}
                         <TextField
                             margin="normal"
                             required
@@ -85,13 +107,15 @@ function Login() {
                             label="Password"
                             type="password"
                             value={adminPassword}
-                            onChange={(e)=>setAdminPassword(e.target.value)}
+                            onChange={handlePasswordChange}
                             id="password"
                             autoComplete="current-password"
                         />
+                         {loginErr.passwordErr && <span style={{color: 'red',fontSize:"small"}}>{loginErr.passwordErr}</span>}
                         <Button
                             type="submit"
                             fullWidth
+                            disabled={Boolean(loginErr.emailErr) || Boolean(loginErr.passwordErr) || !Boolean(adminId) || !Boolean(adminPassword)}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >
@@ -101,9 +125,9 @@ function Login() {
                 </Box>
             </Container>
             <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
+                position="top-center"
+                reverseOrder={false}
+            />
         </ThemeProvider>
     );
 }
