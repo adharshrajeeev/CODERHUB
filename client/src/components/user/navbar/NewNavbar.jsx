@@ -5,7 +5,6 @@ import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import InputBase from '@mui/material/InputBase';
 import Badge from '@mui/material/Badge';
 import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
@@ -13,6 +12,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import LogoutIcon from '@mui/icons-material/Logout';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -39,21 +39,20 @@ const Search = styled('div')(({ theme }) => ({
 
 function NewNavbar({socket}) {
 
-    const navigate=useNavigate();
-    const dispatch=useDispatch();
-    const [notifications,setNotifications]=useState([])
-
-    const [anchorEl, setAnchorEl] = useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =useState(null);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [notifications, setNotifications] = useState([]);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
-  useEffect(()=>{
-    socket?.on('getNotification',data=>{
-      setNotifications(prev=>[...prev,data])
-    })
-  },[socket])
+  useEffect(() => {
+    socket?.on('getNotification', (data) => {
+      setNotifications((prev) => [...prev, data]);
+    });
+  }, [socket]);
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -71,6 +70,36 @@ function NewNavbar({socket}) {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleMenuIconClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const menuId2 = 'primary-search-account-menu';
+  const renderOption = (
+    <Menu
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={menuId2}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      <MenuItem onClick={() => navigate('/home')}>Home</MenuItem>
+      <MenuItem onClick={() => navigate('/explore')}>Explore</MenuItem>
+      <MenuItem onClick={() => navigate('/messenger')}>Messages</MenuItem>
+      <MenuItem onClick={() => navigate('/connections')}>Connections</MenuItem>
+      <MenuItem onClick={() => navigate('/settings')}>Settings</MenuItem>
+      <MenuItem onClick={() => navigate('/profile')}>Profile</MenuItem>
+    </Menu>
+  );
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -146,6 +175,17 @@ function NewNavbar({socket}) {
           <AccountCircle />
         </IconButton >
         <p onClick={()=>navigate('/profile')} sx={{cursor:"pointer"}} >Profile</p>
+      </MenuItem>
+      <MenuItem onClick={handleProfileMenuOpen}>
+        <IconButton
+          size="large"
+          aria-label="account of current user"
+          aria-controls="primary-search-account-menuLogout"
+          aria-haspopup="true"
+          color="inherit"
+        >
+          <LogoutIcon />
+        </IconButton >
         <p onClick={()=>{
       localStorage.removeItem("token");
       dispatch(setLogout())
@@ -160,15 +200,19 @@ function NewNavbar({socket}) {
     <Box sx={{ flexGrow: 1 }} >
       <AppBar position="sticky" style={{color:"white",backgroundColor:"black",top: 0}}>
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="open drawer"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+          <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+
+        <IconButton
+              size="large"
+              edge="start"
+              color="inherit"
+              aria-label="open drawer"
+              sx={{ mr: 2 }}
+              onClick={handleMenuIconClick}
+            >
+              <MenuIcon />
+            </IconButton>
+          </Box>
           <Typography
             variant="h6"
             noWrap
@@ -225,6 +269,7 @@ function NewNavbar({socket}) {
       </AppBar>
       {renderMobileMenu}
       {renderMenu}
+      {renderOption}
     </Box>
     </div>
   )
