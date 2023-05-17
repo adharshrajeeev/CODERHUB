@@ -18,6 +18,6 @@ const adminSlice=createSlice({
     }
 })
 
-export const {setAdminLogin} =adminSlice.actions;
+export const {setAdminLogin,setAdminLogout} =adminSlice.actions;
 
 export default adminSlice.reducer
