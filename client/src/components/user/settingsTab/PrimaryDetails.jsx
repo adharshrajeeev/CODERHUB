@@ -119,54 +119,53 @@ function PrimaryDetails() {
 
   return (
     <Box
-      component="form"
-      sx={{
-        '& .MuiTextField-root': { m: 1, width: '25ch' },
-      }}
-      noValidate
-      autoComplete="off"
-    >
-
-      <Grid container spacing={2} sx={{ flexGrow: 1 }}>
-        <Grid xs={6}>
-          <FormLabel>Name</FormLabel>
-          <Input placeholder="Name" type='text' value={userName} onChange={(e) => handleDetailsChange("userName", e.target.value)} />
-          {formError.userNameError  && <p style={{ color: "red" }}>Name Field is Required</p>}
-        </Grid>
-        <Grid xs={6}>
-          <FormLabel>Email</FormLabel>
-          <Input placeholder="Email" value={userEmail} disabled />
-        </Grid>
-        <Grid xs={4}>
-          <FormLabel>Gender</FormLabel>
-          <Input placeholder="Gender" type='text' value={userGender} onChange={(e) => handleDetailsChange("gender", e.target.value)} />
-          {formError.userGenderError && <p style={{ color: "red" }}>Gender Field is Required</p>}
-        </Grid>
-        <Grid xs={4}>
-          <FormLabel>Phone Number</FormLabel>
-          <Input placeholder="Phone Number" type='number' value={userPhoneNumber} onChange={(e) => handleDetailsChange("phoneNumber", e.target.value)} />
-          {formError.userPhoneNumberError  && <p style={{ color: "red" }}>Phone Field is Required</p>}
-        </Grid>
-        <Grid xs={4}>
-          <FormLabel>User Bio</FormLabel>
-          <Input placeholder="Bio" type='text' value={userBio} onChange={(e) => handleDetailsChange("Bio", e.target.value)} />
-          {formError.userBioError  && <p style={{ color: "red" }}>Bio Field is Required(Max char 10)</p>}
-        </Grid>
-        <Grid xs={12}>
-          <LoadingButton
-            color="primary"
-            loading={loading}
-            loadingPosition="start"
-            startIcon={<SaveIcon />}
-            variant="contained"
-          >
-            <span typeof='button' onClick={handleSaveDetails}>Save</span>
-          </LoadingButton>
-        </Grid>
+    component="form"
+    sx={{
+      '& .MuiTextField-root': { m: 1, width: '100%' },
+    }}
+    noValidate
+    autoComplete="off"
+  >
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        <FormLabel>Name</FormLabel>
+        <Input placeholder="Name" type="text" value={userName} onChange={(e) => handleDetailsChange("userName", e.target.value)} />
+        {formError.userNameError && <p style={{ color: "red" }}>Name Field is Required</p>}
       </Grid>
-
-      <Toaster />
-    </Box>
+      <Grid item xs={12} md={6}>
+        <FormLabel>Email</FormLabel>
+        <Input placeholder="Email" value={userEmail} disabled />
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <FormLabel>Gender</FormLabel>
+        <Input placeholder="Gender" type="text" value={userGender} onChange={(e) => handleDetailsChange("gender", e.target.value)} />
+        {formError.userGenderError && <p style={{ color: "red" }}>Gender Field is Required</p>}
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <FormLabel>Phone Number</FormLabel>
+        <Input placeholder="Phone Number" type="number" value={userPhoneNumber} onChange={(e) => handleDetailsChange("phoneNumber", e.target.value)} />
+        {formError.userPhoneNumberError && <p style={{ color: "red" }}>Phone Field is Required</p>}
+      </Grid>
+      <Grid item xs={12} md={4}>
+        <FormLabel>User Bio</FormLabel>
+        <Input placeholder="Bio" type="text" value={userBio} onChange={(e) => handleDetailsChange("Bio", e.target.value)} />
+        {formError.userBioError && <p style={{ color: "red" }}>Bio Field is Required(Max char 10)</p>}
+      </Grid>
+      <Grid item xs={12}>
+        <LoadingButton
+          color="primary"
+          loading={loading}
+          loadingPosition="start"
+          startIcon={<SaveIcon />}
+          variant="contained"
+        >
+          <span typeof="button" onClick={handleSaveDetails}>Save</span>
+        </LoadingButton>
+      </Grid>
+    </Grid>
+    <Toaster />
+  </Box>
+  
   )
 }
 
