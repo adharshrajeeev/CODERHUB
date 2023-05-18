@@ -23,6 +23,7 @@ import SearchedResults from './pages/user/searchResults/SearchedResults';
 import PostView from './pages/admin/postDetails/PostView';
 import NotifcationsPage from './pages/user/userNotifications/NotifcationsPage';
 import PageNotFound from './pages/user/pageNotFound/PageNotFound';
+import ErrorPage500 from './pages/user/pageNotFound/ErrorPage500';
 const LazyHomePage = React.lazy(()=>import('./pages/user/home/Home'))
 
 
@@ -171,6 +172,8 @@ function App() {
 
 
           <Route path='*' element={<PageNotFound/>} />
+
+           <Route path='/error' element={<ErrorPage500/>} />
         </Routes>
       </BrowserRouter>
     </div>

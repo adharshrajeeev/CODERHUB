@@ -15,7 +15,7 @@ function PageNotFound() {
                 <span className="four"><span className="screen-reader-text">4</span></span>
             </section>
             <div className="link-container">
-                <button className="more-link" onClick={()=>navigate('/')}>
+                <button className="more-link" onClick={()=>navigate(-1)}>
                     Back Home
                 </button>
             </div>
