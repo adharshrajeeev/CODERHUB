@@ -41,7 +41,7 @@ export const getAllUsers = async (req,res)=>{
      
      }catch(err){
           console.error(err);
-          res.status(400).json({message:'Failed to fetch Users'})
+          res.status(500).json({message:'Failed to fetch Users'})
      }
 }
 
@@ -58,7 +58,7 @@ export const changeUserStatus = async (req,res)=>{
                res.status(200).json({message:"User unblocked successfully", user: data})
           }
      } catch(err){
-          res.status(400).json({error:err.message})
+          res.status(500).json({error:err.message})
      }
 }
 
@@ -102,7 +102,7 @@ export const changePostStatus= async(req,res)=>{
                  return res.status(200).json({message:"Post UnBlocked successfully"})
             }
      }catch(err){
-          res.status(400).json({error: err.message,message:"Failed to change post Status"})
+          res.status(500).json({error: err.message,message:"Failed to change post Status"})
      }
     
 }
@@ -117,7 +117,7 @@ export const getMonthWiseUserGrowth = async(req,res)=>{
              res.status(200).json(data);
      }catch(err){
          
-          res.status(200).json({message:"Failed to fetch user growth",error:err.message})
+          res.status(500).json({message:"Failed to fetch user growth",error:err.message})
      }
 }
 
@@ -128,7 +128,7 @@ export const getMothWisePostCount = async(req,res)=>{
              res.status(200).json(data);
      }catch(err){
           console.log(err)
-          res.status(200).json({message:err})
+          res.status(500).json({message:err})
      }
 }
 
@@ -139,6 +139,6 @@ export const getPostDetails= async(req,res)=>{
           res.status(200).json(data);
      }catch(err){
           console.log(err)
-          res.status(200).json({message:err.message})
+          res.status(500).json({message:err.message})
      }
 }
