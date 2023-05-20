@@ -82,4 +82,25 @@ export const updateUserDetailsById = async(userId,body)=>{
         console.log(err.message)
         throw new Error(err.message)
     }
+} 
+
+
+export const fetchAllUserCount = async()=>{
+    try{
+        const count=await User.countDocuments();
+        return {count:count}
+    }catch(err){
+        console.log(err)
+        throw new Error(err.message)
+    }
+}
+
+export const fetchAllUsersPageNation = async(skip,size)=>{
+    try{
+        const data=await User.find().skip(skip).limit(size);
+        return {data:data}
+    }catch(err){
+        console.log(err)
+        throw new Error(err.message)
+    }
 }

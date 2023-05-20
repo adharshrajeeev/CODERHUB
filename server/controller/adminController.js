@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { adminLoginValidate } from "../middlewares/validation.js"
-import { blockUser, fetchAllUsers, fetchMonthWiseUserGrowth, unBlockUser } from '../repositories/userRepository.js';
+import { blockUser, fetchAllUserCount, fetchAllUsers, fetchAllUsersPageNation, fetchMonthWiseUserGrowth, unBlockUser } from '../repositories/userRepository.js';
 import { blockPosts, fetchAllPosts, fetchMonthWisePostGrowth, fetchPostDetails, fetchTotalPostReports, unBlockPosts } from '../repositories/postRepository.js';
 import { comparePassword } from '../utils/bcrypt.js';
 import { fetchAdminDb } from '../repositories/adminRepository.js';
@@ -120,10 +120,10 @@ export const getMonthWiseUserGrowth = async(req,res)=>{
           res.status(500).json({message:"Failed to fetch user growth",error:err.message})
      }
 }
-
+ 
 
 export const getMothWisePostCount = async(req,res)=>{
-     try{
+     try{ 
           const {data} = await fetchMonthWisePostGrowth()   
              res.status(200).json(data);
      }catch(err){
@@ -137,6 +137,23 @@ export const getPostDetails= async(req,res)=>{
      try{
           const {data} = await fetchPostDetails(req.params.postId);
           res.status(200).json(data);
+     }catch(err){
+          console.log(err) 
+          res.status(500).json({message:err.message})
+     }
+}
+
+
+export const getAllUserPagenation = async(req,res)=>{ 
+     try{
+          const page = req.query.page ?   parseInt(req.query.page) : 1;
+          const size = req.query.size ?   parseInt(req.query.size) : 10 ;
+
+          const skip= (page - 1) *  size;
+          const {count}=await fetchAllUserCount();
+          const total=count
+          const {data}= await fetchAllUsersPageNation(skip,size)
+          res.status(200).json({records:data,total,page,size})
      }catch(err){
           console.log(err)
           res.status(500).json({message:err.message})
