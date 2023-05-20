@@ -1,4 +1,4 @@
-import { ADMINLOGIN, CHANGE_POST_STATUS, CHANGE_USER_STATUS, GET_ALL_POSTS, GET_ALL_USERS, GET_POST_DETAILS, GET_REPORTED_POSTS, POST_MONTH_WISE_COUNT, 
+import { ADMINLOGIN, CHANGE_POST_STATUS, CHANGE_USER_STATUS, GET_ALL_POSTS, GET_ALL_USERS, GET_ALL_USER_PAGENATION, GET_POST_DETAILS, GET_REPORTED_POSTS, POST_MONTH_WISE_COUNT, 
         USER_MONTH_WISE_GROWTH } from "../utils/ConstUrls";
 import { adminInstance } from "../utils/axios";
 
@@ -78,6 +78,18 @@ export const changePostStatus =async (postId,status)=>{
 export const fetchPostDetailsById = async(postId)=>{
     try{
         const response=await adminInstance.get(`${GET_POST_DETAILS}/${postId}`);
+        return response
+    }catch(err){  
+        throw err
+    }
+}
+
+export const fetchAllUsersPageNation = async(activePage,LIMIT)=>{
+    try{
+        const response=await adminInstance.get(GET_ALL_USER_PAGENATION,{params:{
+            page:activePage,
+            size:LIMIT
+        }})
         return response
     }catch(err){
         throw err
