@@ -74,26 +74,28 @@ function EditPostModal({ postId, postedUserId, userId, content, postImage, postV
 
         formData.append("content", editcontent);
       }
-      if (changedImage && !editcontent) {
+      if (changedImage && (!editcontent || editcontent==null)) {
         formData.append('imageContent', true)
-        formData.append('image', editImage)
+        console.log(editImage,"editImage da")
+        formData.append('image', changedImage)
       }
       if (changedImage && editcontent) {
         formData.append("content", editcontent);
         formData.append('contentImg', true)
-        formData.append('image', editImage)
+        formData.append('image', changedImage)
       }
 
-      if (changeedVideo && !editcontent) {
-     
+      if (changeedVideo && (!editcontent || editcontent==null)) {
+        console.log(changeedVideo,"changed field")
         formData.append('videoContent', true);
-        formData.append("my-video", editVideo)
+        formData.append("my-video", changeedVideo)
       }
       if (changeedVideo && editcontent) {
         formData.append("content", editcontent);
         formData.append('contentVideo', true)
-        formData.append("my-video", editVideo)
+        formData.append("my-video", changeedVideo)
       }
+
       axios.put(UPDATE_USER_POST, formData, { headers: { 'Authorization': `Bearer ${token}` } }).then((response) => {
         setOpen(false);
         setLoading(false);

@@ -13,12 +13,12 @@ const RightBar = () => {
 
         </div>
         <div className="item">
-          <span>Latest Activities</span>
-          
+          {/* <span>Latest Activities</span>
+           */}
         
         </div>
         <div className="item">
-          <span>Online Friends</span>
+          {/* <span>Online Friends</span> */}
          
         </div>
       </div>
