@@ -56,6 +56,7 @@ export const GET_ALL_NOTIFICATIONS='/notifications'
 export const GET_NOTIFICATION_DATA='/notificationDetails'
 export const CHANGE_NOTIFICATION_STATUS='/readNotification'
 export const DELETE_NOTIFICATION='/deleteNotification'
+export const FETCH_SUGGESTION_USERS='/suggestions'
 
 
 

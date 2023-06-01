@@ -41,7 +41,7 @@ function Followings() {
                 {
                   following && following.length > 0 ?
                   following?.map((users, index) => (
-                    <Grid item xs={4}>
+                    <Grid item xs={12} sm={6} md={4}>
                       <React.Suspense fallback={<SkeletonLoading />}>
                           <LazyFollowings users={users} key={index} listFollowingUsers={listFollowingUsers}/>
                       </React.Suspense>

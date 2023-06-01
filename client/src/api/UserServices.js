@@ -1,5 +1,5 @@
 import store from '../redux/store'
-import { ADD_COMMENTS, ADD_COVERPICTURE, ADD_PROFILEIMAGE, ALL_POSTS, CHANGE_NOTIFICATION_STATUS, CHANGE_USER_PASSWORD, DELETE_COMMENT, DELETE_NOTIFICATION, DELETE_POSTS, EMAIL_VERIFICATION_SIGNUP, EXPLORE_ALLPOST, FOLLOW_USER, GET_ALL_NOTIFICATIONS,
+import { ADD_COMMENTS, ADD_COVERPICTURE, ADD_PROFILEIMAGE, ALL_POSTS, CHANGE_NOTIFICATION_STATUS, CHANGE_USER_PASSWORD, DELETE_COMMENT, DELETE_NOTIFICATION, DELETE_POSTS, EMAIL_VERIFICATION_SIGNUP, EXPLORE_ALLPOST, FETCH_SUGGESTION_USERS, FOLLOW_USER, GET_ALL_NOTIFICATIONS,
      GET_CONNECTIONS, GET_FOLLOWERS_LIST, GET_FOLLOWING_LIST, GET_PROFILE_DETAILS, GET_USER_DETAILS, LIKE_POST, OTP_AND_RESET_PASS, OTP_SIGNUP, REMOVE_FOLLOWER, SEND_OTP_REQUEST, 
     SHOW_USER_POST, UNFOLLOW_USER, UNLIKE_POST, UPDATE_USER_DETAILS, USER_LOGIN } from '../utils/ConstUrls'
 import { setLogin } from '../redux/userSlice';
@@ -301,6 +301,15 @@ export const updateUserPrimaryDetails = async (userId,body) =>{
 export const verifyOtpRequest = async (body) =>{
     try{
         const response = await instance.post(OTP_SIGNUP,body)
+        return response
+    }catch(err){
+        throw err
+    }
+}
+
+export const fetchUserSuggestions = async(userId)=>{
+    try{    
+        const response = await instance.get(`${FETCH_SUGGESTION_USERS}/${userId}`)
         return response
     }catch(err){
         throw err

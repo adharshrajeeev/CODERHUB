@@ -42,7 +42,7 @@ function Followers() {
                 {
                    followers && followers.length > 0 ?
                   followers?.map((users, index) => (
-                    <Grid item xs={4}>
+                    <Grid item xs={12} sm={6} md={4}>
                       <React.Suspense fallback={<SkeletonLoading/>}>
                         <LazyFollowers users={users} key={index} getAllFollowers={getAllFollowers}/>
                       </React.Suspense>

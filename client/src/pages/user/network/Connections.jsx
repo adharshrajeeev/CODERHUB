@@ -43,7 +43,7 @@ function Connections() {
                 {
                  connections && connections.length > 0 ? 
                  connections?.map(users => (
-                   <Grid item xs={4}>
+                   <Grid item xs={12} sm={6} md={4}>
                      <React.Suspense fallback={<SkeletonLoading />}>
                        <LazyFriendsLists users={users} key={users._id} listAllUsers={listAllUsers} />
                      </React.Suspense>

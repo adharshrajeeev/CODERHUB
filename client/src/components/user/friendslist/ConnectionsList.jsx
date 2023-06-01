@@ -44,21 +44,18 @@ function Followers({ users,listAllUsers }) {
 
 
   return (
-
+    <div class="cards-container" key={users._id}>
     <div className="card-container">
-
       <img className="round" style={{ width: "100px",height:"100px" }} src={users?.profilePic ? users.profilePic : "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRPx687wePRshC2SLhc2L9Xu4sZHUifOnZGQQ&usqp=CAU"} alt="user" />
       <Link to={`/user-profile/${users._id}`}   style={{ cursor:"pointer",textDecoration: "none", color: "inherit" }}>
       <h3>{users?.userName}</h3>
       </Link>
-      {/* <div className="buttons"> */}
         <LoadingButton variant="contained" loading={loading} onClick={handleFollowUser}>
           FOLLOW
         </LoadingButton>
-      {/* </div> */}
       <Toaster/>
     </div>
-
+    </div>
 
 
   )
