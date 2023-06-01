@@ -104,3 +104,13 @@ export const fetchAllUsersPageNation = async(skip,size)=>{
         throw new Error(err.message)
     }
 }
+
+export const fetchSuggestionUser =  async(userId)=>{
+    try{
+        const user=await User.findOne({_id:userId});
+        const data =await User.find({$and:[{_id:{$nin:user.following}},{_id:{$ne:userId}}]}).limit(5)
+        return {data:data}
+    }catch(err){
+        throw new Error(err.message)
+    }
+}

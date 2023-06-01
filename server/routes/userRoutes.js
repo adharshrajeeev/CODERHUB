@@ -2,7 +2,7 @@ import express from 'express'
 import upload from '../config/multer.js';
 import {  addPostComment, addUserPosts, deletePostComment, deleteUserPost, exploreAllPosts, getAllPosts, getEditPost, 
         getLikedPostCount, getUserPost, likePost, reportPostByUser, reportPostUserHome, unLikePost, updateUserPost } from '../controller/postController.js';
-import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getUserBio, getUserDetails, getUserProfileInfo,
+import { addCoverPicture, addProfilePicture, addUserBio, changeUserPassword, followUser, getAllConnections, getAllFollowers, getAllFollowings, getAllUsers, getSuggestionUsers, getUserBio, getUserDetails, getUserProfileInfo,
          getUserProfilePic, getUsers, otpSignupVerification, registerUser, removeFollower,resetAndConfrimOtp,searchAllUsers,searchUserFollowing,sendOtpToMail,
         unFollowUser,updateUserDetals,UpdateUserPicture,uptadeUserBio,userLogin, verificationAndSignup } from '../controller/userController.js';
 import { verifyToken } from '../middlewares/authentication.js';
@@ -78,6 +78,8 @@ router.put('/deleteComment',verifyToken,isBlocked,deletePostComment)
 router.get('/connections/:id',verifyToken,isBlocked,getAllConnections);
 router.get('/followings/:id',verifyToken,isBlocked,getAllFollowings)
 router.get('/followers/:id',verifyToken,isBlocked,getAllFollowers)
+
+router.get('/suggestions/:id',verifyToken,isBlocked,getSuggestionUsers)
 
 
 router.post('/reportPost',verifyToken,isBlocked,reportPostByUser)

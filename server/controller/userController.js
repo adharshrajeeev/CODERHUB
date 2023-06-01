@@ -8,7 +8,7 @@ import User from '../model/users.js';
 import Posts from '../model/posts.js';
 import Mailgen from 'mailgen'; 
 import dotenv from 'dotenv'
-import { fetchAllUsers, fetchUserById, updateUserDetailsById } from '../repositories/userRepository.js';
+import { fetchAllUsers, fetchSuggestionUser, fetchUserById, updateUserDetailsById } from '../repositories/userRepository.js';
 dotenv.config();
 
 export const registerUser = async (req,res)=>{
@@ -641,6 +641,17 @@ export const searchUserFollowing = async(req,res)=>{
      else return  res.status(200).json(users)
    }catch(err){
       res.status(400).json({message:"Search Folowing error",error:err})
+   }
+}
+
+export const getSuggestionUsers = async(req,res)=>{
+   try{
+      const userId=req.params.id;
+      const {data} = await fetchSuggestionUser(userId)
+      res.status(200).json({message:"suggestion users",status:200,users:data})
+   }catch(err)
+   {
+      res.status(500).json({message:"Server Error",error:err})
    }
 }
 
