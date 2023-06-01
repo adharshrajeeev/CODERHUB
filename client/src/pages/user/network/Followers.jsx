@@ -28,7 +28,7 @@ function Followers() {
 
   useEffect(()=>{
     getAllFollowers();
-  },[followers])
+  },[])
   return (
     <>
       <NewNavbar />

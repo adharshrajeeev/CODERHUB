@@ -27,7 +27,7 @@ function Followings() {
 
   useEffect(() => {
     listFollowingUsers();
-  }, [following])
+  }, [])
 
   return (
     <>
