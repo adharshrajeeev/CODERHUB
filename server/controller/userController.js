@@ -149,13 +149,14 @@ export const userLogin = async(req,res)=>{
          res.status(400).json({success:false,message:error.details[0].message})
       }else{
          const {email,password}=req.body;
-         const userdetails=await User.findOne({email});
+         let userdetails=await User.findOne({email});
          if(userdetails){
             if(userdetails.isBlocked) return res.status(403).json({message:" Sorry, your account has been blocked."})
             const passMatch=await bcrypt.compare(password,userdetails.password);
             if(!passMatch) return res.status(400).json({success:false,message:"User Password is Invalid"})
             
             const token=jwt.sign({id:userdetails._id},process.env.JWT_SECETKEY);
+             userdetails=await User.findOne({email}).select('-password');
             res.status(200).json({success:true,message:"Login success",token,userdetails})
          }else{
             res.status(400).json({success:false,message:"User not found"})
