@@ -20,7 +20,7 @@ export const registerUser = async (req,res)=>{
       }else{
          
          const {email,password,userName,phoneNumber,dateOfBirth,gender}=req.body
-         const userdetails=await User.findOne({ email});
+         const userdetails=await User.findOne({ email}).select('-password');
          if(userdetails){
             res.status(200).json({success:false,message:"User already Registered"})
          }else{
@@ -33,6 +33,7 @@ export const registerUser = async (req,res)=>{
                dateOfBirth,gender,
                profilePic:"https://res.cloudinary.com/dusueqzzk/image/upload/v1683175773/istockphoto-1337144146-612x612_rnhtjp.jpg"
             })
+            
             res.status(200).json({success:true,message:"success new user created",user:newUser})
          }
       }
